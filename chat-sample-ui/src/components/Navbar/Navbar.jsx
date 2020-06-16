@@ -2,6 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 import { Link } from 'react-router-dom'
 import colors from '../../utils/colors.json'
+import { isLoggedIn } from '../../services/authService'
 
 const Wrapper = styled.div`
   display: flex;
@@ -40,8 +41,8 @@ const Navbar = () => {
     <Wrapper>
       <Logo>SampleChat</Logo>
       <Links>
-        <Link to='/login'>Login</Link>
-        <Link to='/logout'>Logout</Link>
+        {!isLoggedIn && <Link to='/login'>Login</Link>}
+        {isLoggedIn && <Link to='/logout'>Logout</Link>}
       </Links>
     </Wrapper>
   )

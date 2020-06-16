@@ -2,6 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 import colors from '../../utils/colors.json'
 import { Link } from 'react-router-dom'
+import { isLoggedIn } from '../../services/authService'
 
 const Wrapper = styled.div`
   display: flex;
@@ -30,10 +31,11 @@ const RoomButton = styled(Link)`
   width: 90%;
   min-height: 55px;
   border-radius: 5px;
-  background: ${colors.secondary};
+  background: ${colors.ternary};
   text-decoration: none;
   font-size: 18px;
-  color: white;
+  font-weight: 500;
+  color: black;
   margin: 10px;
   display: flex;
   justify-content: center;
@@ -41,6 +43,8 @@ const RoomButton = styled(Link)`
 `
 
 const SideMenu = () => {
+  if (!isLoggedIn) return null
+
   return (
     <Wrapper>
       <RoomButton>Room1</RoomButton>
