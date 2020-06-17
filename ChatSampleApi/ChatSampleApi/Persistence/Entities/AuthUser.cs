@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 
-namespace ChatSampleApi.Persistance.Entities
+namespace ChatSampleApi.Persistence.Entities
 {
     public class AuthUser : IdentityUser<string>
     {

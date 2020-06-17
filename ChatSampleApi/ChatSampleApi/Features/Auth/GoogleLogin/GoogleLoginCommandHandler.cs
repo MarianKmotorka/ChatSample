@@ -5,7 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using ChatSampleApi.Exceptions;
 using ChatSampleApi.Options;
-using ChatSampleApi.Persistance;
+using ChatSampleApi.Persistence;
 using ChatSampleApi.Services;
 using MediatR;
 
@@ -54,9 +54,9 @@ namespace ChatSampleApi.Features.Auth.GoogleLogin
             response = await _httpClient.SendAsync(userInfoRequest);
             var userInfoResponse = await response.Content.ReadAsAsync<GoogleUserInfoModel>();
 
-            var jwt = await _authService.CreateJwt(userInfoResponse);
+            var (jwt, refreshToken) = await _authService.LoginWithGoogle(userInfoResponse);
 
-            return new GoogleLoginResponse { Jwt = jwt, RefreshToken = "refersh" }; // TODO return refresh token as well
+            return new GoogleLoginResponse { Jwt = jwt, RefreshToken = refreshToken };
         }
     }
 }

@@ -22,6 +22,19 @@ namespace ChatSampleApi
             configuration.GetSection(nameof(GoogleOAuthOptions)).Bind(oAuthOptions);
             services.AddSingleton(oAuthOptions);
 
+            var tokenValidationParams = new TokenValidationParameters
+            {
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtOptions.Secret)),
+                ValidateIssuerSigningKey = true,
+                ValidIssuer = jwtOptions.Issuer,
+                ValidateIssuer = true,
+                ValidateAudience = false,
+                ValidateLifetime = true,
+                ClockSkew = TimeSpan.Zero
+            };
+
+            services.AddSingleton(tokenValidationParams);
+
             services.AddAuthentication(o =>
             {
                 o.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -30,16 +43,7 @@ namespace ChatSampleApi
             })
                 .AddJwtBearer(o =>
                 {
-                    o.TokenValidationParameters = new TokenValidationParameters
-                    {
-                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtOptions.Secret)),
-                        ValidateIssuerSigningKey = true,
-                        ValidIssuer = jwtOptions.Issuer,
-                        ValidateIssuer = true,
-                        ValidateAudience = false,
-                        ValidateLifetime = true,
-                        ClockSkew = TimeSpan.Zero
-                    };
+                    o.TokenValidationParameters = tokenValidationParams;
 
                     o.Events = new JwtBearerEvents
                     {

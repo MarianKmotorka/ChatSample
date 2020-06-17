@@ -15,8 +15,7 @@ const GoogleLoginCallback = () => {
       const response = await api.get(
         `${config.SERVER_AUTH_CALLBACK_URL}?code=${code}`
       )
-      const res = await response.json()
-      console.log(res)
+      console.log(response.data)
     }
     sendCodeToServer()
   }, [code, history])

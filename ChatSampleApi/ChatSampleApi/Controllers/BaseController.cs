@@ -5,7 +5,6 @@ using Microsoft.Extensions.DependencyInjection;
 namespace ChatSampleApi.Controllers
 {
     [ApiController]
-    [Route("api")]
     public abstract class BaseController : ControllerBase
     {
         private IMediator _mediator;

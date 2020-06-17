@@ -1,5 +1,6 @@
 using System.Reflection;
-using ChatSampleApi.Persistance;
+using ChatSampleApi.Middleware.ErrorHandling;
+using ChatSampleApi.Persistence;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -49,6 +50,7 @@ namespace ChatSampleApi
             else
                 app.UseHsts();
 
+            app.UseCustomExceptionHandlingMiddleware();
             app.UseRouting();
 
             app.UseAuthentication();

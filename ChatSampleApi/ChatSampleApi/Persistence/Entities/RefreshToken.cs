@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ChatSampleApi.Persistance.Entities
+namespace ChatSampleApi.Persistence.Entities
 {
     public class RefreshToken
     {
@@ -13,7 +13,5 @@ namespace ChatSampleApi.Persistance.Entities
         public DateTime ExpiryDate { get; set; }
 
         public bool Used { get; set; }
-
-        public string AppUserId { get; set; }
     }
 }
