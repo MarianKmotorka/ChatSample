@@ -11,15 +11,14 @@ const GoogleLoginCallback = () => {
   const { code } = queryString.parse(search)
 
   useEffect(() => {
-    // const sendCodeToServer = async () => {
-    //   const response = await api.get(
-    //     `${config.SERVER_AUTH_CALLBACK_URL}?code=${code}`
-    //   )
-    //   const { token } = await response.json()
-    //   login(token)
-    //   history.replace('/myInfo')
-    // }
-    // sendCodeToServer()
+    const sendCodeToServer = async () => {
+      const response = await api.get(
+        `${config.SERVER_AUTH_CALLBACK_URL}?code=${code}`
+      )
+      const res = await response.json()
+      console.log(res)
+    }
+    sendCodeToServer()
   }, [code, history])
 
   return <div>Authenticating...</div>
