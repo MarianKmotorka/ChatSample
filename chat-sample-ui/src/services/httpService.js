@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { get } from 'lodash'
-import { setJwtAndRefreshToken, getJwt, getRefreshToken } from './authService'
+import { login, getJwt, getRefreshToken } from './authService'
 import { API_URL } from '../utils/config.json'
 
 axios.defaults.baseURL = API_URL
@@ -21,18 +21,18 @@ axios.interceptors.response.use(
     if (error.response.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true
 
-      const response = await axios.post('/appUsers/refresh', {
+      const response = await axios.post('/auth/refresh-token', {
         expiredJwt: getJwt(),
         refreshToken: getRefreshToken()
       })
 
       if (get(response, 'status') === 200) {
-        setJwtAndRefreshToken(get(response, 'data'))
+        login(get(response, 'data'))
         return axios(originalRequest)
       }
     }
 
-    return Promise.reject(error)
+    window.location = '/login'
   }
 )
 

@@ -8,6 +8,7 @@ import ProtectedRoute from './components/ProtectedRoute'
 import Chat from './pages/Chat/Chat'
 import LoginPage from './pages/Login/Login'
 import GoogleLoginCallback from './pages/Login/GoogleLoginCallback'
+import Logout from './pages/Logout'
 
 const NavAndBelow = styled.div`
   height: 100%;
@@ -32,12 +33,13 @@ const App = () => {
         <SideMenu />
         <Content>
           <Switch>
-            <ProtectedRoute path='/chat' component={Chat} />
+            <ProtectedRoute path='/' exact component={Chat} />
             <Route
               path='/google-login-callback'
               component={GoogleLoginCallback}
             />
             <Route path='/login' component={LoginPage} />
+            <Route path='/logout' component={Logout} />
             <Route path='/' render={() => 'NOT FOUND'} />
           </Switch>
         </Content>

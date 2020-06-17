@@ -15,7 +15,10 @@ const GoogleLoginCallback = () => {
       const response = await api.get(
         `${config.SERVER_AUTH_CALLBACK_URL}?code=${code}`
       )
-      console.log(response.data)
+
+      login(response.data)
+
+      window.location = '/'
     }
     sendCodeToServer()
   }, [code, history])

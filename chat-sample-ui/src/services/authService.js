@@ -1,28 +1,17 @@
-import { isNil, set, get } from 'lodash'
+const JWT = 'jwt'
+const REFRESH_TOKEN = 'refresh_token'
 
-export const login = token => localStorage.setItem('token', token)
-
-export const logout = () => localStorage.removeItem('appUser')
-
-export const getToken = () => localStorage.getItem('token') || null
-
-export const isLoggedIn = getToken()
-
-export const setCurrentUser = user =>
-  localStorage.setItem('appUser', JSON.stringify(user))
-
-export const getCurrentUser = () => {
-  if (isNil(localStorage.getItem('appUser'))) return null
-  return JSON.parse(localStorage.getItem('appUser'))
+export const login = loginResponse => {
+  localStorage.setItem(JWT, loginResponse.jwt)
+  localStorage.setItem(REFRESH_TOKEN, loginResponse.refreshToken)
 }
 
-export const getJwt = () => get(getCurrentUser(), 'jwt')
-export const getRefreshToken = () => get(getCurrentUser(), 'refreshToken')
-
-export const setJwtAndRefreshToken = ({ jwt, refreshToken }) => {
-  let currUser = getCurrentUser()
-  set(currUser, 'jwt', jwt)
-  set(currUser, 'refreshToken', refreshToken)
-
-  setCurrentUser(currUser)
+export const logout = () => {
+  localStorage.removeItem(JWT)
+  localStorage.removeItem(REFRESH_TOKEN)
 }
+
+export const getJwt = () => localStorage.getItem(JWT)
+export const getRefreshToken = () => localStorage.getItem(REFRESH_TOKEN)
+
+export const isLoggedIn = !!getJwt()
