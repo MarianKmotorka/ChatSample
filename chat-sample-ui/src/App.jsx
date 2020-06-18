@@ -1,37 +1,21 @@
 import React from 'react'
-import './App.css'
 import Navbar from './components/Navbar/Navbar'
 import SideMenu from './components/SideMenu/SideMenu'
-import styled from 'styled-components'
 import { Switch, Route } from 'react-router-dom'
 import ProtectedRoute from './components/ProtectedRoute'
 import Chat from './pages/Chat/Chat'
 import LoginPage from './pages/Login/Login'
 import GoogleLoginCallback from './pages/Login/GoogleLoginCallback'
 import Logout from './pages/Logout'
-
-const NavAndBelow = styled.div`
-  height: 100%;
-`
-
-const MenuAndContent = styled.div`
-  display: flex;
-`
-
-const Content = styled.div`
-  flex: 1;
-  width: 100%;
-  height: 92vh;
-  background: linear-gradient(45deg, #c1dfc4, #deecdd);
-`
+import { AppWrapper, MenuAndContentWrapper, ContentWrapper } from './App.styled'
 
 const App = () => {
   return (
-    <NavAndBelow>
+    <AppWrapper>
       <Navbar />
-      <MenuAndContent>
+      <MenuAndContentWrapper>
         <SideMenu />
-        <Content>
+        <ContentWrapper>
           <Switch>
             <ProtectedRoute path='/' exact component={Chat} />
             <Route
@@ -42,9 +26,9 @@ const App = () => {
             <Route path='/logout' component={Logout} />
             <Route path='/' render={() => 'NOT FOUND'} />
           </Switch>
-        </Content>
-      </MenuAndContent>
-    </NavAndBelow>
+        </ContentWrapper>
+      </MenuAndContentWrapper>
+    </AppWrapper>
   )
 }
 
