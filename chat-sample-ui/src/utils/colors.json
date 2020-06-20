@@ -1,8 +1,7 @@
 {
-  "main": "#21e6c1",
-  "mainLight": "#adf2e5",
-  "mainDark": "#278ea5",
-  "secondary": "#1f4287",
+  "main": "#2c365d",
+  "mainDark": "#272e4f",
+  "secondary": "#ff5e3a",
   "secondaryDark": "#071e3d",
-  "ternary": "#fcfeff"
+  "ternary": "#BDBDBD"
 }

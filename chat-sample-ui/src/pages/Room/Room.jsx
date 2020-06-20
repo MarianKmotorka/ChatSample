@@ -1,4 +1,5 @@
-import React from 'react'
+import React, { useState } from 'react'
+import { maxBy } from 'lodash'
 import Chat from '../../components/Chat/Chat'
 
 const testMessages = [
@@ -46,7 +47,22 @@ const testMessages = [
 ]
 
 const Room = () => {
-  return <Chat messages={testMessages} onMessageSent={x => x} />
+  const [messages, setMessages] = useState(testMessages)
+
+  const handleMessageSent = text => {
+    const newMessage = {
+      id: maxBy(messages, 'id').id + 1,
+      text,
+      senderName: 'New MEssage SEnder',
+      isMyMessage: true,
+      senderPicture:
+        'https://lh6.googleusercontent.com/-qGab-DzMugE/AAAAAAAAAAI/AAAAAAAAAAA/AMZuuckKYJ1jTQ-UuSXjAJg6g9x14bt6kg/photo.jpg'
+    }
+
+    setMessages(prev => [...prev, newMessage])
+  }
+
+  return <Chat messages={messages} onMessageSent={handleMessageSent} />
 }
 
 export default Room

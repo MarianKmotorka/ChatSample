@@ -18,14 +18,14 @@ const Card = styled.div`
   min-width: 250px;
   display: flex;
   flex-direction: column;
-  background: ${colors.ternary};
   border-radius: 20px;
+  border: gray solid 1.5px;
   box-shadow: 0px 3px 2px 0px #ccc;
 `
 
 const Header = styled.div`
   background: ${colors.secondary};
-  color: ${colors.ternary};
+  color: ${colors.main};
   font-size: 30px;
   border-radius: 20px 20px 0 0;
   display: flex;
@@ -34,7 +34,7 @@ const Header = styled.div`
 `
 
 const Content = styled.div`
-  background: ${colors.ternary};
+  background: ${colors.mainDark};
   color: ${colors.secondaryDark};
   flex: 1;
   border-radius: 0 0 20px 20px;
@@ -57,6 +57,7 @@ const Content = styled.div`
 
     &:hover {
       background: ${colors.main};
+      color: ${colors.secondary};
     }
 
     & img {
