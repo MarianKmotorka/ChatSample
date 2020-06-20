@@ -8,27 +8,30 @@ import GoogleLoginCallback from './pages/Login/GoogleLoginCallback'
 import Logout from './pages/Logout'
 import { AppWrapper, MenuAndContentWrapper, ContentWrapper } from './App.styled'
 import Room from './pages/Room/Room'
+import ProfileContextProvider from './contextProviders/ProfileContextProvider'
 
 const App = () => {
   return (
-    <AppWrapper>
-      <Navbar />
-      <MenuAndContentWrapper>
-        <SideMenu />
-        <ContentWrapper>
-          <Switch>
-            <ProtectedRoute path='/room/:id' exact component={Room} />
-            <Route
-              path='/google-login-callback'
-              component={GoogleLoginCallback}
-            />
-            <Route path='/login' component={LoginPage} />
-            <Route path='/logout' component={Logout} />
-            <Route path='/' render={() => 'NOT FOUND'} />
-          </Switch>
-        </ContentWrapper>
-      </MenuAndContentWrapper>
-    </AppWrapper>
+    <ProfileContextProvider>
+      <AppWrapper>
+        <Navbar />
+        <MenuAndContentWrapper>
+          <SideMenu />
+          <ContentWrapper>
+            <Switch>
+              <ProtectedRoute path='/room/:id' exact component={Room} />
+              <Route
+                path='/google-login-callback'
+                component={GoogleLoginCallback}
+              />
+              <Route path='/login' component={LoginPage} />
+              <Route path='/logout' component={Logout} />
+              <Route path='/' render={() => 'NOT FOUND'} />
+            </Switch>
+          </ContentWrapper>
+        </MenuAndContentWrapper>
+      </AppWrapper>
+    </ProfileContextProvider>
   )
 }
 

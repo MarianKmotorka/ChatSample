@@ -1,6 +1,7 @@
 using System.Reflection;
 using ChatSampleApi.Middleware.ErrorHandling;
 using ChatSampleApi.Persistence;
+using ChatSampleApi.Services;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -25,6 +26,7 @@ namespace ChatSampleApi
             services.AddJwtAuthentication(Configuration);
             services.AddHttpClient();
             services.AddHttpContextAccessor();
+            services.AddScoped<ICurrentUserService, CurrentUserService>();
 
             services.AddMediatR(Assembly.GetExecutingAssembly());
 

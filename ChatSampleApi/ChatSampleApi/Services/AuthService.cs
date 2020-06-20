@@ -71,7 +71,7 @@ namespace ChatSampleApi.Services
             storedRefreshToken.Used = true;
             await _db.SaveChangesAsync();
 
-            var appUserId = validatedJwt.Claims.Single(c => c.Type == "appUserId").Value;
+            var appUserId = validatedJwt.Claims.Single(c => c.Type == ClaimTypes.NameIdentifier).Value;
             var appUser = await _db.Users.SingleAsync(x => x.Id == appUserId);
 
             return await CreateJwtAndRefreshToken(appUser);
@@ -96,7 +96,7 @@ namespace ChatSampleApi.Services
                 claims,
                 DateTime.UtcNow,
                 DateTime.UtcNow.Add(_jwtOptions.TokenLifeTime),
-                new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+                new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256)
                 );
 
             var refreshToken = new RefreshToken

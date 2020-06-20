@@ -16,7 +16,7 @@ namespace ChatSampleApi.Features.Auth.RefreshToken
 
         public async Task<RefreshTokenResponse> Handle(RefreshTokenCommand request, CancellationToken cancellationToken)
         {
-            var (jwt, refreshToken) = await _authService.RefreshJwtAsync(request.Jwt, request.RefreshToken);
+            var (jwt, refreshToken) = await _authService.RefreshJwtAsync(request.ExpiredJwt, request.RefreshToken);
 
             return new RefreshTokenResponse
             {

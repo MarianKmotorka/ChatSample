@@ -15,7 +15,7 @@ namespace ChatSampleApi.Controllers
             return Ok(response);
         }
 
-        [HttpPost("/refresh-token")]
+        [HttpPost("refresh-token")]
         public async Task<ActionResult> RefreshToken(RefreshTokenCommand request)
         {
             var resposne = await Mediator.Send(request);

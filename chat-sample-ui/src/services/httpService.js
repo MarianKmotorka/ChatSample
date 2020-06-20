@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { get } from 'lodash'
-import { login, getJwt, getRefreshToken } from './authService'
+import { login, getJwt, getRefreshToken, logout } from './authService'
 import { API_URL } from '../utils/config.json'
 
 axios.defaults.baseURL = API_URL
@@ -18,9 +18,7 @@ axios.interceptors.response.use(
   async error => {
     const originalRequest = error.config
 
-    if (error.response.status === 401 && !originalRequest._retry) {
-      originalRequest._retry = true
-
+    if (error.response.status === 401) {
       const response = await axios.post('/auth/refresh-token', {
         expiredJwt: getJwt(),
         refreshToken: getRefreshToken()
@@ -29,10 +27,11 @@ axios.interceptors.response.use(
       if (get(response, 'status') === 200) {
         login(get(response, 'data'))
         return axios(originalRequest)
+      } else {
+        logout()
+        window.location = '/login'
       }
     }
-
-    window.location = '/login'
   }
 )
 

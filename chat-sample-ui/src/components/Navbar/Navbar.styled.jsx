@@ -11,14 +11,14 @@ export const Wrapper = styled.div`
 
 export const Logo = styled.div`
   font-size: 25px;
-  flex: 3;
   padding: 10px 0 10px 30px;
   color: ${colors.secondary};
+  }
 `
 
 export const Links = styled.div`
-  flex: 1;
   display: flex;
+  flex: 1;
   justify-content: flex-end;
   margin-right: 30px;
 
@@ -31,5 +31,25 @@ export const Links = styled.div`
     &:hover {
       transform: translateY(5px);
     }
+  }
+`
+
+export const ProfileWrapper = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-right: 20px;
+  border-radius: 30px;
+  background: ${colors.secondary};
+
+  & > p {
+    color: ${colors.mainDark};
+    padding-right: 7px;
+  }
+
+  & > img {
+    border-radius: 50%;
+    margin-right: 5px;
+    width: 30px;
   }
 `
