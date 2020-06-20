@@ -1,4 +1,5 @@
 using System.Reflection;
+using ChatSampleApi.Features.Chat;
 using ChatSampleApi.Middleware.ErrorHandling;
 using ChatSampleApi.Persistence;
 using ChatSampleApi.Services;
@@ -26,6 +27,7 @@ namespace ChatSampleApi
             services.AddJwtAuthentication(Configuration);
             services.AddHttpClient();
             services.AddHttpContextAccessor();
+
             services.AddScoped<ICurrentUserService, CurrentUserService>();
 
             services.AddMediatR(Assembly.GetExecutingAssembly());
@@ -61,6 +63,7 @@ namespace ChatSampleApi
             app.UseEndpoints(cfg =>
             {
                 cfg.MapControllers();
+                cfg.MapHub<ChatHub>("api/chat-hub");
             });
         }
     }

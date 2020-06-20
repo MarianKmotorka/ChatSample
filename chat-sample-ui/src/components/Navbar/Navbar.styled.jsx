@@ -13,7 +13,6 @@ export const Logo = styled.div`
   font-size: 25px;
   padding: 10px 0 10px 30px;
   color: ${colors.secondary};
-  }
 `
 
 export const Links = styled.div`

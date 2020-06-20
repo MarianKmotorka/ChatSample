@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 import colors from '../../utils/colors.json'
-import { Link } from 'react-router-dom'
+import { NavLink } from 'react-router-dom'
 
 export const Wrapper = styled.div`
   display: flex;
@@ -25,7 +25,7 @@ export const Wrapper = styled.div`
   }
 `
 
-export const RoomButton = styled(Link)`
+export const ChatButtonLink = styled(NavLink)`
   width: 90%;
   min-height: 55px;
   border-radius: 5px;
@@ -38,4 +38,20 @@ export const RoomButton = styled(Link)`
   display: flex;
   justify-content: center;
   align-items: center;
+
+  &.active {
+    border: solid 2px ${colors.secondary};
+  }
+`
+
+export const CreateChatButton = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  border-radius: 50%;
+  background: ${colors.secondary};
+  color: ${colors.mainDark};
+  width: 40px;
+  height: 40px;
 `

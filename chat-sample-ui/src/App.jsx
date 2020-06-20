@@ -9,6 +9,7 @@ import Logout from './pages/Logout'
 import { AppWrapper, MenuAndContentWrapper, ContentWrapper } from './App.styled'
 import Room from './pages/Room/Room'
 import ProfileContextProvider from './contextProviders/ProfileContextProvider'
+import { isLoggedIn } from './services/authService'
 
 const App = () => {
   return (
@@ -16,10 +17,10 @@ const App = () => {
       <AppWrapper>
         <Navbar />
         <MenuAndContentWrapper>
-          <SideMenu />
+          {isLoggedIn && <SideMenu />}
           <ContentWrapper>
             <Switch>
-              <ProtectedRoute path='/room/:id' exact component={Room} />
+              <ProtectedRoute path='/chats/:id' exact component={Room} />
               <Route
                 path='/google-login-callback'
                 component={GoogleLoginCallback}
