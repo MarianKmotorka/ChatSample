@@ -1,7 +1,8 @@
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
 import api from '../../services/httpService'
 import styled from 'styled-components'
 import colors from '../../utils/colors.json'
+import { ChatContext } from '../../contextProviders/ChatContextProvider'
 
 const Form = styled.form`
   height: 50vh;
@@ -73,11 +74,12 @@ const Content = styled.div`
 
 const CreateRoomForm = ({ formRef, callback }) => {
   const [name, setName] = useState('')
+  const { connectionId } = useContext(ChatContext)
 
   const createChat = async e => {
     e.preventDefault()
     if (name) {
-      await api.post('/chats', { name })
+      await api.post('/chats', { name, connectionId })
       callback()
     }
   }

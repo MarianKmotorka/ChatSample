@@ -4,16 +4,19 @@ using ChatSampleApi.Exceptions;
 using ChatSampleApi.Persistence;
 using ChatSampleApi.Persistence.Entities.JunctionEntities;
 using MediatR;
+using Microsoft.AspNetCore.SignalR;
 
 namespace ChatSampleApi.Features.Chat.CreateChat
 {
     public class CreateChatCommandHandler : IRequestHandler<CreateChatCommand>
     {
         private readonly DatabaseContext _db;
+        private readonly IHubContext<ChatHub> _hubContext;
 
-        public CreateChatCommandHandler(DatabaseContext db)
+        public CreateChatCommandHandler(DatabaseContext db, IHubContext<ChatHub> hubContext)
         {
             _db = db;
+            _hubContext = hubContext;
         }
 
         public async Task<Unit> Handle(CreateChatCommand request, CancellationToken cancellationToken)
@@ -31,6 +34,9 @@ namespace ChatSampleApi.Features.Chat.CreateChat
 
             _db.Chats.Add(newChat);
             await _db.SaveChangesAsync();
+
+            await _hubContext.Groups.AddToGroupAsync(request.ConnectionId, newChat.Id);
+            await _hubContext.Clients.Group(newChat.Id).SendAsync("GetChats");
 
             return Unit.Value;
         }

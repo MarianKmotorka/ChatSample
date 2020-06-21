@@ -9,5 +9,7 @@ namespace ChatSampleApi.Features.Chat.CreateChat
         public string UserId { get; set; }
 
         public string Name { get; set; }
+
+        public string ConnectionId { get; set; }
     }
 }

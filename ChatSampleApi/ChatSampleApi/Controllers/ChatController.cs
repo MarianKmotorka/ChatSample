@@ -1,9 +1,11 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
+using ChatSampleApi.Features.Chat;
 using ChatSampleApi.Features.Chat.CreateChat;
 using ChatSampleApi.Persistence;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 
 namespace ChatSampleApi.Controllers
@@ -13,10 +15,12 @@ namespace ChatSampleApi.Controllers
     public class ChatController : BaseController
     {
         private readonly DatabaseContext _db;
+        private readonly IHubContext<ChatHub> _hubContext;
 
-        public ChatController(DatabaseContext db)
+        public ChatController(DatabaseContext db, IHubContext<ChatHub> hubContext)
         {
             _db = db;
+            _hubContext = hubContext;
         }
 
         [HttpGet("mine")]
@@ -40,6 +44,18 @@ namespace ChatSampleApi.Controllers
         {
             request.UserId = CurrentUserService.UserId;
             await Mediator.Send(request);
+            return NoContent();
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<ActionResult> DeleteChat(string id)
+        {
+            var chat = await _db.Chats.SingleOrNotFoundAsync(x => x.Id == id);
+            _db.Chats.Remove(chat);
+            await _db.SaveChangesAsync();
+
+            await _hubContext.Clients.Group(chat.Id).SendAsync("GetChats");
+
             return NoContent();
         }
     }

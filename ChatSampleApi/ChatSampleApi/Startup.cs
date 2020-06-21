@@ -63,7 +63,7 @@ namespace ChatSampleApi
             app.UseEndpoints(cfg =>
             {
                 cfg.MapControllers();
-                cfg.MapHub<ChatHub>("api/chat-hub");
+                cfg.MapHub<ChatHub>(ChatHub.ApiPath);
             });
         }
     }

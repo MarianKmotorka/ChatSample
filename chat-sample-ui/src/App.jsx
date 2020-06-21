@@ -10,28 +10,31 @@ import { AppWrapper, MenuAndContentWrapper, ContentWrapper } from './App.styled'
 import Room from './pages/Room/Room'
 import ProfileContextProvider from './contextProviders/ProfileContextProvider'
 import { isLoggedIn } from './services/authService'
+import ChatContextProvider from './contextProviders/ChatContextProvider'
 
 const App = () => {
   return (
     <ProfileContextProvider>
-      <AppWrapper>
-        <Navbar />
-        <MenuAndContentWrapper>
-          {isLoggedIn && <SideMenu />}
-          <ContentWrapper>
-            <Switch>
-              <ProtectedRoute path='/chats/:id' exact component={Room} />
-              <Route
-                path='/google-login-callback'
-                component={GoogleLoginCallback}
-              />
-              <Route path='/login' component={LoginPage} />
-              <Route path='/logout' component={Logout} />
-              <Route path='/' render={() => 'NOT FOUND'} />
-            </Switch>
-          </ContentWrapper>
-        </MenuAndContentWrapper>
-      </AppWrapper>
+      <ChatContextProvider>
+        <AppWrapper>
+          <Navbar />
+          <MenuAndContentWrapper>
+            {isLoggedIn && <SideMenu />}
+            <ContentWrapper>
+              <Switch>
+                <ProtectedRoute path='/chats/:id' exact component={Room} />
+                <Route
+                  path='/google-login-callback'
+                  component={GoogleLoginCallback}
+                />
+                <Route path='/login' component={LoginPage} />
+                <Route path='/logout' component={Logout} />
+                <Route path='/' render={() => 'NOT FOUND'} />
+              </Switch>
+            </ContentWrapper>
+          </MenuAndContentWrapper>
+        </AppWrapper>
+      </ChatContextProvider>
     </ProfileContextProvider>
   )
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Text;
 using System.Threading.Tasks;
+using ChatSampleApi.Features.Chat;
 using ChatSampleApi.Options;
 using ChatSampleApi.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -52,7 +53,7 @@ namespace ChatSampleApi
                             var accessToken = context.Request.Query["access_token"];
                             var path = context.HttpContext.Request.Path;
 
-                            if (!string.IsNullOrEmpty(accessToken) && path.StartsWithSegments("/api/chat"))
+                            if (!string.IsNullOrEmpty(accessToken) && path.StartsWithSegments(ChatHub.ApiPath))
                                 context.Token = accessToken;
 
                             return Task.CompletedTask;

@@ -38,6 +38,18 @@ export const ChatButtonLink = styled(NavLink)`
   display: flex;
   justify-content: center;
   align-items: center;
+  position: relative;
+
+  & i {
+    position: absolute;
+    top: 5px;
+    right: 8px;
+    transition: color 0.2s;
+
+    &:hover {
+      color: ${colors.secondary};
+    }
+  }
 
   &.active {
     border: solid 2px ${colors.secondary};
@@ -54,4 +66,5 @@ export const CreateChatButton = styled.div`
   color: ${colors.mainDark};
   width: 40px;
   height: 40px;
+  margin-top: 20px;
 `
