@@ -45,5 +45,12 @@
                 ErrorMessage = errorMessage ?? "Please check if you typed the url correctly."
             };
         }
+
+        public static ErrorResponse CreateForbiden403Response()
+            => new ErrorResponse
+            {
+                ErrorCode = "Forbidden",
+                ErrorMessage = "You cannot access this resource.",
+            };
     }
 }

@@ -47,6 +47,10 @@ namespace ChatSampleApi.Middleware.ErrorHandling
                     code = HttpStatusCode.NotFound;
                     errorResponse = ErrorResponseFactory.CreateNotFoundErrorResponse(exception.Message);
                     break;
+                case Forbidden403Exception _:
+                    code = HttpStatusCode.Forbidden;
+                    errorResponse = ErrorResponseFactory.CreateForbiden403Response();
+                    break;
                 default:
                     _logger.LogError(exception, string.Empty);
                     errorResponse = ErrorResponseFactory.CreateBadRequestErrorResponse("Processing error");

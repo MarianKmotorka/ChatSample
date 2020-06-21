@@ -93,6 +93,7 @@ namespace ChatSampleApi.Migrations
             modelBuilder.Entity("ChatSampleApi.Persistence.Entities.Chat", b =>
                 {
                     b.Property<string>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Name")
@@ -121,6 +122,7 @@ namespace ChatSampleApi.Migrations
             modelBuilder.Entity("ChatSampleApi.Persistence.Entities.Message", b =>
                 {
                     b.Property<string>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("ChatId")
@@ -314,7 +316,7 @@ namespace ChatSampleApi.Migrations
 
             modelBuilder.Entity("ChatSampleApi.Persistence.Entities.Message", b =>
                 {
-                    b.HasOne("ChatSampleApi.Persistence.Entities.Chat", null)
+                    b.HasOne("ChatSampleApi.Persistence.Entities.Chat", "Chat")
                         .WithMany("Messages")
                         .HasForeignKey("ChatId")
                         .OnDelete(DeleteBehavior.Cascade);

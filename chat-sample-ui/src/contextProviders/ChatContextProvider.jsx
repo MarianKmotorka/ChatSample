@@ -1,4 +1,5 @@
-import React, { useState, useEffect, createContext } from 'react'
+import React, { useState, useEffect, createContext, useCallback } from 'react'
+import { get } from 'lodash'
 import api from '../services/httpService'
 import { isLoggedIn, getJwt } from '../services/authService'
 import {
@@ -13,6 +14,14 @@ const ChatContextProvider = ({ children }) => {
   const [chats, setChats] = useState(null)
   const [chatsFetching, setChatsFetching] = useState(false)
   const [connectionId, setConnectionId] = useState(null)
+
+  const [currentChat, setCurrentChat] = useState(null)
+  const [currentChatFetching, setCurrentChatFetching] = useState(false)
+
+  const getMessages = async chatId => {
+    const { data: messages } = await api.get(`chats/${chatId}/messages`)
+    setCurrentChat(prev => ({ ...prev, messages }))
+  }
 
   useEffect(() => {
     const fetchChats = async () => {
@@ -34,6 +43,7 @@ const ChatContextProvider = ({ children }) => {
 
       connection.on('GetChats', () => fetchChats())
       connection.on('GetConnectionId', cId => setConnectionId(cId))
+      connection.on('GetMessages', getMessages)
 
       connection
         .start()
@@ -47,8 +57,24 @@ const ChatContextProvider = ({ children }) => {
     }
   }, [])
 
+  const getChat = useCallback(async chatId => {
+    setCurrentChatFetching(true)
+    const response = await api.get(`chats/mine/${chatId}`)
+    setCurrentChat(get(response, 'data'))
+    setCurrentChatFetching(false)
+  }, [])
+
   return (
-    <ChatContext.Provider value={{ chats, chatsFetching, connectionId }}>
+    <ChatContext.Provider
+      value={{
+        chats,
+        chatsFetching,
+        connectionId,
+        currentChat,
+        currentChatFetching,
+        getChat
+      }}
+    >
       {children}
     </ChatContext.Provider>
   )

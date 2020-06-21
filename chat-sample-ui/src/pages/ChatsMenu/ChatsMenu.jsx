@@ -1,23 +1,31 @@
 import React, { useState, useRef, useContext } from 'react'
 import { map, get } from 'lodash'
-import { Wrapper, ChatButtonLink, CreateChatButton } from './SideMenu.styled'
+import { useHistory } from 'react-router-dom'
 
-import Backdrop from '../Backdrop'
-import LoadingSpinner from '../LoadingSpinner'
+import Backdrop from '../../components/Backdrop'
+import { Wrapper, ChatButtonLink, CreateChatButton } from './ChatsMenu.styled'
+import LoadingSpinner from '../../components/LoadingSpinner'
 import CreateRoomForm from './CreateRoomForm'
 import { useOnClickOutside } from '../../utils/useOnClickOutside'
 import { ChatContext } from '../../contextProviders/ChatContextProvider'
 import api from '../../services/httpService'
 
-const SideMenu = () => {
+const ChatsMenu = () => {
   const [showCreateChatDialog, setShowCreateChatDialog] = useState(false)
   const { chats, chatsFetching } = useContext(ChatContext)
   const formRef = useRef()
+  const history = useHistory()
 
   useOnClickOutside(formRef, () => setShowCreateChatDialog(false))
 
   const deleteChat = async id => {
     await api.delete(`/chats/${id}`)
+    history.push('/chats')
+  }
+
+  const createChatCallback = chatId => {
+    setShowCreateChatDialog(false)
+    history.push(`/chats/${chatId}`)
   }
 
   if (chatsFetching)
@@ -31,10 +39,7 @@ const SideMenu = () => {
     <>
       {showCreateChatDialog && (
         <Backdrop>
-          <CreateRoomForm
-            formRef={formRef}
-            callback={() => setShowCreateChatDialog(false)}
-          />
+          <CreateRoomForm formRef={formRef} callback={createChatCallback} />
         </Backdrop>
       )}
       <Wrapper>
@@ -55,4 +60,4 @@ const SideMenu = () => {
   )
 }
 
-export default SideMenu
+export default ChatsMenu

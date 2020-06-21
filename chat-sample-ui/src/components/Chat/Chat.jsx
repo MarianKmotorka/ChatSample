@@ -1,25 +1,31 @@
 import React, { useState, useEffect, useRef } from 'react'
 import PropTypes from 'prop-types'
+import moment from 'moment'
 import { map, last } from 'lodash'
 import {
+  ChatWithInput,
   Wrapper,
   MessagesWrapper,
   InputWrapper,
   MessageWrapper,
-  ImageAndName
+  MessageInfo,
+  MessageDate,
+  Text
 } from './Chat.styled'
+import ChatDetail from './ChatDetail/ChatDetail'
 
 const Message = ({ message, forwardRef }) => (
   <MessageWrapper isMyMessage={message.isMyMessage}>
-    <ImageAndName>
+    <MessageInfo>
       <img src={message.senderPicture} alt='user' />
       <p>{message.senderName}</p>
-    </ImageAndName>
-    <h6 ref={forwardRef}>{message.text}</h6>
+      <MessageDate>{moment(message.date).fromNow()}</MessageDate>
+    </MessageInfo>
+    <Text ref={forwardRef}>{message.text}</Text>
   </MessageWrapper>
 )
 
-const Chat = ({ messages, onMessageSent }) => {
+const Chat = ({ messages, participants, onMessageSent }) => {
   const [text, setText] = useState('')
   const lastMessageRef = useRef(null)
 
@@ -47,19 +53,22 @@ const Chat = ({ messages, onMessageSent }) => {
 
   return (
     <Wrapper>
-      <MessagesWrapper>{map(messages, renderMessage)}</MessagesWrapper>
-      <form onSubmit={onMessageSentInternal}>
-        <InputWrapper>
-          <input
-            value={text}
-            onChange={({ target }) => setText(target.value)}
-          />
-          <button>
-            <p>Send</p>
-            <i className='fas fa-chevron-right'></i>
-          </button>
-        </InputWrapper>
-      </form>
+      <ChatWithInput>
+        <MessagesWrapper>{map(messages, renderMessage)}</MessagesWrapper>
+        <form onSubmit={onMessageSentInternal}>
+          <InputWrapper>
+            <input
+              value={text}
+              onChange={({ target }) => setText(target.value)}
+            />
+            <button>
+              <p>Send</p>
+              <i className='fas fa-chevron-right'></i>
+            </button>
+          </InputWrapper>
+        </form>
+      </ChatWithInput>
+      <ChatDetail participants={participants} />
     </Wrapper>
   )
 }
@@ -67,14 +76,21 @@ const Chat = ({ messages, onMessageSent }) => {
 Chat.propTypes = {
   messages: PropTypes.arrayOf(
     PropTypes.shape({
-      id: PropTypes.number.isRequired,
+      id: PropTypes.string.isRequired,
       text: PropTypes.string.isRequired,
       senderName: PropTypes.string.isRequired,
       isMyMessage: PropTypes.bool.isRequired,
       senderPicture: PropTypes.string.isRequired
     })
-  ),
-  onMessageSent: PropTypes.func.isRequired
+  ).isRequired,
+  onMessageSent: PropTypes.func.isRequired,
+  participants: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.string.isRequired,
+      name: PropTypes.string.isRequired,
+      picture: PropTypes.string.isRequired
+    })
+  ).isRequired
 }
 
 export default Chat

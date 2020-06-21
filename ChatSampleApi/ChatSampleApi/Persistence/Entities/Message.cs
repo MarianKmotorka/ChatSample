@@ -10,6 +10,8 @@ namespace ChatSampleApi.Persistence.Entities
 
         public AuthUser Sender { get; set; }
 
+        public Chat Chat { get; set; }
+
         public DateTime SentDate { get; set; }
     }
 }

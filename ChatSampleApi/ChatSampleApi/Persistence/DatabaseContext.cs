@@ -40,6 +40,12 @@ namespace ChatSampleApi.Persistence
                 y.HasMany(x => x.Messages).WithOne().OnDelete(DeleteBehavior.Cascade);
                 y.Property(x => x.Id).ValueGeneratedOnAdd();
             });
+
+            builder.Entity<Message>(y =>
+            {
+                y.Property(x => x.Id).ValueGeneratedOnAdd();
+                y.HasOne(x => x.Chat).WithMany(x => x.Messages).OnDelete(DeleteBehavior.Cascade);
+            });
         }
     }
 }

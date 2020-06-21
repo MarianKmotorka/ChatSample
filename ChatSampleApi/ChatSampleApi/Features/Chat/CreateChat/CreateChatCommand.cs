@@ -3,7 +3,7 @@ using MediatR;
 
 namespace ChatSampleApi.Features.Chat.CreateChat
 {
-    public class CreateChatCommand : IRequest
+    public class CreateChatCommand : IRequest<string>
     {
         [JsonIgnore]
         public string UserId { get; set; }

@@ -1,5 +1,6 @@
 import React, { useState, useContext } from 'react'
 import api from '../../services/httpService'
+import { get } from 'lodash'
 import styled from 'styled-components'
 import colors from '../../utils/colors.json'
 import { ChatContext } from '../../contextProviders/ChatContextProvider'
@@ -79,8 +80,8 @@ const CreateRoomForm = ({ formRef, callback }) => {
   const createChat = async e => {
     e.preventDefault()
     if (name) {
-      await api.post('/chats', { name, connectionId })
-      callback()
+      const reponse = await api.post('/chats', { name, connectionId })
+      callback(get(reponse, 'data'))
     }
   }
 

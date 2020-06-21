@@ -44,7 +44,7 @@ export const ChatButtonLink = styled(NavLink)`
     position: absolute;
     top: 5px;
     right: 8px;
-    transition: color 0.2s;
+    transition: color 0.1s;
 
     &:hover {
       color: ${colors.secondary};
