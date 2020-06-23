@@ -29,21 +29,27 @@ export const ChatButtonLink = styled(NavLink)`
   width: 90%;
   min-height: 55px;
   border-radius: 5px;
-  background: ${colors.ternary};
+  background: radial-gradient(
+    circle,
+    ${colors.ternaryLight} 90%,
+    ${colors.main} 100%
+  );
   text-decoration: none;
   font-size: 18px;
   font-weight: 500;
-  color: black;
+  color: ${colors.main};
   margin: 10px;
   display: flex;
   justify-content: center;
   align-items: center;
   position: relative;
+  font-weight: 300;
 
   & i {
     position: absolute;
     top: 5px;
-    right: 8px;
+    right: 10px;
+    color: ${colors.main};
     transition: color 0.1s;
 
     &:hover {
@@ -52,7 +58,8 @@ export const ChatButtonLink = styled(NavLink)`
   }
 
   &.active {
-    border: solid 2px ${colors.secondary};
+    color: ${colors.secondary};
+    font-weight: 500;
   }
 `
 
@@ -67,4 +74,11 @@ export const CreateChatButton = styled.div`
   width: 40px;
   height: 40px;
   margin-top: 20px;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background: ${colors.mainDark};
+    color: ${colors.secondary};
+    transform: scale(1.5);
+  }
 `

@@ -53,22 +53,25 @@ const Content = styled.div`
   }
 
   & button {
-    padding: 8px;
+    padding: 2px 4px;
+    margin-top: 8px;
     outline: transparent;
-    border-radius: 6px;
+    border-radius: 16px;
     border: transparent;
-    width: 70%;
+    width: 40%;
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    background: ${colors.main};
-    color: ${colors.secondary};
+    background: ${colors.secondary};
+    color: ${colors.main};
     font-size: 20px;
-    transition: color 0.3s;
+    transition: all 0.2s ease;
 
     &:hover {
-      color: ${colors.ternary};
+      background: ${colors.main};
+      color: ${colors.secondary};
+      transform: scale(1.4);
     }
   }
 `

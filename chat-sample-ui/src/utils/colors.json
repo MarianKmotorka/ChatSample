@@ -2,6 +2,7 @@
   "main": "#2c365d",
   "mainDark": "#272e4f",
   "secondary": "#ff5e3a",
-  "secondaryDark": "#071e3d",
-  "ternary": "#BDBDBD"
+  "secondaryLight": "#f3a391",
+  "ternary": "#BDBDBD",
+  "ternaryLight": "#fff"
 }
