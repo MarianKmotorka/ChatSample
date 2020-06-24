@@ -23,6 +23,11 @@ const ChatContextProvider = ({ children }) => {
     setCurrentChat(prev => ({ ...prev, messages }))
   }
 
+  const getParticipants = async chatId => {
+    const { data: participants } = await api.get(`chats/${chatId}/participants`)
+    setCurrentChat(prev => ({ ...prev, participants }))
+  }
+
   useEffect(() => {
     const fetchChats = async () => {
       setChatsFetching(true)
@@ -44,6 +49,7 @@ const ChatContextProvider = ({ children }) => {
       connection.on('GetChats', () => fetchChats())
       connection.on('GetConnectionId', cId => setConnectionId(cId))
       connection.on('GetMessages', getMessages)
+      connection.on('GetParticipants', getParticipants)
 
       connection
         .start()

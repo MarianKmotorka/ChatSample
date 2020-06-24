@@ -30,7 +30,7 @@ namespace ChatSampleApi.Features.Chat.SendMessage
             chat.AddMessage(sender, request.Text);
             await _db.SaveChangesAsync();
 
-            await _hubContext.Clients.Group(chat.Id).SendAsync("GetMessages", chat.Id);
+            await _hubContext.Clients.Group(chat.Id).SendAsync(ChatHub.GetMessages, chat.Id);
 
             return Unit.Value;
         }

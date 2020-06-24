@@ -11,9 +11,12 @@ namespace ChatSampleApi.Features.Chat
     [Authorize]
     public class ChatHub : Hub
     {
-        //public string GetConnectionId() => Context.ConnectionId;
-
         public const string ApiPath = "/api/chat-hub";
+        public const string GetMessages = "GetMessages";
+        public const string GetParticipants = "GetParticipants";
+        public const string GetChats = "GetChats";
+        public const string GetConnectionId = "GetConnectionId";
+
         private readonly ICurrentUserService _currentUserService;
         private readonly DatabaseContext _db;
 
@@ -25,7 +28,7 @@ namespace ChatSampleApi.Features.Chat
 
         public async override Task OnConnectedAsync()
         {
-            await Clients.Caller.SendAsync("GetConnectionId", Context.ConnectionId);
+            await Clients.Caller.SendAsync(GetConnectionId, Context.ConnectionId);
             await AddUserToGroups();
 
             await base.OnConnectedAsync();

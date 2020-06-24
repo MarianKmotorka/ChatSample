@@ -28,9 +28,17 @@ export const ParticipantWrapper = styled.div`
   }
 `
 
-export const Header = styled.p`
+export const Header = styled.div`
   font-size: 25px;
   border-bottom: solid 2px;
+  color: ${colors.main};
   margin: 15px 0;
-  width: 90%;
+  width: 85%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  & i {
+    cursor: pointer;
+  }
 `

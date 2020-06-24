@@ -1,6 +1,8 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using ChatSampleApi.Features.Chat;
+using ChatSampleApi.Features.Chat.AddParticipant;
 using ChatSampleApi.Features.Chat.CreateChat;
 using ChatSampleApi.Features.Chat.GetMessages;
 using ChatSampleApi.Features.Chat.GetMyChat;
@@ -27,7 +29,7 @@ namespace ChatSampleApi.Controllers
         }
 
         [HttpGet("mine")]
-        public async Task<ActionResult> GetChats()
+        public async Task<ActionResult<List<object>>> GetChats()
         {
             var userId = CurrentUserService.UserId;
 
@@ -43,7 +45,7 @@ namespace ChatSampleApi.Controllers
         }
 
         [HttpGet("mine/{id}")]
-        public async Task<ActionResult> GetChat(string id)
+        public async Task<ActionResult<GetMyChatResponse>> GetChat(string id)
         {
             var response = await Mediator.Send(new GetMyChatQuery { ChatId = id, UserId = CurrentUserService.UserId });
             return Ok(response);
@@ -80,7 +82,7 @@ namespace ChatSampleApi.Controllers
         }
 
         [HttpGet("{id}/messages")]
-        public async Task<ActionResult> GetMessages(string id, int? count, int? offSet)
+        public async Task<ActionResult<IEnumerable<MessageDto>>> GetMessages(string id, int? count, int? offSet)
         {
             var request = new GetMessagesQuery
             {
@@ -92,6 +94,26 @@ namespace ChatSampleApi.Controllers
 
             var response = await Mediator.Send(request);
             return Ok(response);
+        }
+
+        [HttpPost("{id}/participants")]
+        public async Task<ActionResult> AddParticipant(string id, [FromBody] AddParticipantCommand request)
+        {
+            request.ChatId = id;
+            await Mediator.Send(request);
+            return NoContent();
+        }
+
+        [HttpGet("{id}/participants")]
+        public async Task<IEnumerable<GetMyChatResponse.ParticipantDto>> GetParticipants(string id)
+        {
+            var chat = await _db.Chats.Include(x => x.Participants.Select(y => y.User)).SingleOrNotFoundAsync(x => x.Id == id);
+            return chat.Participants.Select(x => new GetMyChatResponse.ParticipantDto
+            {
+                Id = x.User.Id,
+                Name = x.User.FullName,
+                Picture = x.User.Picture
+            });
         }
     }
 }

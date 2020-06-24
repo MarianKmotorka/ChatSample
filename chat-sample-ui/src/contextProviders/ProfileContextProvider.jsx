@@ -9,7 +9,7 @@ const ProfileContextProvider = ({ children }) => {
 
   useEffect(() => {
     const fetch = async () => {
-      const { data } = await api.get('/profile')
+      const { data } = await api.get('/users/me')
       setProfile(data)
     }
 
