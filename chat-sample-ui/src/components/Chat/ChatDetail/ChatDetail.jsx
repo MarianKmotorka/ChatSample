@@ -2,9 +2,17 @@ import React, { useState } from 'react'
 import { map, get } from 'lodash'
 import { Wrapper, ParticipantWrapper, Header } from './ChatDetail.styled'
 import SearchableDropdown from '../../SearchableDropdown/SearchableDropdown'
+import api from '../../../services/httpService'
 
-const ChatDetail = ({ participants }) => {
+const ChatDetail = ({ participants, chatId }) => {
   const [showDropdown, setShowDropdown] = useState(false)
+
+  const handleAddParticipant = async user => {
+    await api.post(`/chats/${chatId}/participants`, {
+      participantId: get(user, 'id')
+    })
+    setShowDropdown(false)
+  }
 
   return (
     <Wrapper>
@@ -18,6 +26,7 @@ const ChatDetail = ({ participants }) => {
             url: '/users',
             formatter: x => ({ id: x.id, value: x.name })
           }}
+          onChange={handleAddParticipant}
         />
       )}
       {map(participants, x => (

@@ -107,7 +107,7 @@ namespace ChatSampleApi.Controllers
         [HttpGet("{id}/participants")]
         public async Task<IEnumerable<GetMyChatResponse.ParticipantDto>> GetParticipants(string id)
         {
-            var chat = await _db.Chats.Include(x => x.Participants.Select(y => y.User)).SingleOrNotFoundAsync(x => x.Id == id);
+            var chat = await _db.Chats.Include(x => x.Participants).ThenInclude(x => x.User).SingleOrNotFoundAsync(x => x.Id == id);
             return chat.Participants.Select(x => new GetMyChatResponse.ParticipantDto
             {
                 Id = x.User.Id,

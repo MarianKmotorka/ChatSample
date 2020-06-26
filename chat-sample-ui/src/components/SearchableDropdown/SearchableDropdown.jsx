@@ -1,10 +1,18 @@
 import React, { useEffect, useState, useRef } from 'react'
 import PropTypes from 'prop-types'
-import { useStyles } from './useStyles'
 import { map, filter, includes, toLower } from 'lodash'
-import TextField from '@material-ui/core/TextField'
 import { useOnClickOutside } from '../../utils/useOnClickOutside'
 import api from '../../services/httpService'
+import {
+  Expander,
+  Item,
+  Error,
+  Input,
+  Wrapper,
+  Header,
+  ArrowWrapper,
+  LoadingItem
+} from './SearchableDropdown.styled'
 
 const SearchableDropdown = ({
   options: initialOptions,
@@ -17,6 +25,7 @@ const SearchableDropdown = ({
   const [expanded, setExpanded] = useState(false)
   const [loading, setLoading] = useState(false)
   const wrapperRef = useRef()
+  const inputRef = useRef()
 
   useOnClickOutside(wrapperRef, () => setExpanded(false))
 
@@ -44,15 +53,15 @@ const SearchableDropdown = ({
 
     if (initialOptions) setOptionsFromProps()
     else setOptionsFromApi()
-  }, [text, initialOptions, expanded])
+  }, [text, initialOptions, expanded, fetchOptions])
 
   const toogle = () => {
+    !expanded && inputRef && inputRef.current && inputRef.current.focus()
     setExpanded(prev => !prev)
   }
 
   const onTextChange = e => {
     setText(e.target.value)
-    onChange(null)
   }
 
   const onItemSelected = item => {
@@ -61,44 +70,35 @@ const SearchableDropdown = ({
     toogle()
   }
 
-  const classes = useStyles()
-
   return (
-    <div ref={wrapperRef} className={classes.wrapper}>
-      <div className={classes.header}>
-        <TextField
-          inputRef={input => expanded && input && input.focus()}
-          root={classes.textField}
-          label='Some Label'
-          fullWidth={true}
+    <Wrapper ref={wrapperRef}>
+      <Header>
+        <Input
+          ref={inputRef}
           value={text}
           onChange={onTextChange}
           onClick={() => setExpanded(true)}
         />
         {expanded ? (
-          <i className='fas fa-chevron-up' onClick={toogle} />
+          <ArrowWrapper className='fas fa-chevron-up' onClick={toogle} />
         ) : (
-          <i className='fas fa-chevron-down' onClick={toogle} />
+          <ArrowWrapper className='fas fa-chevron-down' onClick={toogle} />
         )}
-      </div>
+      </Header>
 
-      {error && !expanded && <p className={classes.error}>{error}</p>}
+      {error && !expanded && <Error>{error}</Error>}
 
       {expanded && (
-        <div className={classes.expander}>
-          {loading && <p>Loading...</p>}
+        <Expander>
+          {loading && <LoadingItem className='fas fa-spinner fa-3x fa-spin' />}
           {map(options, x => (
-            <div
-              className={classes.item}
-              key={x.id}
-              onClick={() => onItemSelected(x)}
-            >
+            <Item key={x.id} onClick={() => onItemSelected(x)}>
               {x.value}
-            </div>
+            </Item>
           ))}
-        </div>
+        </Expander>
       )}
-    </div>
+    </Wrapper>
   )
 }
 

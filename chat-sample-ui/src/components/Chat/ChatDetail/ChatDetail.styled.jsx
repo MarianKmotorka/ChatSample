@@ -6,9 +6,10 @@ export const Wrapper = styled.div`
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
-  width: 300px;
+  min-width: 300px;
   background: linear-gradient(0deg, ${colors.secondary}, ${colors.ternary});
   border-left: solid 2px ${colors.main};
+  padding: 0px 10px;
 `
 
 export const ParticipantWrapper = styled.div`

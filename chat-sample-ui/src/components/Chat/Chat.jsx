@@ -25,7 +25,7 @@ const Message = ({ message, forwardRef }) => (
   </MessageWrapper>
 )
 
-const Chat = ({ messages, participants, onMessageSent }) => {
+const Chat = ({ messages, participants, onMessageSent, chatId }) => {
   const [text, setText] = useState('')
   const lastMessageRef = useRef(null)
 
@@ -68,7 +68,7 @@ const Chat = ({ messages, participants, onMessageSent }) => {
           </InputWrapper>
         </form>
       </ChatWithInput>
-      <ChatDetail participants={participants} />
+      <ChatDetail participants={participants} chatId={chatId} />
     </Wrapper>
   )
 }
@@ -90,7 +90,8 @@ Chat.propTypes = {
       name: PropTypes.string.isRequired,
       picture: PropTypes.string.isRequired
     })
-  ).isRequired
+  ).isRequired,
+  chatId: PropTypes.string.isRequired
 }
 
 export default Chat
