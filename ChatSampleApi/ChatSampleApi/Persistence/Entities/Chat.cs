@@ -27,7 +27,7 @@ namespace ChatSampleApi.Persistence.Entities
 
         public List<Message> Messages { get; private set; }
 
-        public void AddMessage(AuthUser sender, string text)
+        public Message AddMessage(AuthUser sender, string text)
         {
             if (!Participants.Any(x => x.UserId == sender.Id))
                 throw new Forbidden403Exception();
@@ -40,11 +40,14 @@ namespace ChatSampleApi.Persistence.Entities
             };
 
             Messages.Add(message);
+
+            return message;
         }
 
-        public void AddParticipant(AuthUser participant)
+        public AuthUser AddParticipant(AuthUser participant)
         {
             Participants.Add(new ChatUser { User = participant });
+            return participant;
         }
     }
 }

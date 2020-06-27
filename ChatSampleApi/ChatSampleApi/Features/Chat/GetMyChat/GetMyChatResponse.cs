@@ -24,6 +24,8 @@ namespace ChatSampleApi.Features.Chat.GetMyChat
         {
             public string Id { get; set; }
 
+            public string SenderId { get; set; }
+
             public string SenderName { get; set; }
 
             public string SenderPicture { get; set; }

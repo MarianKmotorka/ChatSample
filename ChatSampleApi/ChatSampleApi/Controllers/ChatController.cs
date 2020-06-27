@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using ChatSampleApi.Features.Chat;
 using ChatSampleApi.Features.Chat.AddParticipant;
 using ChatSampleApi.Features.Chat.CreateChat;
-using ChatSampleApi.Features.Chat.GetMessages;
 using ChatSampleApi.Features.Chat.GetMyChat;
 using ChatSampleApi.Features.Chat.SendMessage;
 using ChatSampleApi.Persistence;
@@ -66,8 +65,7 @@ namespace ChatSampleApi.Controllers
             _db.Chats.Remove(chat);
             await _db.SaveChangesAsync();
 
-            await _hubContext.Clients.Group(chat.Id).SendAsync("GetChats");
-
+            await _hubContext.Clients.Group(chat.Id).SendAsync(ChatHub.DeleteChat, id);
             return NoContent();
         }
 
@@ -81,39 +79,12 @@ namespace ChatSampleApi.Controllers
             return NoContent();
         }
 
-        [HttpGet("{id}/messages")]
-        public async Task<ActionResult<IEnumerable<MessageDto>>> GetMessages(string id, int? count, int? offSet)
-        {
-            var request = new GetMessagesQuery
-            {
-                ChatId = id,
-                Count = count ?? 50,
-                Offset = offSet ?? 0,
-                UserId = CurrentUserService.UserId
-            };
-
-            var response = await Mediator.Send(request);
-            return Ok(response);
-        }
-
         [HttpPost("{id}/participants")]
         public async Task<ActionResult> AddParticipant(string id, [FromBody] AddParticipantCommand request)
         {
             request.ChatId = id;
             await Mediator.Send(request);
             return NoContent();
-        }
-
-        [HttpGet("{id}/participants")]
-        public async Task<IEnumerable<GetMyChatResponse.ParticipantDto>> GetParticipants(string id)
-        {
-            var chat = await _db.Chats.Include(x => x.Participants).ThenInclude(x => x.User).SingleOrNotFoundAsync(x => x.Id == id);
-            return chat.Participants.Select(x => new GetMyChatResponse.ParticipantDto
-            {
-                Id = x.User.Id,
-                Name = x.User.FullName,
-                Picture = x.User.Picture
-            });
         }
     }
 }

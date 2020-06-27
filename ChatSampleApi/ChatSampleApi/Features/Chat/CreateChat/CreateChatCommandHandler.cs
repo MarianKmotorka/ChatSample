@@ -32,7 +32,7 @@ namespace ChatSampleApi.Features.Chat.CreateChat
             await _db.SaveChangesAsync();
 
             await _hubContext.Groups.AddToGroupAsync(request.ConnectionId, newChat.Id);
-            await _hubContext.Clients.Group(newChat.Id).SendAsync(ChatHub.GetChats);
+            await _hubContext.Clients.Group(newChat.Id).SendAsync(ChatHub.RecieveChat, new { newChat.Id, newChat.Name });
 
             return newChat.Id;
         }

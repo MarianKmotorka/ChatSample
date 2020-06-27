@@ -23,10 +23,19 @@ namespace ChatSampleApi.Features.Chat.AddParticipant
             var chat = await _db.Chats.Include(x => x.Participants).SingleOrNotFoundAsync(x => x.Id == request.ChatId);
             var user = await _db.Users.SingleOrNotFoundAsync(x => x.Id == request.ParticipantId);
 
-            chat.AddParticipant(user);
+            var participant = chat.AddParticipant(user);
             await _db.SaveChangesAsync();
 
-            await _hubContext.Clients.Group(chat.Id).SendAsync(ChatHub.GetParticipants, chat.Id);
+            if (ChatHub.UserConnections.TryGetValue(participant.Id, out var connections))
+                foreach (var connection in connections)
+                    await _hubContext.Groups.AddToGroupAsync(connection, chat.Id, cancellationToken);
+
+            await _hubContext.Clients.Group(chat.Id).SendAsync(ChatHub.RecieveParticipant, new { chat.Id, chat.Name }, new GetMyChat.GetMyChatResponse.ParticipantDto
+            {
+                Id = participant.Id,
+                Name = participant.FullName,
+                Picture = participant.Picture
+            });
 
             return Unit.Value;
         }

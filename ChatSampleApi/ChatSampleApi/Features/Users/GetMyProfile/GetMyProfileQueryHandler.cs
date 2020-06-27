@@ -19,6 +19,7 @@ namespace ChatSampleApi.Features.Profile.GetMyProfile
             var user = await _db.Users.FindAsync(request.UserId);
             return new GetMyProfileResponse
             {
+                Id = user.Id,
                 Email = user.Email,
                 Name = user.FullName,
                 Picture = user.Picture

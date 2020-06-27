@@ -1,5 +1,4 @@
 import React, { useState, useRef, useContext } from 'react'
-import { TransitionGroup } from 'react-transition-group'
 import { map, get } from 'lodash'
 import { useHistory } from 'react-router-dom'
 

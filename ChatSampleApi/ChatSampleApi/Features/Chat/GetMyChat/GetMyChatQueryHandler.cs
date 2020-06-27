@@ -27,6 +27,7 @@ namespace ChatSampleApi.Features.Chat.GetMyChat
                     {
                         Id = m.Id,
                         IsMyMessage = m.Sender.Id == request.UserId,
+                        SenderId = m.Sender.Id,
                         SenderName = m.Sender.FullName,
                         SenderPicture = m.Sender.Picture,
                         Text = m.Text,

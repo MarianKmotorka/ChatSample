@@ -24,7 +24,7 @@ const ChatPage = () => {
     <Chat
       chatId={chatId}
       messages={get(currentChat, 'messages', [])}
-      participants={get(currentChat, 'participants')}
+      participants={get(currentChat, 'participants', [])}
       onMessageSent={handleMessageSent}
     />
   )

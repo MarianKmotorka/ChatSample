@@ -1,12 +1,20 @@
-import React, { useState, useEffect, createContext, useCallback } from 'react'
-import { get } from 'lodash'
-import api from '../services/httpService'
-import { isLoggedIn, getJwt } from '../services/authService'
+import React, {
+  useState,
+  useEffect,
+  createContext,
+  useCallback,
+  useContext
+} from 'react'
 import {
   HubConnectionBuilder,
   LogLevel,
   HttpTransportType
 } from '@aspnet/signalr'
+import { get, filter, includes } from 'lodash'
+
+import api from '../services/httpService'
+import { isLoggedIn, getJwt } from '../services/authService'
+import { ProfileContext } from './ProfileContextProvider'
 
 export const ChatContext = createContext()
 
@@ -14,28 +22,67 @@ const ChatContextProvider = ({ children }) => {
   const [chats, setChats] = useState(null)
   const [chatsFetching, setChatsFetching] = useState(false)
   const [connectionId, setConnectionId] = useState(null)
+  const [hubConnection, setHubConnection] = useState(null)
 
   const [currentChat, setCurrentChat] = useState(null)
   const [currentChatFetching, setCurrentChatFetching] = useState(false)
 
-  const getMessages = async chatId => {
-    const { data: messages } = await api.get(`chats/${chatId}/messages`)
-    setCurrentChat(prev => ({ ...prev, messages }))
+  const { profile } = useContext(ProfileContext)
+
+  const recieveMessage = useCallback(
+    (chatId, message) => {
+      if (chatId !== get(currentChat, 'id')) return
+
+      const updatedMessage = {
+        ...message,
+        isMyMessage: get(message, 'senderId') === get(profile, 'id')
+      }
+
+      const currChatMessages = get(currentChat, 'messages', [])
+      setCurrentChat(x => ({
+        ...x,
+        messages: [...currChatMessages, updatedMessage]
+      }))
+    },
+    [currentChat, profile]
+  )
+
+  const recieveChat = useCallback(chat => {
+    setChats(x => [chat, ...x])
+  }, [])
+
+  const recieveParticipant = useCallback(
+    (chat, participant) => {
+      console.log(get(participant, 'id'), get(profile, 'id'))
+
+      if (get(participant, 'id') === get(profile, 'id'))
+        setChats(x => [chat, ...x])
+      if (chat.id !== get(currentChat, 'id')) return
+
+      const currChatParticipants = get(currentChat, 'participants', [])
+      setCurrentChat(x => ({
+        ...x,
+        participants: [...currChatParticipants, participant]
+      }))
+    },
+    [currentChat, profile]
+  )
+
+  const fetchChats = async () => {
+    setChatsFetching(true)
+    const { data } = await api.get('/chats/mine')
+    setChats(data)
+    setChatsFetching(false)
   }
 
-  const getParticipants = async chatId => {
-    const { data: participants } = await api.get(`chats/${chatId}/participants`)
-    setCurrentChat(prev => ({ ...prev, participants }))
-  }
+  const getChat = useCallback(async chatId => {
+    setCurrentChatFetching(true)
+    const response = await api.get(`chats/mine/${chatId}`)
+    setCurrentChat(get(response, 'data'))
+    setCurrentChatFetching(false)
+  }, [])
 
   useEffect(() => {
-    const fetchChats = async () => {
-      setChatsFetching(true)
-      const { data } = await api.get('/chats/mine')
-      setChats(data)
-      setChatsFetching(false)
-    }
-
     const connectToHub = () => {
       const connection = new HubConnectionBuilder()
         .withUrl('https://localhost:5001/api/chat-hub', {
@@ -46,10 +93,7 @@ const ChatContextProvider = ({ children }) => {
         .configureLogging(LogLevel.Information)
         .build()
 
-      connection.on('GetChats', () => fetchChats())
-      connection.on('GetConnectionId', cId => setConnectionId(cId))
-      connection.on('GetMessages', getMessages)
-      connection.on('GetParticipants', getParticipants)
+      setHubConnection(connection)
 
       connection
         .start()
@@ -63,12 +107,18 @@ const ChatContextProvider = ({ children }) => {
     }
   }, [])
 
-  const getChat = useCallback(async chatId => {
-    setCurrentChatFetching(true)
-    const response = await api.get(`chats/mine/${chatId}`)
-    setCurrentChat(get(response, 'data'))
-    setCurrentChatFetching(false)
-  }, [])
+  useEffect(() => {
+    if (!hubConnection) return
+
+    hubConnection.onclose(() => alert('DISCONNECTED'))
+    hubConnection.on('RecieveChat', recieveChat)
+    hubConnection.on('GetConnectionId', cId => setConnectionId(cId))
+    hubConnection.on('RecieveMessage', recieveMessage)
+    hubConnection.on('RecieveParticipant', recieveParticipant)
+    hubConnection.on('DeleteChat', chatId =>
+      setChats(prev => filter(prev, x => x.id !== chatId))
+    )
+  }, [hubConnection, recieveMessage, recieveChat, recieveParticipant])
 
   return (
     <ChatContext.Provider

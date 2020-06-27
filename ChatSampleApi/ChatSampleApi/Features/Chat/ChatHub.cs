@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using ChatSampleApi.Persistence;
 using ChatSampleApi.Services;
@@ -12,13 +13,20 @@ namespace ChatSampleApi.Features.Chat
     public class ChatHub : Hub
     {
         public const string ApiPath = "/api/chat-hub";
-        public const string GetMessages = "GetMessages";
-        public const string GetParticipants = "GetParticipants";
-        public const string GetChats = "GetChats";
+        public const string RecieveMessage = "RecieveMessage";
+        public const string RecieveParticipant = "RecieveParticipant";
+        public const string RecieveChat = "RecieveChat";
+        public const string DeleteChat = "DeleteChat";
         public const string GetConnectionId = "GetConnectionId";
 
         private readonly ICurrentUserService _currentUserService;
         private readonly DatabaseContext _db;
+
+        private static Dictionary<string, string[]> _userConnections = new Dictionary<string, string[]>();
+        public static IReadOnlyDictionary<string, string[]> UserConnections
+        {
+            get => _userConnections;
+        }
 
         public ChatHub(ICurrentUserService currentUserService, DatabaseContext db)
         {
@@ -30,8 +38,19 @@ namespace ChatSampleApi.Features.Chat
         {
             await Clients.Caller.SendAsync(GetConnectionId, Context.ConnectionId);
             await AddUserToGroups();
+            AddUserConnection();
 
             await base.OnConnectedAsync();
+        }
+
+        private void AddUserConnection()
+        {
+            var userId = _currentUserService.UserId;
+
+            if (_userConnections.ContainsKey(userId))
+                _userConnections[userId].Append(Context.ConnectionId);
+            else
+                _userConnections.Add(userId, new[] { Context.ConnectionId });
         }
 
         private async Task AddUserToGroups()

@@ -27,10 +27,18 @@ namespace ChatSampleApi.Features.Chat.SendMessage
 
             var sender = await _db.Users.FindAsync(request.UserId);
 
-            chat.AddMessage(sender, request.Text);
+            var message = chat.AddMessage(sender, request.Text);
             await _db.SaveChangesAsync();
 
-            await _hubContext.Clients.Group(chat.Id).SendAsync(ChatHub.GetMessages, chat.Id);
+            await _hubContext.Clients.Group(chat.Id).SendAsync(ChatHub.RecieveMessage, chat.Id, new GetMyChat.GetMyChatResponse.MessageDto
+            {
+                Date = message.SentDate,
+                Id = message.Id,
+                SenderId = message.Sender.Id,
+                SenderName = message.Sender.FullName,
+                SenderPicture = message.Sender.Picture,
+                Text = message.Text
+            });
 
             return Unit.Value;
         }
