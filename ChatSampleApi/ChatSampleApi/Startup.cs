@@ -1,5 +1,6 @@
 using System.Reflection;
 using ChatSampleApi.Features.Chat;
+using ChatSampleApi.Middleware;
 using ChatSampleApi.Middleware.ErrorHandling;
 using ChatSampleApi.Persistence;
 using ChatSampleApi.Services;
@@ -29,6 +30,7 @@ namespace ChatSampleApi
             services.AddHttpContextAccessor();
 
             services.AddScoped<ICurrentUserService, CurrentUserService>();
+            services.AddTransient(typeof(IPipelineBehavior<,>), typeof(PerformanceBehaviour<,>));
 
             services.AddMediatR(Assembly.GetExecutingAssembly());
 

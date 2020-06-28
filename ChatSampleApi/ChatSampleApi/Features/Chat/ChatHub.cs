@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ChatSampleApi.Persistence;
@@ -22,8 +23,8 @@ namespace ChatSampleApi.Features.Chat
         private readonly ICurrentUserService _currentUserService;
         private readonly DatabaseContext _db;
 
-        private static Dictionary<string, string[]> _userConnections = new Dictionary<string, string[]>();
-        public static IReadOnlyDictionary<string, string[]> UserConnections
+        private static Dictionary<string, List<string>> _userConnections = new Dictionary<string, List<string>>();
+        public static IReadOnlyDictionary<string, List<string>> UserConnections
         {
             get => _userConnections;
         }
@@ -43,14 +44,21 @@ namespace ChatSampleApi.Features.Chat
             await base.OnConnectedAsync();
         }
 
+        public override async Task OnDisconnectedAsync(Exception exception)
+        {
+            await RemoveUserFromGroups();
+            RemoveUserConnections();
+            await base.OnDisconnectedAsync(exception);
+        }
+
         private void AddUserConnection()
         {
             var userId = _currentUserService.UserId;
 
             if (_userConnections.ContainsKey(userId))
-                _userConnections[userId].Append(Context.ConnectionId);
+                _userConnections[userId] = _userConnections[userId].Append(Context.ConnectionId).ToList();
             else
-                _userConnections.Add(userId, new[] { Context.ConnectionId });
+                _userConnections.Add(userId, new List<string> { Context.ConnectionId });
         }
 
         private async Task AddUserToGroups()
@@ -59,6 +67,22 @@ namespace ChatSampleApi.Features.Chat
 
             foreach (var group in groups)
                 await Groups.AddToGroupAsync(Context.ConnectionId, group.Id);
+        }
+
+        private async Task RemoveUserFromGroups()
+        {
+            var groups = await _db.Chats.Where(x => x.Participants.Any(p => p.UserId == _currentUserService.UserId)).ToListAsync();
+
+            foreach (var group in groups)
+                await Groups.RemoveFromGroupAsync(Context.ConnectionId, group.Id);
+        }
+
+        private void RemoveUserConnections()
+        {
+            var userId = _currentUserService.UserId;
+
+            if (_userConnections.ContainsKey(userId))
+                _userConnections[userId].Remove(Context.ConnectionId);
         }
     }
 }

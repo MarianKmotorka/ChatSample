@@ -1,7 +1,8 @@
-import React, { useState, useContext } from 'react'
-import api from '../../services/httpService'
-import { get } from 'lodash'
+import React, { useState, useContext, useRef, useEffect } from 'react'
 import styled from 'styled-components'
+import { get } from 'lodash'
+
+import api from '../../services/httpService'
 import colors from '../../utils/colors.json'
 import { ChatContext } from '../../contextProviders/ChatContextProvider'
 
@@ -79,6 +80,12 @@ const Content = styled.div`
 const CreateRoomForm = ({ formRef, callback }) => {
   const [name, setName] = useState('')
   const { connectionId } = useContext(ChatContext)
+  const inputRef = useRef()
+
+  useEffect(() => {
+    const input = get(inputRef, 'current')
+    input && input.focus()
+  }, [])
 
   const createChat = async e => {
     e.preventDefault()
@@ -93,7 +100,11 @@ const CreateRoomForm = ({ formRef, callback }) => {
       <Header>Create chat</Header>
       <Content>
         <p>Name:</p>
-        <input value={name} onChange={({ target }) => setName(target.value)} />
+        <input
+          ref={inputRef}
+          value={name}
+          onChange={({ target }) => setName(target.value)}
+        />
         <button>Create</button>
       </Content>
     </Form>

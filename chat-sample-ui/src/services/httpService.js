@@ -16,9 +16,9 @@ axios.interceptors.request.use(
 axios.interceptors.response.use(
   response => response,
   async error => {
-    const originalRequest = error.config
+    const originalRequest = get(error, 'config')
 
-    if (error.response.status === 401) {
+    if (get(error, 'response.status') === 401) {
       const response = await axios.post('/auth/refresh-token', {
         expiredJwt: getJwt(),
         refreshToken: getRefreshToken()

@@ -10,7 +10,7 @@ namespace ChatSampleApi.Services
         {
             var userClaims = httpContextAccessor.HttpContext.User.Claims;
 
-            UserId = userClaims.Single(x => x.Type == ClaimTypes.NameIdentifier).Value;
+            UserId = userClaims.SingleOrDefault(x => x.Type == ClaimTypes.NameIdentifier)?.Value;
         }
 
         public string UserId { get; }

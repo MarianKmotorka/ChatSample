@@ -21,7 +21,9 @@ const Message = ({ message, forwardRef }) => (
       <p>{message.senderName}</p>
       <MessageDate>{moment(message.date).fromNow()}</MessageDate>
     </MessageInfo>
-    <Text ref={forwardRef}>{message.text}</Text>
+    <Text className='wordwrap' ref={forwardRef}>
+      {message.text}
+    </Text>
   </MessageWrapper>
 )
 

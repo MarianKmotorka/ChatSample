@@ -10,7 +10,7 @@ import {
   LogLevel,
   HttpTransportType
 } from '@aspnet/signalr'
-import { get, filter, includes } from 'lodash'
+import { get, filter } from 'lodash'
 
 import api from '../services/httpService'
 import { isLoggedIn, getJwt } from '../services/authService'
@@ -21,11 +21,15 @@ export const ChatContext = createContext()
 const ChatContextProvider = ({ children }) => {
   const [chats, setChats] = useState(null)
   const [chatsFetching, setChatsFetching] = useState(false)
-  const [connectionId, setConnectionId] = useState(null)
-  const [hubConnection, setHubConnection] = useState(null)
 
   const [currentChat, setCurrentChat] = useState(null)
   const [currentChatFetching, setCurrentChatFetching] = useState(false)
+
+  const [messages, setMessages] = useState([])
+  const [participants, setParticipants] = useState([])
+
+  const [connectionId, setConnectionId] = useState(null)
+  const [hubConnection, setHubConnection] = useState(null)
 
   const { profile } = useContext(ProfileContext)
 
@@ -38,34 +42,30 @@ const ChatContextProvider = ({ children }) => {
         isMyMessage: get(message, 'senderId') === get(profile, 'id')
       }
 
-      const currChatMessages = get(currentChat, 'messages', [])
-      setCurrentChat(x => ({
-        ...x,
-        messages: [...currChatMessages, updatedMessage]
-      }))
+      setMessages(prev => [...prev, updatedMessage])
+    },
+    [currentChat, profile]
+  )
+
+  const recieveParticipant = useCallback(
+    (chat, participant) => {
+      if (get(participant, 'id') === get(profile, 'id'))
+        setChats(x => [chat, ...x])
+
+      if (chat.id !== get(currentChat, 'id')) return
+
+      setParticipants(prev => [...prev, participant])
     },
     [currentChat, profile]
   )
 
   const recieveChat = useCallback(chat => {
-    setChats(x => [chat, ...x])
+    setChats(prev => [chat, ...prev])
   }, [])
 
-  const recieveParticipant = useCallback(
-    (chat, participant) => {
-      console.log(get(participant, 'id'), get(profile, 'id'))
-
-      if (get(participant, 'id') === get(profile, 'id'))
-        setChats(x => [chat, ...x])
-      if (chat.id !== get(currentChat, 'id')) return
-
-      const currChatParticipants = get(currentChat, 'participants', [])
-      setCurrentChat(x => ({
-        ...x,
-        participants: [...currChatParticipants, participant]
-      }))
-    },
-    [currentChat, profile]
+  const deleteChat = useCallback(
+    chatId => setChats(prev => filter(prev, x => x.id !== chatId)),
+    []
   )
 
   const fetchChats = async () => {
@@ -78,8 +78,11 @@ const ChatContextProvider = ({ children }) => {
   const getChat = useCallback(async chatId => {
     setCurrentChatFetching(true)
     const response = await api.get(`chats/mine/${chatId}`)
-    setCurrentChat(get(response, 'data'))
     setCurrentChatFetching(false)
+
+    setCurrentChat(get(response, 'data'))
+    setParticipants(get(response, 'data.participants'))
+    setMessages(get(response, 'data.messages'))
   }, [])
 
   useEffect(() => {
@@ -90,7 +93,7 @@ const ChatContextProvider = ({ children }) => {
           transport: HttpTransportType.WebSockets,
           accessTokenFactory: getJwt
         })
-        .configureLogging(LogLevel.Information)
+        .configureLogging(LogLevel.Debug)
         .build()
 
       setHubConnection(connection)
@@ -110,15 +113,19 @@ const ChatContextProvider = ({ children }) => {
   useEffect(() => {
     if (!hubConnection) return
 
-    hubConnection.onclose(() => alert('DISCONNECTED'))
     hubConnection.on('RecieveChat', recieveChat)
-    hubConnection.on('GetConnectionId', cId => setConnectionId(cId))
+    hubConnection.on('GetConnectionId', setConnectionId)
     hubConnection.on('RecieveMessage', recieveMessage)
     hubConnection.on('RecieveParticipant', recieveParticipant)
-    hubConnection.on('DeleteChat', chatId =>
-      setChats(prev => filter(prev, x => x.id !== chatId))
-    )
-  }, [hubConnection, recieveMessage, recieveChat, recieveParticipant])
+    hubConnection.on('DeleteChat', deleteChat)
+  }, [
+    hubConnection,
+    recieveMessage,
+    setConnectionId,
+    recieveParticipant,
+    recieveChat,
+    deleteChat
+  ])
 
   return (
     <ChatContext.Provider
@@ -128,6 +135,8 @@ const ChatContextProvider = ({ children }) => {
         connectionId,
         currentChat,
         currentChatFetching,
+        messages,
+        participants,
         getChat
       }}
     >

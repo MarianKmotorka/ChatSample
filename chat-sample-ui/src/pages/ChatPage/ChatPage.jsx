@@ -7,7 +7,9 @@ import LoadingSpinner from '../../components/LoadingSpinner'
 import api from '../../services/httpService'
 
 const ChatPage = () => {
-  const { currentChat, currentChatFetching, getChat } = useContext(ChatContext)
+  const { currentChatFetching, getChat, messages, participants } = useContext(
+    ChatContext
+  )
   const { chatId } = useParams()
 
   useEffect(() => {
@@ -23,8 +25,8 @@ const ChatPage = () => {
   return (
     <Chat
       chatId={chatId}
-      messages={get(currentChat, 'messages', [])}
-      participants={get(currentChat, 'participants', [])}
+      messages={messages}
+      participants={participants}
       onMessageSent={handleMessageSent}
     />
   )
