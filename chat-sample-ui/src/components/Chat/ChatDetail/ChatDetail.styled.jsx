@@ -21,11 +21,24 @@ export const ParticipantWrapper = styled.div`
   border-radius: 45px;
   margin-top: 20px;
   width: 80%;
+  min-height: 43px;
   background: ${colors.ternary};
   & img {
     border-radius: 50%;
     width: 45px;
     margin-right: 15px;
+  }
+  & i {
+    background: ${colors.secondary};
+    color: ${colors.ternaryLight};
+    width: 20px;
+    height: 20px;
+    padding-top: 3px;
+    text-align: center;
+    border-radius: 50%;
+    margin-left: auto;
+    margin-right: 15px;
+    cursor: pointer;
   }
 `
 

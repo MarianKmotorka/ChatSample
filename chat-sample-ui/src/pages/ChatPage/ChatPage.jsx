@@ -1,5 +1,4 @@
 import React, { useContext, useEffect } from 'react'
-import { get } from 'lodash'
 import { useParams } from 'react-router-dom'
 import Chat from '../../components/Chat/Chat'
 import { ChatContext } from '../../contextProviders/ChatContextProvider'

@@ -14,6 +14,10 @@ const ChatDetail = ({ participants, chatId }) => {
     setShowDropdown(false)
   }
 
+  const handleRemoveParticipant = async id => {
+    await api.delete(`/chats/${chatId}/participants/${id}`)
+  }
+
   return (
     <Wrapper>
       <Header>
@@ -33,6 +37,10 @@ const ChatDetail = ({ participants, chatId }) => {
         <ParticipantWrapper key={x.id}>
           <img src={x.picture} alt='' />
           <p>{x.name}</p>
+          <i
+            className='fas fa-times'
+            onClick={() => handleRemoveParticipant(x.id)}
+          ></i>
         </ParticipantWrapper>
       ))}
     </Wrapper>

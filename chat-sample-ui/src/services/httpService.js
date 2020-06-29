@@ -31,7 +31,7 @@ axios.interceptors.response.use(
         logout()
         window.location = '/login'
       }
-    }
+    } else return Promise.reject(error)
   }
 )
 

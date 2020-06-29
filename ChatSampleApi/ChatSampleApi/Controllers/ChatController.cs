@@ -5,6 +5,7 @@ using ChatSampleApi.Features.Chat;
 using ChatSampleApi.Features.Chat.AddParticipant;
 using ChatSampleApi.Features.Chat.CreateChat;
 using ChatSampleApi.Features.Chat.GetMyChat;
+using ChatSampleApi.Features.Chat.RemoveParticipant;
 using ChatSampleApi.Features.Chat.SendMessage;
 using ChatSampleApi.Persistence;
 using Microsoft.AspNetCore.Authorization;
@@ -80,9 +81,16 @@ namespace ChatSampleApi.Controllers
         }
 
         [HttpPost("{id}/participants")]
-        public async Task<ActionResult> AddParticipant(string id, [FromBody] AddParticipantCommand request)
+        public async Task<ActionResult> AddParticipant(string id, AddParticipantCommand request)
         {
             request.ChatId = id;
+            await Mediator.Send(request);
+            return NoContent();
+        }
+
+        [HttpDelete("{chatId}/participants/{participantId}")]
+        public async Task<ActionResult> RemoveParticipant([FromRoute] RemoveParticipantCommand request)
+        {
             await Mediator.Send(request);
             return NoContent();
         }

@@ -63,15 +63,26 @@ const ChatContextProvider = ({ children }) => {
     setChats(prev => [chat, ...prev])
   }, [])
 
-  const deleteChat = useCallback(
-    chatId => setChats(prev => filter(prev, x => x.id !== chatId)),
-    []
+  const deleteChat = useCallback(chatId => {
+    setChats(prev => filter(prev, x => x.id !== chatId))
+  }, [])
+
+  const deleteParticipant = useCallback(
+    (chatId, participantId) => {
+      if (get(profile, 'id') === participantId)
+        return setChats(prev => filter(prev, x => x.id !== chatId))
+
+      if (chatId !== get(currentChat, 'id')) return
+
+      setParticipants(prev => filter(prev, x => x.id !== participantId))
+    },
+    [profile, currentChat]
   )
 
   const fetchChats = async () => {
     setChatsFetching(true)
-    const { data } = await api.get('/chats/mine')
-    setChats(data)
+    const response = await api.get('/chats/mine')
+    setChats(response.data)
     setChatsFetching(false)
   }
 
@@ -118,13 +129,15 @@ const ChatContextProvider = ({ children }) => {
     hubConnection.on('RecieveMessage', recieveMessage)
     hubConnection.on('RecieveParticipant', recieveParticipant)
     hubConnection.on('DeleteChat', deleteChat)
+    hubConnection.on('DeleteParticipant', deleteParticipant)
   }, [
     hubConnection,
     recieveMessage,
     setConnectionId,
     recieveParticipant,
     recieveChat,
-    deleteChat
+    deleteChat,
+    deleteParticipant
   ])
 
   return (

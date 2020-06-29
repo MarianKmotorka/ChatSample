@@ -18,6 +18,7 @@ namespace ChatSampleApi.Features.Chat
         public const string RecieveParticipant = "RecieveParticipant";
         public const string RecieveChat = "RecieveChat";
         public const string DeleteChat = "DeleteChat";
+        public const string DeleteParticipant = "DeleteParticipant";
         public const string GetConnectionId = "GetConnectionId";
 
         private readonly ICurrentUserService _currentUserService;
