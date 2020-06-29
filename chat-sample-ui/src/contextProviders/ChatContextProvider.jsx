@@ -50,13 +50,13 @@ const ChatContextProvider = ({ children }) => {
   const recieveParticipant = useCallback(
     (chat, participant) => {
       if (get(participant, 'id') === get(profile, 'id'))
-        setChats(x => [chat, ...x])
+        setChats([chat, ...chats])
 
       if (chat.id !== get(currentChat, 'id')) return
 
-      setParticipants(prev => [...prev, participant])
+      setParticipants([...participants, participant])
     },
-    [currentChat, profile]
+    [currentChat, profile, chats, participants]
   )
 
   const recieveChat = useCallback(chat => {
