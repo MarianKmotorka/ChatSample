@@ -25,8 +25,7 @@ namespace ChatSampleApi.Features.Chat.RemoveParticipant
             var chat = await _db.Chats.Include(x => x.Participants).SingleOrNotFoundAsync(x => x.Id == request.ChatId);
             var participant = chat.Participants.SingleOrDefault(x => x.UserId == request.ParticipantId);
 
-            if (participant is null)
-                throw new BadRequestException($"Participant with id ({request.ParticipantId}) does not exist");
+            _ = participant ?? throw new BadRequestException($"Participant with id ({request.ParticipantId}) does not exist");
 
             chat.Participants.Remove(participant);
 

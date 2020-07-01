@@ -5,15 +5,11 @@ import React, {
   useCallback,
   useContext
 } from 'react'
-import {
-  HubConnectionBuilder,
-  LogLevel,
-  HttpTransportType
-} from '@aspnet/signalr'
 import { get, filter } from 'lodash'
 
 import api from '../services/httpService'
-import { isLoggedIn, getJwt } from '../services/authService'
+import { isLoggedIn } from '../services/authService'
+import useHub from '../utils/useHub'
 import { ProfileContext } from './ProfileContextProvider'
 
 export const ChatContext = createContext()
@@ -29,8 +25,8 @@ const ChatContextProvider = ({ children }) => {
   const [participants, setParticipants] = useState([])
 
   const [connectionId, setConnectionId] = useState(null)
-  const [hubConnection, setHubConnection] = useState(null)
 
+  const { hubConnection } = useHub('https://localhost:5001/api/chat-hub')
   const { profile } = useContext(ProfileContext)
 
   const recieveMessage = useCallback(
@@ -79,13 +75,6 @@ const ChatContextProvider = ({ children }) => {
     [profile, currentChat]
   )
 
-  const fetchChats = async () => {
-    setChatsFetching(true)
-    const response = await api.get('/chats/mine')
-    setChats(response.data)
-    setChatsFetching(false)
-  }
-
   const getChat = useCallback(async chatId => {
     setCurrentChatFetching(true)
     const response = await api.get(`chats/mine/${chatId}`)
@@ -97,27 +86,15 @@ const ChatContextProvider = ({ children }) => {
   }, [])
 
   useEffect(() => {
-    const connectToHub = () => {
-      const connection = new HubConnectionBuilder()
-        .withUrl('https://localhost:5001/api/chat-hub', {
-          skipNegotiation: true,
-          transport: HttpTransportType.WebSockets,
-          accessTokenFactory: getJwt
-        })
-        .configureLogging(LogLevel.Debug)
-        .build()
-
-      setHubConnection(connection)
-
-      connection
-        .start()
-        .then(() => console.log('CONNECTED'))
-        .catch(err => console.log(err))
+    const fetchChats = async () => {
+      setChatsFetching(true)
+      const response = await api.get('/chats/mine')
+      setChats(response.data)
+      setChatsFetching(false)
     }
 
     if (isLoggedIn) {
       fetchChats()
-      connectToHub()
     }
   }, [])
 
@@ -130,6 +107,15 @@ const ChatContextProvider = ({ children }) => {
     hubConnection.on('RecieveParticipant', recieveParticipant)
     hubConnection.on('DeleteChat', deleteChat)
     hubConnection.on('DeleteParticipant', deleteParticipant)
+
+    return () => {
+      hubConnection.off('RecieveChat')
+      hubConnection.off('GetConnectionId')
+      hubConnection.off('RecieveMessage')
+      hubConnection.off('RecieveParticipant')
+      hubConnection.off('DeleteChat')
+      hubConnection.off('DeleteParticipant')
+    }
   }, [
     hubConnection,
     recieveMessage,
