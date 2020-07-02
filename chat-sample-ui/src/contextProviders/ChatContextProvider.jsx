@@ -44,6 +44,7 @@ const ChatContextProvider = ({ children }) => {
         )
 
         beep()
+        return
       }
 
       const updatedMessage = {
@@ -53,7 +54,7 @@ const ChatContextProvider = ({ children }) => {
 
       setMessages(prev => [...prev, updatedMessage])
     },
-    [currentChat, profile]
+    [currentChat, profile, beep]
   )
 
   const recieveParticipant = useCallback(

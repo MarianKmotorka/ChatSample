@@ -34,7 +34,18 @@ namespace ChatSampleApi.Features.Chat.RemoveParticipant
 
             await _db.SaveChangesAsync(cancellationToken);
             await _hubContext.Clients.Group(chat.Id).SendAsync(ChatHub.DeleteParticipant, chat.Id, participant.UserId, cancellationToken);
+            await RemoveUserConnectionsFromGroup(request.ParticipantId, chat.Id);
+
             return Unit.Value;
+        }
+
+        private async Task RemoveUserConnectionsFromGroup(string userId, string groupName)
+        {
+            if (!ChatHub.UserConnections.ContainsKey(userId))
+                return;
+
+            foreach (var connectionId in ChatHub.UserConnections[userId])
+                await _hubContext.Groups.RemoveFromGroupAsync(connectionId, groupName);
         }
     }
 }
