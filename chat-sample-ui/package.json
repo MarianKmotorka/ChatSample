@@ -18,7 +18,8 @@
     "react-final-form": "^6.5.0",
     "react-router-dom": "^5.2.0",
     "react-scripts": "3.4.1",
-    "styled-components": "^5.1.1"
+    "styled-components": "^5.1.1",
+    "use-sound": "^1.0.2"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -38,7 +39,8 @@
     "development": [
       "last 1 chrome version",
       "last 1 firefox version",
-      "last 1 safari version"
+      "last 1 safari version",
+      "last 1 edge version"
     ]
   }
 }

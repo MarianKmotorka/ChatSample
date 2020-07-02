@@ -33,6 +33,8 @@ namespace ChatSampleApi.Persistence
                 x.HasKey(y => new { y.ChatId, y.UserId });
                 x.HasOne(y => y.Chat).WithMany(y => y.Participants).OnDelete(DeleteBehavior.Cascade);
                 x.HasOne(y => y.User).WithMany().OnDelete(DeleteBehavior.Cascade);
+
+                x.HasMany(x => x.UnreadMessages).WithOne().OnDelete(DeleteBehavior.NoAction).IsRequired(false);
             });
 
             builder.Entity<Chat>(y =>

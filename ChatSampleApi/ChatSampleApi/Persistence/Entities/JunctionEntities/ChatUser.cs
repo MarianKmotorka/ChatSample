@@ -1,4 +1,6 @@
-﻿namespace ChatSampleApi.Persistence.Entities.JunctionEntities
+﻿using System.Collections.Generic;
+
+namespace ChatSampleApi.Persistence.Entities.JunctionEntities
 {
     public class ChatUser
     {
@@ -9,5 +11,7 @@
         public Chat Chat { get; set; }
 
         public string ChatId { get; set; }
+
+        public List<Message> UnreadMessages { get; set; }
     }
 }

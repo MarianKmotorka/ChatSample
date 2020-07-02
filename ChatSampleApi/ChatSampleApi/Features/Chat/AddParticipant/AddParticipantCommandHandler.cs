@@ -30,12 +30,20 @@ namespace ChatSampleApi.Features.Chat.AddParticipant
                 foreach (var connection in connections)
                     await _hubContext.Groups.AddToGroupAsync(connection, chat.Id, cancellationToken);
 
-            await _hubContext.Clients.Group(chat.Id).SendAsync(ChatHub.RecieveParticipant, new { chat.Id, chat.Name }, new GetMyChat.GetMyChatResponse.ParticipantDto
-            {
-                Id = participant.Id,
-                Name = participant.FullName,
-                Picture = participant.Picture
-            });
+            await _hubContext.Clients.Group(chat.Id).SendAsync(
+                ChatHub.RecieveParticipant,
+                new GetMyChatsList.ChatDto
+                {
+                    Id = chat.Id,
+                    Name = chat.Name,
+                    UnreadMessages = 0
+                },
+                new GetMyChat.GetMyChatResponse.ParticipantDto
+                {
+                    Id = participant.Id,
+                    Name = participant.FullName,
+                    Picture = participant.Picture
+                });
 
             return Unit.Value;
         }

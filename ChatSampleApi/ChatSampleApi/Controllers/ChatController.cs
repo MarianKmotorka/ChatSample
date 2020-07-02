@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using ChatSampleApi.Features.Chat;
 using ChatSampleApi.Features.Chat.AddParticipant;
@@ -11,7 +10,6 @@ using ChatSampleApi.Persistence;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
-using Microsoft.EntityFrameworkCore;
 
 namespace ChatSampleApi.Controllers
 {
@@ -31,17 +29,8 @@ namespace ChatSampleApi.Controllers
         [HttpGet("mine")]
         public async Task<ActionResult<List<object>>> GetChats()
         {
-            var userId = CurrentUserService.UserId;
-
-            var chats = await _db.Chats.Where(x => x.Participants.Any(p => p.UserId == userId))
-                .Select(x => new
-                {
-                    x.Id,
-                    x.Name
-                })
-                .ToListAsync();
-
-            return Ok(chats);
+            var response = await Mediator.Send(new GetMyChatsList.Query { UserId = CurrentUserService.UserId });
+            return Ok(response);
         }
 
         [HttpGet("mine/{id}")]

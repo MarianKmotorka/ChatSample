@@ -82,3 +82,13 @@ export const CreateChatButton = styled.div`
     transform: scale(1.5);
   }
 `
+
+export const Badge = styled.div`
+  padding: 4px 10px;
+  border-radius: 50%;
+  background-color: ${colors.secondaryLight};
+  color: ${colors.main};
+  position: absolute;
+  bottom: -5px;
+  right: -5px;
+`

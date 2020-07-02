@@ -5,12 +5,14 @@ import React, {
   useCallback,
   useContext
 } from 'react'
-import { get, filter } from 'lodash'
+import { get, filter, map } from 'lodash'
+import useSound from 'use-sound'
 
+import useHub from '../utils/useHub'
 import api from '../services/httpService'
 import { isLoggedIn } from '../services/authService'
-import useHub from '../utils/useHub'
 import { ProfileContext } from './ProfileContextProvider'
+import newMessageBeep from '../sounds/newMessageBeep.mp3'
 
 export const ChatContext = createContext()
 
@@ -28,10 +30,21 @@ const ChatContextProvider = ({ children }) => {
 
   const { hubConnection } = useHub('https://localhost:5001/api/chat-hub')
   const { profile } = useContext(ProfileContext)
+  const [beep] = useSound(newMessageBeep)
 
   const recieveMessage = useCallback(
     (chatId, message) => {
-      if (chatId !== get(currentChat, 'id')) return
+      if (chatId !== get(currentChat, 'id')) {
+        setChats(prev =>
+          map(prev, x => {
+            if (x.id === chatId)
+              return { ...x, unreadMessages: x.unreadMessages + 1 }
+            return x
+          })
+        )
+
+        beep()
+      }
 
       const updatedMessage = {
         ...message,
@@ -83,6 +96,13 @@ const ChatContextProvider = ({ children }) => {
     setCurrentChat(get(response, 'data'))
     setParticipants(get(response, 'data.participants'))
     setMessages(get(response, 'data.messages'))
+
+    setChats(prev =>
+      map(prev, x => {
+        if (x.id === chatId) return { ...x, unreadMessages: 0 }
+        return x
+      })
+    )
   }, [])
 
   useEffect(() => {

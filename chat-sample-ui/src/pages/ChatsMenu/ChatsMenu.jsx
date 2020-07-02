@@ -1,14 +1,20 @@
 import React, { useState, useRef, useContext } from 'react'
-import { map, get } from 'lodash'
 import { useHistory } from 'react-router-dom'
+import { map, get } from 'lodash'
 
-import Backdrop from '../../components/Backdrop'
-import { Wrapper, ChatButtonLink, CreateChatButton } from './ChatsMenu.styled'
-import LoadingSpinner from '../../components/LoadingSpinner'
+import api from '../../services/httpService'
 import CreateRoomForm from './CreateRoomForm'
+import Backdrop from '../../components/Backdrop'
+import LoadingSpinner from '../../components/LoadingSpinner'
 import { useOnClickOutside } from '../../utils/useOnClickOutside'
 import { ChatContext } from '../../contextProviders/ChatContextProvider'
-import api from '../../services/httpService'
+
+import {
+  Wrapper,
+  ChatButtonLink,
+  CreateChatButton,
+  Badge
+} from './ChatsMenu.styled'
 
 const ChatsMenu = () => {
   const [showCreateChatDialog, setShowCreateChatDialog] = useState(false)
@@ -43,15 +49,22 @@ const ChatsMenu = () => {
         </Backdrop>
       )}
       <Wrapper>
-        {map(chats, x => (
-          <ChatButtonLink key={get(x, 'id')} to={`/chats/${get(x, 'id')}`}>
-            {get(x, 'name')}
-            <i
-              className='fas fa-times'
-              onClick={() => deleteChat(get(x, 'id'))}
-            ></i>
-          </ChatButtonLink>
-        ))}
+        {map(chats, x => {
+          const unreadMessages = get(x, 'unreadMessages')
+          const name = get(x, 'name')
+          const id = get(x, 'id')
+
+          return (
+            <ChatButtonLink key={id} to={`/chats/${id}`}>
+              {name}
+              <i
+                className='fas fa-times'
+                onClick={() => deleteChat(get(x, 'id'))}
+              ></i>
+              {!!unreadMessages && <Badge>{unreadMessages}</Badge>}
+            </ChatButtonLink>
+          )
+        })}
         <CreateChatButton onClick={() => setShowCreateChatDialog(true)}>
           <i className='fas fa-plus'></i>
         </CreateChatButton>

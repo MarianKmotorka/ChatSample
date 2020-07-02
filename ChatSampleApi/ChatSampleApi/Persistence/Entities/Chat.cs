@@ -41,7 +41,15 @@ namespace ChatSampleApi.Persistence.Entities
 
             Messages.Add(message);
 
+            foreach (var chatUser in Participants.Where(x => x.UserId != sender.Id))
+                chatUser.UnreadMessages.Add(message);
+
             return message;
+        }
+
+        public void SetMessagesAsReadForParticipant(string id)
+        {
+            Participants.Single(x => x.UserId == id).UnreadMessages.Clear();
         }
 
         public AuthUser AddParticipant(AuthUser participant)

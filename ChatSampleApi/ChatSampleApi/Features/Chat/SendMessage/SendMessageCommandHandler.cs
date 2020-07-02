@@ -23,6 +23,7 @@ namespace ChatSampleApi.Features.Chat.SendMessage
             var chat = await _db.Chats
                 .Include(x => x.Messages)
                 .Include(x => x.Participants)
+                .ThenInclude(x => x.UnreadMessages)
                 .SingleOrNotFoundAsync(x => x.Id == request.ChatId);
 
             var sender = await _db.Users.FindAsync(request.UserId);
