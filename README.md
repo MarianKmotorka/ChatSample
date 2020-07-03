@@ -1,9 +1,8 @@
 # ChatSample
 
-Demo project created to make use of cool technologies like:
+Demo project utilizing technologies like:
   * SignalR
-  * OAuth2 + OIDC 
+  * Google login
   * EF Core 3.1
-  * React Final Form
   * React Hooks
-  * Material UI
+  * Styled-components
