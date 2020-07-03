@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace ChatSampleApi.Migrations
+namespace ChatSampleApi.Persistence
 {
     public partial class Initial : Migration
     {
