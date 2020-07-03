@@ -7,6 +7,7 @@ import React, {
 } from 'react'
 import { get, filter, map } from 'lodash'
 import useSound from 'use-sound'
+import { useHistory } from 'react-router-dom'
 
 import useHub from '../utils/useHub'
 import api from '../services/httpService'
@@ -31,6 +32,7 @@ const ChatContextProvider = ({ children }) => {
   const { hubConnection } = useHub('https://localhost:5001/api/chat-hub')
   const { profile } = useContext(ProfileContext)
   const [beep] = useSound(newMessageBeep)
+  const history = useHistory()
 
   const recieveMessage = useCallback(
     (chatId, message) => {
@@ -73,20 +75,26 @@ const ChatContextProvider = ({ children }) => {
     setChats(prev => [chat, ...prev])
   }, [])
 
-  const deleteChat = useCallback(chatId => {
-    setChats(prev => filter(prev, x => x.id !== chatId))
-  }, [])
+  const deleteChat = useCallback(
+    chatId => {
+      if (chatId === currentChat.id) history.replace('/')
+      setChats(prev => filter(prev, x => x.id !== chatId))
+    },
+    [currentChat, history]
+  )
 
   const deleteParticipant = useCallback(
     (chatId, participantId) => {
-      if (get(profile, 'id') === participantId)
+      if (get(profile, 'id') === participantId) {
+        history.replace('/')
         return setChats(prev => filter(prev, x => x.id !== chatId))
+      }
 
       if (chatId !== get(currentChat, 'id')) return
 
       setParticipants(prev => filter(prev, x => x.id !== participantId))
     },
-    [profile, currentChat]
+    [profile, currentChat, history]
   )
 
   const getChat = useCallback(async chatId => {

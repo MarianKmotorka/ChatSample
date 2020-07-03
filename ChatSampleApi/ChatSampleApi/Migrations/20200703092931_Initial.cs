@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace ChatSampleApi.Migrations
 {
-    public partial class ChatEntities : Migration
+    public partial class Initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -212,12 +212,19 @@ namespace ChatSampleApi.Migrations
                     Id = table.Column<string>(nullable: false),
                     Text = table.Column<string>(nullable: true),
                     SenderId = table.Column<string>(nullable: true),
+                    ChatId = table.Column<string>(nullable: true),
                     SentDate = table.Column<DateTime>(nullable: false),
-                    ChatId = table.Column<string>(nullable: true)
+                    AuthUserId = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Message", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Message_AuthUser_AuthUserId",
+                        column: x => x.AuthUserId,
+                        principalTable: "AuthUser",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.SetNull);
                     table.ForeignKey(
                         name: "FK_Message_Chat_ChatId",
                         column: x => x.ChatId,
@@ -277,6 +284,11 @@ namespace ChatSampleApi.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Message_AuthUserId",
+                table: "Message",
+                column: "AuthUserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Message_ChatId",
                 table: "Message",
                 column: "ChatId");
@@ -317,10 +329,10 @@ namespace ChatSampleApi.Migrations
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
-                name: "Chat");
+                name: "AuthUser");
 
             migrationBuilder.DropTable(
-                name: "AuthUser");
+                name: "Chat");
         }
     }
 }

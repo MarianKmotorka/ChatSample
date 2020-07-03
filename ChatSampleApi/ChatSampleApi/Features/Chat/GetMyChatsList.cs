@@ -32,7 +32,7 @@ namespace ChatSampleApi.Features.Chat
                     {
                         Id = x.Id,
                         Name = x.Name,
-                        UnreadMessages = x.Participants.Single(p => p.UserId == request.UserId).UnreadMessages.Count
+                        UnreadMessages = x.Participants.Single(p => p.UserId == request.UserId).User.UnreadMessages.Count
                     })
                     .ToListAsync();
 

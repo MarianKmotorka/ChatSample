@@ -83,5 +83,13 @@ namespace ChatSampleApi.Controllers
             await Mediator.Send(request);
             return NoContent();
         }
+
+        [HttpGet("{chatId}/participants/new")]
+        public async Task<ActionResult<IEnumerable<GetNewParticipantsSelector.UserDto>>> GetNewParticipantsSelector(string chatId, [FromQuery] GetNewParticipantsSelector.Query request)
+        {
+            request.ChatId = chatId;
+            var response = await Mediator.Send(request);
+            return Ok(response);
+        }
     }
 }

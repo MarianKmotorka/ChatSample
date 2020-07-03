@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react'
 import PropTypes from 'prop-types'
-import { map, filter, includes, toLower } from 'lodash'
+import { map, filter, includes, toLower, identity } from 'lodash'
 import { useOnClickOutside } from '../../utils/useOnClickOutside'
 import api from '../../services/httpService'
 import {
@@ -41,10 +41,10 @@ const SearchableDropdown = ({
 
     const setOptionsFromApi = async () => {
       setOptions([])
-      const { url, params, formatter = x => x } = fetchOptions
+      const { url, params, formatter = identity } = fetchOptions
 
       setLoading(true)
-      const { data } = await api.get(`${url}?text=${text}`)
+      const { data } = await api.get(`${url}?text=${text}`, { params })
       setLoading(false)
 
       const formatted = map(data, formatter)
@@ -100,6 +100,22 @@ const SearchableDropdown = ({
       )}
     </Wrapper>
   )
+}
+
+SearchableDropdown.propTypes = {
+  options: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+      value: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
+    })
+  ),
+  fetchOptions: PropTypes.shape({
+    url: PropTypes.string,
+    params: PropTypes.shape(),
+    formatter: PropTypes.func
+  }),
+  onChange: PropTypes.func.isRequired,
+  error: PropTypes.string
 }
 
 export default SearchableDropdown

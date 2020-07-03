@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using System.Collections.Generic;
+using Microsoft.AspNetCore.Identity;
 
 namespace ChatSampleApi.Persistence.Entities
 {
@@ -7,5 +8,8 @@ namespace ChatSampleApi.Persistence.Entities
         public string FullName { get; set; }
 
         public string Picture { get; set; }
+
+        public List<Message> UnreadMessages { get; set; }
+
     }
 }

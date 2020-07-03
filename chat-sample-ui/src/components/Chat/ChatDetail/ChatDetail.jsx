@@ -27,7 +27,7 @@ const ChatDetail = ({ participants, chatId }) => {
       {showDropdown && (
         <SearchableDropdown
           fetchOptions={{
-            url: '/users',
+            url: `/chats/${chatId}/participants/new`,
             formatter: x => ({ id: x.id, value: x.name })
           }}
           onChange={handleAddParticipant}

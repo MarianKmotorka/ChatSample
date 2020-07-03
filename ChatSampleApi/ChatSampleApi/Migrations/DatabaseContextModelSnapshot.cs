@@ -125,13 +125,10 @@ namespace ChatSampleApi.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<string>("AuthUserId")
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<string>("ChatId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("ChatUserChatId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("ChatUserUserId")
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("SenderId")
@@ -145,11 +142,11 @@ namespace ChatSampleApi.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("AuthUserId");
+
                     b.HasIndex("ChatId");
 
                     b.HasIndex("SenderId");
-
-                    b.HasIndex("ChatUserChatId", "ChatUserUserId");
 
                     b.ToTable("Message");
                 });
@@ -324,6 +321,11 @@ namespace ChatSampleApi.Migrations
 
             modelBuilder.Entity("ChatSampleApi.Persistence.Entities.Message", b =>
                 {
+                    b.HasOne("ChatSampleApi.Persistence.Entities.AuthUser", null)
+                        .WithMany("UnreadMessages")
+                        .HasForeignKey("AuthUserId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
                     b.HasOne("ChatSampleApi.Persistence.Entities.Chat", "Chat")
                         .WithMany("Messages")
                         .HasForeignKey("ChatId")
@@ -332,11 +334,6 @@ namespace ChatSampleApi.Migrations
                     b.HasOne("ChatSampleApi.Persistence.Entities.AuthUser", "Sender")
                         .WithMany()
                         .HasForeignKey("SenderId");
-
-                    b.HasOne("ChatSampleApi.Persistence.Entities.JunctionEntities.ChatUser", null)
-                        .WithMany("UnreadMessages")
-                        .HasForeignKey("ChatUserChatId", "ChatUserUserId")
-                        .OnDelete(DeleteBehavior.NoAction);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

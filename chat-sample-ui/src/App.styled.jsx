@@ -12,5 +12,5 @@ export const ContentWrapper = styled.div`
   flex: 1;
   width: 100%;
   height: 92vh;
-  background: linear-gradient(45deg, #c1dfc4, #deecdd);
+  background: linear-gradient(to right, #e65245, #e43a15);
 `

@@ -24,6 +24,7 @@ namespace ChatSampleApi.Features.Chat.GetMyChat
                 .Include(x => x.Messages)
                     .ThenInclude(x => x.Sender)
                 .Include(x => x.Participants)
+                    .ThenInclude(x => x.User)
                     .ThenInclude(x => x.UnreadMessages)
                 .Include(x => x.Participants)
                     .ThenInclude(x => x.User)

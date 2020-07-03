@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ChatSampleApi.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20200620162901_ChatEntities")]
-    partial class ChatEntities
+    [Migration("20200703092931_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -95,6 +95,7 @@ namespace ChatSampleApi.Migrations
             modelBuilder.Entity("ChatSampleApi.Persistence.Entities.Chat", b =>
                 {
                     b.Property<string>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Name")
@@ -123,6 +124,10 @@ namespace ChatSampleApi.Migrations
             modelBuilder.Entity("ChatSampleApi.Persistence.Entities.Message", b =>
                 {
                     b.Property<string>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("AuthUserId")
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("ChatId")
@@ -138,6 +143,8 @@ namespace ChatSampleApi.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("AuthUserId");
 
                     b.HasIndex("ChatId");
 
@@ -316,7 +323,12 @@ namespace ChatSampleApi.Migrations
 
             modelBuilder.Entity("ChatSampleApi.Persistence.Entities.Message", b =>
                 {
-                    b.HasOne("ChatSampleApi.Persistence.Entities.Chat", null)
+                    b.HasOne("ChatSampleApi.Persistence.Entities.AuthUser", null)
+                        .WithMany("UnreadMessages")
+                        .HasForeignKey("AuthUserId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.HasOne("ChatSampleApi.Persistence.Entities.Chat", "Chat")
                         .WithMany("Messages")
                         .HasForeignKey("ChatId")
                         .OnDelete(DeleteBehavior.Cascade);

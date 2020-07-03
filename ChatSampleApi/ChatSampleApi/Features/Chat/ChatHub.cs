@@ -57,7 +57,7 @@ namespace ChatSampleApi.Features.Chat
             var userId = _currentUserService.UserId;
 
             if (_userConnections.ContainsKey(userId))
-                _userConnections[userId] = _userConnections[userId].Append(Context.ConnectionId).ToList();
+                _userConnections[userId].Add(Context.ConnectionId);
             else
                 _userConnections.Add(userId, new List<string> { Context.ConnectionId });
         }
