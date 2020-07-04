@@ -28,7 +28,7 @@ namespace ChatSampleApi.Persistence
             builder.Entity<AuthUser>(y =>
             {
                 y.ToTable("AuthUser");
-                y.HasMany(x => x.UnreadMessages).WithOne().OnDelete(DeleteBehavior.SetNull).IsRequired(false);
+                y.HasMany(x => x.UnreadMessages).WithOne(x => x.User).Metadata.PrincipalToDependent.SetPropertyAccessMode(PropertyAccessMode.Field);
             });
 
             builder.Entity<ChatUser>(x =>
@@ -37,6 +37,14 @@ namespace ChatSampleApi.Persistence
                 x.HasKey(y => new { y.ChatId, y.UserId });
                 x.HasOne(y => y.Chat).WithMany(y => y.Participants).OnDelete(DeleteBehavior.Cascade);
                 x.HasOne(y => y.User).WithMany().OnDelete(DeleteBehavior.Cascade);
+            });
+
+            builder.Entity<UserUnreadMessage>(x =>
+            {
+                x.ToTable("UserUnreadMessages");
+                x.HasKey(y => new { y.MessageId, y.UserId });
+                x.HasOne(y => y.Message).WithMany().OnDelete(DeleteBehavior.Cascade);
+                x.HasOne(y => y.User).WithMany(y => y.UnreadMessages).OnDelete(DeleteBehavior.Cascade);
             });
 
             builder.Entity<Chat>(y =>

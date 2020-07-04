@@ -26,6 +26,7 @@ namespace ChatSampleApi.Features.Chat.GetMyChat
                 .Include(x => x.Participants)
                     .ThenInclude(x => x.User)
                     .ThenInclude(x => x.UnreadMessages)
+                    .ThenInclude(x => x.Message)
                 .Include(x => x.Participants)
                     .ThenInclude(x => x.User)
                 .SingleOrNotFoundAsync(x => x.Id == request.ChatId);
@@ -33,7 +34,7 @@ namespace ChatSampleApi.Features.Chat.GetMyChat
             if (!chat.Participants.Any(x => x.UserId == request.UserId))
                 throw new Forbidden403Exception();
 
-            chat.SetMessagesAsReadForParticipant(request.UserId);
+            chat.Participants.Single(x => x.UserId == request.UserId).User.SetUnreadMessagesAsRead(request.ChatId);
             await _db.SaveChangesAsync(cancellationToken);
 
             return new GetMyChatResponse

@@ -27,7 +27,7 @@ namespace ChatSampleApi.Features.Chat.RemoveParticipant
 
             _ = participant ?? throw new BadRequestException($"Participant with id ({request.ParticipantId}) does not exist");
 
-            chat.Participants.Remove(participant);
+            chat.RemoveParticipant(participant);
 
             if (!chat.Participants.Any())
                 _db.Remove(chat);

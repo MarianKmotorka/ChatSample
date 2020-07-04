@@ -11,8 +11,8 @@ namespace ChatSampleApi.Persistence.Entities
         public Chat(string name)
         {
             Name = name;
-            Participants = new List<ChatUser>();
-            Messages = new List<Message>();
+            _participants = new List<ChatUser>();
+            _messages = new List<Message>();
         }
 
         private Chat()
@@ -23,9 +23,11 @@ namespace ChatSampleApi.Persistence.Entities
 
         public string Name { get; private set; }
 
-        public List<ChatUser> Participants { get; private set; }
+        public IReadOnlyCollection<ChatUser> Participants => _participants;
+        private List<ChatUser> _participants;
 
-        public List<Message> Messages { get; private set; }
+        public IReadOnlyCollection<Message> Messages => _messages;
+        private List<Message> _messages;
 
         public Message AddMessage(AuthUser sender, string text)
         {
@@ -39,23 +41,20 @@ namespace ChatSampleApi.Persistence.Entities
                 Text = text
             };
 
-            Messages.Add(message);
+            _messages.Add(message);
 
             foreach (var chatUser in Participants.Where(x => x.UserId != sender.Id))
-                chatUser.User.UnreadMessages.Add(message);
+                chatUser.User.AddUnreadMessage(message);
 
             return message;
         }
 
-        public void SetMessagesAsReadForParticipant(string id)
-        {
-            Participants.Single(x => x.UserId == id).User.UnreadMessages.Clear();
-        }
-
         public AuthUser AddParticipant(AuthUser participant)
         {
-            Participants.Add(new ChatUser { User = participant });
+            _participants.Add(new ChatUser(participant, this));
             return participant;
         }
+
+        public void RemoveParticipant(ChatUser chatUser) => _participants.Remove(chatUser);
     }
 }

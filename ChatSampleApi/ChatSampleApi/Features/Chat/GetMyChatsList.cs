@@ -28,14 +28,12 @@ namespace ChatSampleApi.Features.Chat
             {
                 var chats = await _db.Chats
                     .Where(x => x.Participants.Any(p => p.UserId == request.UserId))
-                    .Select(x => new ChatDto
-                    {
-                        Id = x.Id,
-                        Name = x.Name,
-                        UnreadMessages = x.Participants.Single(p => p.UserId == request.UserId).User.UnreadMessages.Count
-                    })
-                    .ToListAsync();
+                    .Select(x => new ChatDto { Id = x.Id, Name = x.Name }).ToListAsync(cancellationToken);
 
+                var unreadMessages =
+                    (await _db.Users.Include(x => x.UnreadMessages).ThenInclude(x => x.Message).SingleAsync(x => x.Id == request.UserId)).UnreadMessages;
+
+                chats.ForEach(x => x.UnreadMessages = unreadMessages.Where(m => m.Message.ChatId == x.Id).Count());
                 return chats;
             }
         }

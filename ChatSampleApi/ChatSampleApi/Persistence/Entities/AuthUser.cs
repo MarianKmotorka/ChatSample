@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using ChatSampleApi.Persistence.Entities.JunctionEntities;
 using Microsoft.AspNetCore.Identity;
 
 namespace ChatSampleApi.Persistence.Entities
@@ -9,8 +10,13 @@ namespace ChatSampleApi.Persistence.Entities
 
         public string Picture { get; set; }
 
-        public List<Message> UnreadMessages { get; set; }
+        public IReadOnlyCollection<UserUnreadMessage> UnreadMessages => _unreadMessages;
+        private List<UserUnreadMessage> _unreadMessages;
 
         public bool IsOnline { get; set; }
+
+        public void AddUnreadMessage(Message message) => _unreadMessages.Add(new UserUnreadMessage(this, message));
+
+        public void SetUnreadMessagesAsRead(string chatId) => _unreadMessages.RemoveAll(x => x.Message.ChatId == chatId);
     }
 }
