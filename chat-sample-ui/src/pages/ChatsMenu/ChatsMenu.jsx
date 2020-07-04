@@ -49,6 +49,9 @@ const ChatsMenu = () => {
         </Backdrop>
       )}
       <Wrapper>
+        <CreateChatButton onClick={() => setShowCreateChatDialog(true)}>
+          <i className='fas fa-plus'></i>
+        </CreateChatButton>
         {map(chats, x => {
           const unreadMessages = get(x, 'unreadMessages')
           const name = get(x, 'name')
@@ -65,9 +68,6 @@ const ChatsMenu = () => {
             </ChatButtonLink>
           )
         })}
-        <CreateChatButton onClick={() => setShowCreateChatDialog(true)}>
-          <i className='fas fa-plus'></i>
-        </CreateChatButton>
       </Wrapper>
     </>
   )

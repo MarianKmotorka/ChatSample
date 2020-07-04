@@ -34,7 +34,7 @@ const ChatDetail = ({ participants, chatId }) => {
         />
       )}
       {map(participants, x => (
-        <ParticipantWrapper key={x.id}>
+        <ParticipantWrapper key={x.id} isOnline={x.isOnline}>
           <img src={x.picture} alt='' />
           <p>{x.name}</p>
           <i

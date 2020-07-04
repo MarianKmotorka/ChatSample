@@ -114,6 +114,15 @@ const ChatContextProvider = ({ children }) => {
     )
   }, [])
 
+  const userConnectedStatusChanged = useCallback((userId, isOnline) => {
+    setParticipants(prev =>
+      map(prev, x => {
+        if (x.id === userId) return { ...x, isOnline }
+        return x
+      })
+    )
+  }, [])
+
   useEffect(() => {
     const fetchChats = async () => {
       setChatsFetching(true)
@@ -136,6 +145,7 @@ const ChatContextProvider = ({ children }) => {
     hubConnection.on('RecieveParticipant', recieveParticipant)
     hubConnection.on('DeleteChat', deleteChat)
     hubConnection.on('DeleteParticipant', deleteParticipant)
+    hubConnection.on('UserConnectedStatusChanged', userConnectedStatusChanged)
 
     return () => {
       hubConnection.off('RecieveChat')
@@ -144,6 +154,7 @@ const ChatContextProvider = ({ children }) => {
       hubConnection.off('RecieveParticipant')
       hubConnection.off('DeleteChat')
       hubConnection.off('DeleteParticipant')
+      hubConnection.off('UserConnectedStatusChanged')
     }
   }, [
     hubConnection,
@@ -152,7 +163,8 @@ const ChatContextProvider = ({ children }) => {
     recieveParticipant,
     recieveChat,
     deleteChat,
-    deleteParticipant
+    deleteParticipant,
+    userConnectedStatusChanged
   ])
 
   return (

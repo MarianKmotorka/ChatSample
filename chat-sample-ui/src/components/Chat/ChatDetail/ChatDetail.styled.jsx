@@ -22,7 +22,7 @@ export const ParticipantWrapper = styled.div`
   margin-top: 20px;
   width: 80%;
   min-height: 43px;
-  background: ${colors.ternary};
+  background: ${({ isOnline }) => (isOnline ? 'lightGreen' : colors.ternary)};
   & img {
     border-radius: 50%;
     width: 45px;

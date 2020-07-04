@@ -54,7 +54,8 @@ namespace ChatSampleApi.Features.Chat.GetMyChat
                 {
                     Id = p.UserId,
                     Name = p.User.FullName,
-                    Picture = p.User.Picture
+                    Picture = p.User.Picture,
+                    IsOnline = p.User.IsOnline
                 })
             };
         }

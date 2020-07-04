@@ -11,5 +11,6 @@ namespace ChatSampleApi.Persistence.Entities
 
         public List<Message> UnreadMessages { get; set; }
 
+        public bool IsOnline { get; set; }
     }
 }

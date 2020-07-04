@@ -18,6 +18,8 @@ namespace ChatSampleApi.Features.Chat.GetMyChat
             public string Name { get; set; }
 
             public string Picture { get; set; }
+
+            public bool IsOnline { get; set; }
         }
 
         public class MessageDto

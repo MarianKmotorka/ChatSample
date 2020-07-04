@@ -42,7 +42,8 @@ namespace ChatSampleApi.Features.Chat.AddParticipant
                 {
                     Id = participant.Id,
                     Name = participant.FullName,
-                    Picture = participant.Picture
+                    Picture = participant.Picture,
+                    IsOnline = participant.IsOnline
                 });
 
             return Unit.Value;

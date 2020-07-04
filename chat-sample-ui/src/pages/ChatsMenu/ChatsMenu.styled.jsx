@@ -72,8 +72,8 @@ export const CreateChatButton = styled.div`
   background: ${colors.secondary};
   color: ${colors.mainDark};
   width: 40px;
-  height: 40px;
-  margin-top: 20px;
+  min-height: 40px;
+  margin-bottom: 20px;
   transition: all 0.2s ease;
 
   &:hover {
