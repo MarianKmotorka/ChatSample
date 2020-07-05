@@ -1,9 +1,10 @@
 import React, { useState, useRef, useContext } from 'react'
 import { useHistory } from 'react-router-dom'
 import { map, get } from 'lodash'
+import { DeleteFilled, PlusOutlined } from '@ant-design/icons'
 
 import api from '../../services/httpService'
-import CreateRoomForm from './CreateRoomForm'
+import CreateRoomForm from './CreateChatForm'
 import Backdrop from '../../components/Backdrop'
 import LoadingSpinner from '../../components/LoadingSpinner'
 import { useOnClickOutside } from '../../utils/useOnClickOutside'
@@ -12,9 +13,9 @@ import { ChatContext } from '../../contextProviders/ChatContextProvider'
 import {
   Wrapper,
   ChatButtonLink,
-  CreateChatButton,
-  Badge
-} from './ChatsMenu.styled'
+  StyledButton,
+  StyledBadge
+} from './styled/ChatsMenu.styled'
 
 const ChatsMenu = () => {
   const [showCreateChatDialog, setShowCreateChatDialog] = useState(false)
@@ -49,23 +50,23 @@ const ChatsMenu = () => {
         </Backdrop>
       )}
       <Wrapper>
-        <CreateChatButton onClick={() => setShowCreateChatDialog(true)}>
-          <i className='fas fa-plus'></i>
-        </CreateChatButton>
+        <StyledButton
+          onClick={() => setShowCreateChatDialog(true)}
+          shape='circle'
+          icon={<PlusOutlined />}
+        />
         {map(chats, x => {
-          const unreadMessages = get(x, 'unreadMessages')
+          const unreadMessages = get(x, 'unreadMessages', 0)
           const name = get(x, 'name')
           const id = get(x, 'id')
 
           return (
-            <ChatButtonLink key={id} to={`/chats/${id}`}>
-              {name}
-              <i
-                className='fas fa-times'
-                onClick={() => deleteChat(get(x, 'id'))}
-              ></i>
-              {!!unreadMessages && <Badge>{unreadMessages}</Badge>}
-            </ChatButtonLink>
+            <StyledBadge key={id} count={unreadMessages} offset={[-5, 5]}>
+              <ChatButtonLink to={`/chats/${id}`}>
+                {name}
+                <DeleteFilled onClick={() => deleteChat(get(x, 'id'))} />
+              </ChatButtonLink>
+            </StyledBadge>
           )
         })}
       </Wrapper>

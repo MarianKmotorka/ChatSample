@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import colors from '../../utils/colors.json'
+import { Button } from 'antd'
 
 export const Wrapper = styled.div`
   height: 100%;
@@ -16,35 +16,33 @@ export const ChatWithInput = styled.div`
 
 export const InputWrapper = styled.div`
   display: flex;
-  border-top: 2px solid ${colors.secondaryDark};
-  background: white;
+  background: ${({ theme }) => theme.blackCoffee};
+  align-items: center;
+  padding: 10px;
+
   & input {
     flex: 4;
-    font-size: 18px;
-    padding: 8px 15px;
+    font-size: 16px;
+    padding: 6px 15px;
     outline: none;
     border: none;
-    border-radius: 0 10px 10px 0;
+    border-radius: 22px;
+    background: ${({ theme }) => theme.dimGray};
+    color: ${({ theme }) => theme.white};
   }
+`
 
-  & button {
-    flex: 1;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border: none;
-    background: linear-gradient(-90deg, ${colors.secondary}, white);
-    cursor: pointer;
-    color: ${colors.secondaryDark};
-    font-size: 20px;
+export const StyledButton = styled(Button)`
+  flex: 1;
+  background: ${({ theme }) => theme.marigold};
+  color: ${({ theme }) => theme.blackCoffee};
+  border: none;
+  max-width: 200px;
+  margin: 0 15px 0 25px;
+  font-size: 15px;
 
-    &:focus {
-      outline: none;
-    }
-
-    & > * {
-      margin-right: 5px;
-    }
+  &:hover {
+    background: ${({ theme }) => theme.red};
   }
 `
 
@@ -72,11 +70,11 @@ export const MessageWrapper = styled.div`
   border: 1.5px grey solid;
   max-width: 55%;
 
-  background: ${({ isMyMessage }) =>
-    isMyMessage ? colors.mainDark : colors.ternary};
+  background: ${({ isMyMessage, theme }) =>
+    isMyMessage ? theme.gold : theme.grey};
 
   margin-left: ${({ isMyMessage }) => (isMyMessage ? 'auto' : '5px')};
-  color: ${({ isMyMessage }) => (isMyMessage ? colors.ternary : 'black')};
+  color: ${({ isMyMessage, theme }) => (isMyMessage ? theme.grey : 'black')};
 
   @media only screen and (max-width: 600px) {
     max-width: 80%;

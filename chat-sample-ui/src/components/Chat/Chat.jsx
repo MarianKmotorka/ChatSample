@@ -2,6 +2,9 @@ import React, { useState, useEffect, useRef } from 'react'
 import PropTypes from 'prop-types'
 import moment from 'moment'
 import { map, last } from 'lodash'
+import { SwapRightOutlined } from '@ant-design/icons'
+
+import ChatDetail from './ChatDetail/ChatDetail'
 import {
   ChatWithInput,
   Wrapper,
@@ -10,9 +13,9 @@ import {
   MessageWrapper,
   MessageInfo,
   MessageDate,
-  Text
+  Text,
+  StyledButton
 } from './Chat.styled'
-import ChatDetail from './ChatDetail/ChatDetail'
 
 const Message = ({ message, forwardRef }) => (
   <MessageWrapper isMyMessage={message.isMyMessage}>
@@ -63,10 +66,13 @@ const Chat = ({ messages, participants, onMessageSent, chatId }) => {
               value={text}
               onChange={({ target }) => setText(target.value)}
             />
-            <button>
-              <p>Send</p>
-              <i className='fas fa-chevron-right'></i>
-            </button>
+            <StyledButton
+              type='primary'
+              shape='round'
+              icon={<SwapRightOutlined />}
+            >
+              Send
+            </StyledButton>
           </InputWrapper>
         </form>
       </ChatWithInput>

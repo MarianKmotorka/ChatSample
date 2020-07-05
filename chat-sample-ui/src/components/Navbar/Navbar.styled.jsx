@@ -1,9 +1,8 @@
 import styled from 'styled-components'
-import colors from '../../utils/colors.json'
 
 export const Wrapper = styled.div`
   display: flex;
-  background: ${colors.main};
+  background: ${({ theme }) => theme.marigold};
   width: 100%;
   height: 8vh;
   align-items: center;
@@ -12,7 +11,7 @@ export const Wrapper = styled.div`
 export const Logo = styled.div`
   font-size: 25px;
   padding: 10px 0 10px 30px;
-  color: ${colors.secondary};
+  color: ${({ theme }) => theme.blackCoffee};
 `
 
 export const Links = styled.div`
@@ -25,7 +24,7 @@ export const Links = styled.div`
     text-decoration: none;
     margin: 0 12px;
     font-size: 20px;
-    color: ${colors.secondary};
+    color: ${({ theme }) => theme.blackCoffee};
     transition: transform 0.2s;
     &:hover {
       transform: translateY(5px);
@@ -39,16 +38,16 @@ export const ProfileWrapper = styled.div`
   align-items: center;
   margin-right: 20px;
   border-radius: 30px;
-  background: ${colors.secondary};
-
+  background: ${({ theme }) => theme.blackCoffee};
   & > p {
-    color: ${colors.mainDark};
-    padding-right: 7px;
+    color: ${({ theme }) => theme.white};
+    padding-right: 13px;
+    margin: 0;
   }
 
   & > img {
     border-radius: 50%;
     margin-right: 5px;
-    width: 30px;
+    width: 27px;
   }
 `

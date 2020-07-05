@@ -1,6 +1,5 @@
 import React from 'react'
 import styled from 'styled-components'
-import colors from '../../utils/colors.json'
 import config from '../../utils/config.json'
 import googleIcon from '../../img/google.png'
 
@@ -24,8 +23,6 @@ const Card = styled.div`
 `
 
 const Header = styled.div`
-  background: ${colors.secondary};
-  color: ${colors.main};
   font-size: 30px;
   border-radius: 20px 20px 0 0;
   display: flex;
@@ -34,8 +31,6 @@ const Header = styled.div`
 `
 
 const Content = styled.div`
-  background: ${colors.mainDark};
-  color: ${colors.secondaryDark};
   flex: 1;
   border-radius: 0 0 20px 20px;
   display: flex;
@@ -52,12 +47,9 @@ const Content = styled.div`
     align-items: center;
     justify-content: flex-start;
     cursor: pointer;
-    background: ${colors.mainLight};
     font-size: 20px;
 
     &:hover {
-      background: ${colors.main};
-      color: ${colors.secondary};
     }
 
     & img {
