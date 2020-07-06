@@ -20,6 +20,8 @@ namespace ChatSampleApi.Features.Chat.GetMyChat
 
         public async Task<GetMyChatResponse> Handle(GetMyChatQuery request, CancellationToken cancellationToken)
         {
+            //TODO check for performance issues
+
             var chat = await _db.Chats
                 .Include(x => x.Messages)
                     .ThenInclude(x => x.Sender)

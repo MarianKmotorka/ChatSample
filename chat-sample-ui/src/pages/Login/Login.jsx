@@ -1,63 +1,7 @@
 import React from 'react'
-import styled from 'styled-components'
+import { Wrapper, Card, Header, Content } from './styled/Login.styled'
 import config from '../../utils/config.json'
 import googleIcon from '../../img/google.png'
-
-const Wrapper = styled.div`
-  height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`
-
-const Card = styled.div`
-  height: 50vh;
-  width: 50%;
-  max-width: 300px;
-  min-width: 250px;
-  display: flex;
-  flex-direction: column;
-  border-radius: 20px;
-  border: gray solid 1.5px;
-  box-shadow: 0px 3px 2px 0px #ccc;
-`
-
-const Header = styled.div`
-  font-size: 30px;
-  border-radius: 20px 20px 0 0;
-  display: flex;
-  justify-content: center;
-  padding: 7px;
-`
-
-const Content = styled.div`
-  flex: 1;
-  border-radius: 0 0 20px 20px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  & button {
-    padding: 8px;
-    outline: transparent;
-    border-radius: 6px;
-    border: transparent;
-    width: 70%;
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-    cursor: pointer;
-    font-size: 20px;
-
-    &:hover {
-    }
-
-    & img {
-      width: 15%;
-      margin-right: 10px;
-    }
-  }
-`
 
 const Login = () => {
   const onGoogleLoginClick = () => {
