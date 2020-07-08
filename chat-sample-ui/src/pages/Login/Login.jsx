@@ -23,7 +23,7 @@ const Login = () => {
     <Wrapper>
       <Card>
         <Header>
-          <p>Login</p>
+          <p>Log in</p>
         </Header>
         <Content>
           <button onClick={onGoogleLoginClick}>

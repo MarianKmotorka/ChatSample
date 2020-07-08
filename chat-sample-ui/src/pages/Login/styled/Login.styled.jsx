@@ -4,7 +4,7 @@ import background from '../../../img/background.jpg'
 export const Wrapper = styled.div`
   height: 100%;
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
   background: url(${background});
   background-position: center;
@@ -13,24 +13,24 @@ export const Wrapper = styled.div`
 `
 
 export const Card = styled.div`
-  height: 50vh;
-  width: 50%;
-  max-width: 300px;
-  min-width: 250px;
+  height: 100%;
+  width: 40%;
   display: flex;
   flex-direction: column;
-  border-radius: 20px;
-  background: rgba(0, 0, 0, 0.05);
+  background: rgba(0, 0, 0, 0.6);
 `
 
 export const Header = styled.div`
   font-size: 30px;
-  border-radius: 20px 20px 0 0;
   display: flex;
   justify-content: center;
   padding: 20px 7px 0px 7px;
   color: ${({ theme }) => theme.white};
   background: ${({ theme }) => theme.blackCoffee};
+
+  & p {
+    font-weight: 500;
+  }
 `
 
 export const Content = styled.div`
@@ -45,7 +45,7 @@ export const Content = styled.div`
     outline: transparent;
     border-radius: 6px;
     border: transparent;
-    width: 70%;
+    width: 50%;
     display: flex;
     align-items: center;
     justify-content: flex-start;
@@ -57,6 +57,7 @@ export const Content = styled.div`
       margin: 0;
       font-weight: 500;
       color: ${({ theme }) => theme.blackCoffee};
+      margin: 0 auto;
     }
 
     &:hover {
@@ -68,7 +69,6 @@ export const Content = styled.div`
 
     & img {
       width: 15%;
-      margin-right: 10px;
     }
   }
 `
