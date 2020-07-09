@@ -49,6 +49,7 @@ export const StyledButton = styled(Button)`
 export const MessagesWrapper = styled.div`
   overflow: auto;
   flex: 1;
+  background: ${({ theme }) => theme.white};
 
   ::-webkit-scrollbar {
     width: 7px;
@@ -65,16 +66,17 @@ export const MessageWrapper = styled.div`
   display: flex;
   flex-direction: column;
   padding: 10px;
-  margin: 8px;
+  margin: 10px 10px;
   border-radius: 10px;
   border: 1.5px grey solid;
   max-width: 55%;
 
   background: ${({ isMyMessage, theme }) =>
-    isMyMessage ? theme.gold : theme.grey};
+    isMyMessage ? theme.gold : theme.white};
 
   margin-left: ${({ isMyMessage }) => (isMyMessage ? 'auto' : '5px')};
-  color: ${({ isMyMessage, theme }) => (isMyMessage ? theme.grey : 'black')};
+
+  color: ${({ theme }) => theme.black};
 
   @media only screen and (max-width: 600px) {
     max-width: 80%;
@@ -86,6 +88,7 @@ export const MessageInfo = styled.div`
   justify-content: flex-start;
   align-items: center;
   margin-bottom: 10px;
+  font-size: 17px;
   & img {
     margin-right: 10px;
     width: 30px;

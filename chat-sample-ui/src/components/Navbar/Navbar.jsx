@@ -10,7 +10,7 @@ const Navbar = () => {
 
   return (
     <Wrapper>
-      <Logo>SampleChat</Logo>
+      <Logo to='/'>SampleChat</Logo>
       <Links>
         {!isLoggedIn && <Link to='/login'>Login</Link>}
         {isLoggedIn && (

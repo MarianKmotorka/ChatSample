@@ -8,7 +8,8 @@ const theme = {
   gold: '#DEB841',
   marigold: '#DE9E36',
   blue: '#298cfb',
-  red: '#ff4d4f'
+  red: '#ff4d4f',
+  black: '#000000'
 }
 
 export default theme

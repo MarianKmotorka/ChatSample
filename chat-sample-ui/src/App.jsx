@@ -12,38 +12,46 @@ import ProfileContextProvider from './contextProviders/ProfileContextProvider'
 import ChatContextProvider from './contextProviders/ChatContextProvider'
 import { isLoggedIn } from './services/authService'
 
-import { AppWrapper, MenuAndContentWrapper, ContentWrapper } from './App.styled'
+import {
+  AppWrapper,
+  MenuAndContentWrapper,
+  ContentWrapper,
+  GlobalStyle
+} from './App.styled'
 import Home from './pages/Home/Home'
 
 const App = () => {
   return (
-    <ProfileContextProvider>
-      <ChatContextProvider>
-        <AppWrapper>
-          <Navbar />
-          <MenuAndContentWrapper>
-            {isLoggedIn && <ChatsMenu />}
-            <ContentWrapper>
-              <Switch>
-                <ProtectedRoute path='/' exact component={Home} />
-                <ProtectedRoute
-                  path='/chats/:chatId'
-                  exact
-                  component={ChatPage}
-                />
-                <Route
-                  path='/google-login-callback'
-                  component={GoogleLoginCallback}
-                />
-                <Route path='/login' component={LoginPage} />
-                <Route path='/logout' component={Logout} />
-                <Route path='/' render={() => 'NOT FOUND'} />
-              </Switch>
-            </ContentWrapper>
-          </MenuAndContentWrapper>
-        </AppWrapper>
-      </ChatContextProvider>
-    </ProfileContextProvider>
+    <>
+      <GlobalStyle />
+      <ProfileContextProvider>
+        <ChatContextProvider>
+          <AppWrapper>
+            <Navbar />
+            <MenuAndContentWrapper>
+              {isLoggedIn && <ChatsMenu />}
+              <ContentWrapper>
+                <Switch>
+                  <ProtectedRoute path='/' exact component={Home} />
+                  <ProtectedRoute
+                    path='/chats/:chatId'
+                    exact
+                    component={ChatPage}
+                  />
+                  <Route
+                    path='/google-login-callback'
+                    component={GoogleLoginCallback}
+                  />
+                  <Route path='/login' component={LoginPage} />
+                  <Route path='/logout' component={Logout} />
+                  <Route path='/' render={() => 'NOT FOUND'} />
+                </Switch>
+              </ContentWrapper>
+            </MenuAndContentWrapper>
+          </AppWrapper>
+        </ChatContextProvider>
+      </ProfileContextProvider>
+    </>
   )
 }
 

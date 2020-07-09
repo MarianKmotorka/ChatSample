@@ -1,4 +1,5 @@
 import styled from 'styled-components'
+import { Link } from 'react-router-dom'
 
 export const Wrapper = styled.div`
   display: flex;
@@ -9,10 +10,14 @@ export const Wrapper = styled.div`
   z-index: 5;
 `
 
-export const Logo = styled.div`
+export const Logo = styled(Link)`
   font-size: 25px;
   padding: 10px 0 10px 30px;
   color: ${({ theme }) => theme.blackCoffee};
+
+  &:hover {
+    color: ${({ theme }) => theme.blackCoffee};
+  }
 `
 
 export const Links = styled.div`

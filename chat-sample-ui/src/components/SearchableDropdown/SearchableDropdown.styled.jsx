@@ -7,32 +7,41 @@ export const Wrapper = styled.div`
 
 export const Header = styled.div`
   display: flex;
+  height: 40px;
   align-items: center;
-  border: none;
-  background: rgba(256, 256, 256, 0.2);
-  border-top-right-radius: 8px;
-  border-top-left-radius: 8px;
+  border: 1.5px solid ${({ theme }) => theme.blackCoffee};
+  border-radius: 3px;
 `
 
 export const ArrowWrapper = styled.div`
-  height: 100%;
-  text-align: center;
+  min-height: 100%;
   width: 40px;
+  color: ${({ theme }) => theme.red};
+  background: ${({ theme }) => theme.white};
+  border-top-right-radius: 3px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 `
 
 export const Expander = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  padding: 15px 0px 5px 0px;
-  border-bottom-right-radius: 8px;
-  border-bottom-left-radius: 8px;
+  z-index: 10;
+
   position: absolute;
   top: 100%;
+
+  padding: 10px 0px 5px 0px;
+  border-bottom-right-radius: 3px;
+  border-bottom-left-radius: 3px;
+
   width: 100%;
-  background: rgba(256, 256, 256, 0.9);
-  z-index: 10;
   font-weight: 300;
+  color: ${({ theme }) => theme.black};
+
+  background: ${({ theme }) => theme.white};
 `
 
 export const Item = styled.div`
@@ -42,7 +51,7 @@ export const Item = styled.div`
   font-size: 18px;
 
   &:hover {
-    background-color: #ddd;
+    background: ${({ theme }) => theme.lighGray};
   }
 `
 
@@ -57,17 +66,18 @@ export const LoadingItem = styled(Item)`
 `
 
 export const Error = styled.p`
-  color: red;
+  color: ${({ theme }) => theme.red};
 `
 
 export const Input = styled.input`
   padding: 5px;
   font-size: 18px;
   width: 100%;
+  height: 100%;
   outline: none;
   border: none;
-  background: rgba(256, 256, 256, 0.2);
-  border-top-left-radius: 8px;
+  border-top-left-radius: 3px;
+  background: ${({ theme }) => theme.white};
 
   &:focus {
     outline: none;

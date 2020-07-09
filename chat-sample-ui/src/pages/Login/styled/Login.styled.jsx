@@ -30,6 +30,7 @@ export const Header = styled.div`
 
   & p {
     font-weight: 500;
+    margin-bottom: 13px;
   }
 `
 

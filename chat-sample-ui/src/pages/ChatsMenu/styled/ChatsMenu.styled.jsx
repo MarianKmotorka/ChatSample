@@ -32,8 +32,8 @@ export const ChatButtonLink = styled(NavLink)`
   border-radius: 5px;
   box-shadow: 7px 7px 5px 0px rgba(170, 170, 170, 1);
 
-  background: ${({ theme }) => theme.lighGray};
-  color: ${({ theme }) => theme.blackCoffee};
+  background: ${({ theme }) => theme.blue};
+  color: ${({ theme }) => theme.white};
 
   text-decoration: none;
   font-size: 18px;
@@ -46,7 +46,7 @@ export const ChatButtonLink = styled(NavLink)`
   transition: all 0.3s ease;
 
   & svg {
-    color: ${({ theme }) => theme.blackCoffee};
+    color: ${({ theme }) => theme.gray};
     position: absolute;
     bottom: 1px;
     right: 1px;
@@ -57,14 +57,15 @@ export const ChatButtonLink = styled(NavLink)`
   }
 
   &:hover {
-    color: ${({ theme }) => theme.blackCoffee};
+    color: ${({ theme }) => theme.white};
     box-shadow: 9px 13px 5px 0px rgba(170, 170, 170, 1);
     transform: translateY(-8px);
   }
 
   &.active {
     font-weight: 500;
-    color: ${({ theme }) => theme.red};
+    font-size: 22px;
+    color: ${({ theme }) => theme.gold};
   }
 `
 
