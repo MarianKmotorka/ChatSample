@@ -16,7 +16,7 @@ const Navbar = () => {
         {isLoggedIn && (
           <>
             <ProfileWrapper>
-              <img src={get(profile, 'picture')} alt='user' />
+              <img src={get(profile, 'picture')} alt='' />
               <p>{get(profile, 'name')}</p>
             </ProfileWrapper>
             <Link to='/logout'>Logout</Link>

@@ -6,6 +6,7 @@ export const Wrapper = styled.div`
   width: 100%;
   height: 8vh;
   align-items: center;
+  z-index: 5;
 `
 
 export const Logo = styled.div`

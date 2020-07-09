@@ -30,15 +30,20 @@ export const ChatButtonLink = styled(NavLink)`
   height: 100%;
   min-height: 55px;
   border-radius: 5px;
+  box-shadow: 7px 7px 5px 0px rgba(170, 170, 170, 1);
+
   background: ${({ theme }) => theme.lighGray};
   color: ${({ theme }) => theme.blackCoffee};
+
   text-decoration: none;
   font-size: 18px;
+  font-weight: 300;
+
   display: flex;
   justify-content: center;
   align-items: center;
   position: relative;
-  font-weight: 300;
+  transition: all 0.3s ease;
 
   & svg {
     color: ${({ theme }) => theme.blackCoffee};
@@ -53,6 +58,8 @@ export const ChatButtonLink = styled(NavLink)`
 
   &:hover {
     color: ${({ theme }) => theme.blackCoffee};
+    box-shadow: 9px 13px 5px 0px rgba(170, 170, 170, 1);
+    transform: translateY(-8px);
   }
 
   &.active {

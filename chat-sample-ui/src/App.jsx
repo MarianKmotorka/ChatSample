@@ -13,6 +13,7 @@ import ChatContextProvider from './contextProviders/ChatContextProvider'
 import { isLoggedIn } from './services/authService'
 
 import { AppWrapper, MenuAndContentWrapper, ContentWrapper } from './App.styled'
+import Home from './pages/Home/Home'
 
 const App = () => {
   return (
@@ -24,6 +25,7 @@ const App = () => {
             {isLoggedIn && <ChatsMenu />}
             <ContentWrapper>
               <Switch>
+                <ProtectedRoute path='/' exact component={Home} />
                 <ProtectedRoute
                   path='/chats/:chatId'
                   exact

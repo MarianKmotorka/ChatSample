@@ -20,7 +20,7 @@ import {
 const Message = ({ message, forwardRef }) => (
   <MessageWrapper isMyMessage={message.isMyMessage}>
     <MessageInfo>
-      <img src={message.senderPicture} alt='user' />
+      <img src={message.senderPicture} alt='' />
       <p>{message.senderName}</p>
       <MessageDate>{moment(message.date).fromNow()}</MessageDate>
     </MessageInfo>
@@ -70,6 +70,7 @@ const Chat = ({ messages, participants, onMessageSent, chatId }) => {
               type='primary'
               shape='round'
               icon={<SwapRightOutlined />}
+              onClick={onMessageSentInternal}
             >
               Send
             </StyledButton>

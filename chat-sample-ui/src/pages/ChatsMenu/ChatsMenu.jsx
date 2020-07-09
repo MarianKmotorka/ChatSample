@@ -27,7 +27,7 @@ const ChatsMenu = () => {
 
   const deleteChat = async id => {
     await api.delete(`/chats/${id}`)
-    history.push('/chats')
+    history.push('/')
   }
 
   const createChatCallback = chatId => {
