@@ -35,7 +35,7 @@ const ChatDetail = ({ participants, chatId }) => {
       )}
       {map(participants, x => (
         <ParticipantWrapper key={x.id} isOnline={x.isOnline}>
-          <img src={x.picture} alt='' />
+          <img src={x.picture} referrerPolicy='no-referrer' alt='' />
           <p>{x.name}</p>
           <i
             className='fas fa-times'

@@ -30,7 +30,6 @@ export const ChatButtonLink = styled(NavLink)`
   height: 100%;
   min-height: 55px;
   border-radius: 5px;
-  box-shadow: 7px 7px 5px 0px rgba(170, 170, 170, 1);
 
   background: ${({ theme }) => theme.blue};
   color: ${({ theme }) => theme.white};
@@ -43,7 +42,6 @@ export const ChatButtonLink = styled(NavLink)`
   justify-content: center;
   align-items: center;
   position: relative;
-  transition: all 0.3s ease;
 
   & svg {
     color: ${({ theme }) => theme.gray};
@@ -58,11 +56,9 @@ export const ChatButtonLink = styled(NavLink)`
 
   &:hover {
     color: ${({ theme }) => theme.white};
-    box-shadow: 9px 13px 5px 0px rgba(170, 170, 170, 1);
-    transform: translateY(-8px);
   }
 
-  &.active {
+  &.active p {
     font-weight: 500;
     font-size: 22px;
     color: ${({ theme }) => theme.gold};
@@ -72,6 +68,14 @@ export const ChatButtonLink = styled(NavLink)`
 export const StyledBadge = styled(Badge)`
   width: 90%;
   margin: 7px;
+  box-shadow: 7px 7px 5px 0px rgba(170, 170, 170, 1);
+  transition: all 0.3s ease;
+
+  &:hover {
+    color: ${({ theme }) => theme.white};
+    box-shadow: 9px 13px 5px 0px rgba(170, 170, 170, 1);
+    transform: translateY(-8px);
+  }
 `
 
 export const StyledButton = styled(Button)`

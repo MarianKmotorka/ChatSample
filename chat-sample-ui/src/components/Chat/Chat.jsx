@@ -20,7 +20,7 @@ import {
 const Message = ({ message, forwardRef }) => (
   <MessageWrapper isMyMessage={message.isMyMessage}>
     <MessageInfo>
-      <img src={message.senderPicture} alt='' />
+      <img referrerPolicy='no-referrer' src={message.senderPicture} alt='' />
       <p>{message.senderName}</p>
       <MessageDate>{moment(message.date).fromNow()}</MessageDate>
     </MessageInfo>

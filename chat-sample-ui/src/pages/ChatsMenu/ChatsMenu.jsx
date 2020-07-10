@@ -63,7 +63,7 @@ const ChatsMenu = () => {
           return (
             <StyledBadge key={id} count={unreadMessages} offset={[-5, 5]}>
               <ChatButtonLink to={`/chats/${id}`}>
-                {name}
+                <p>{name}</p>
                 <DeleteFilled onClick={() => deleteChat(get(x, 'id'))} />
               </ChatButtonLink>
             </StyledBadge>
