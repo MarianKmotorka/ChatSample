@@ -19,15 +19,15 @@ axios.interceptors.response.use(
     const originalRequest = get(error, 'config')
 
     if (get(error, 'response.status') === 401) {
-      const response = await axios.post('/auth/refresh-token', {
-        expiredJwt: getJwt(),
-        refreshToken: getRefreshToken()
-      })
+      try {
+        const response = await axios.post('/auth/refresh-token', {
+          expiredJwt: getJwt(),
+          refreshToken: getRefreshToken()
+        })
 
-      if (get(response, 'status') === 200) {
         login(get(response, 'data'))
         return axios(originalRequest)
-      } else {
+      } catch (_) {
         logout()
         window.location = '/login'
       }

@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import { Button } from 'antd'
+import { Button, Badge } from 'antd'
 
 export const Wrapper = styled.div`
   display: flex;
@@ -8,6 +8,7 @@ export const Wrapper = styled.div`
   justify-content: flex-start;
   align-items: center;
   padding: 0px 10px;
+  max-width: 300px;
 `
 
 export const ParticipantWrapper = styled.div`
@@ -17,7 +18,7 @@ export const ParticipantWrapper = styled.div`
   margin-top: 10px;
 
   & p {
-    margin: 0;
+    margin-right: 10px;
     font-size: 18px;
     font-weight: 500;
   }
@@ -39,11 +40,14 @@ export const ParticipantWrapper = styled.div`
   }
 `
 
+export const StyledBadge = styled(Badge)`
+  display: block;
+  margin: 8px 10px 8px 0;
+`
+
 export const Photo = styled.img`
   border-radius: 50%;
   width: 35px;
-  margin: 8px 10px 8px 0;
-  display: block;
 `
 
 export const Header = styled.div`
@@ -83,5 +87,17 @@ export const StyledButton = styled(Button)`
   &:hover {
     transform: scale(1.2);
     color: ${({ theme }) => theme.red};
+  }
+`
+export const DropdownItem = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 5px 0;
+
+  & img {
+    height: 28px;
+    margin-right: 15px;
+    border-radius: 50%;
   }
 `

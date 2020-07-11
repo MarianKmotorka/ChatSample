@@ -19,7 +19,9 @@ const SearchableDropdown = ({
   onChange,
   fetchOptions,
   error,
-  width
+  width,
+  itemRenderer,
+  displayProperty = 'value'
 }) => {
   const [text, setText] = useState('')
   const [options, setOptions] = useState(null)
@@ -67,7 +69,7 @@ const SearchableDropdown = ({
 
   const onItemSelected = item => {
     onChange(item)
-    setText(item.value)
+    setText(item[displayProperty])
     toogle()
   }
 
@@ -94,7 +96,7 @@ const SearchableDropdown = ({
           {loading && <LoadingItem className='fas fa-spinner fa-3x fa-spin' />}
           {map(options, x => (
             <Item key={x.id} onClick={() => onItemSelected(x)}>
-              {x.value}
+              {itemRenderer ? itemRenderer(x) : x[displayProperty]}
             </Item>
           ))}
         </Expander>
@@ -116,7 +118,10 @@ SearchableDropdown.propTypes = {
     formatter: PropTypes.func
   }),
   onChange: PropTypes.func.isRequired,
-  error: PropTypes.string
+  error: PropTypes.string,
+  width: PropTypes.string,
+  itemRenderer: PropTypes.func,
+  displayProperty: PropTypes.string
 }
 
 export default SearchableDropdown

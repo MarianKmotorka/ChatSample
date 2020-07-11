@@ -15,7 +15,9 @@ import {
   Header,
   StyledButton,
   Content,
-  Photo
+  Photo,
+  StyledBadge,
+  DropdownItem
 } from './ChatDetail.styled'
 
 const ChatDetail = ({ participants, chatId }) => {
@@ -38,6 +40,23 @@ const ChatDetail = ({ participants, chatId }) => {
     setShowDropdown(false)
   }
 
+  const renderPhoto = ({ id, isOnline, picture }) => (
+    <StyledBadge
+      key={id}
+      color={isOnline ? 'green' : 'red'}
+      title={isOnline ? 'Online' : 'Offline'}
+    >
+      <Photo src={picture} referrerPolicy='no-referrer' />
+    </StyledBadge>
+  )
+
+  const renderDropdownItem = ({ picture, name }) => (
+    <DropdownItem>
+      <img src={picture} referrerPolicy='no-referrer' alt='' />
+      <p>{name}</p>
+    </DropdownItem>
+  )
+
   return (
     <Wrapper>
       <Header>
@@ -57,18 +76,19 @@ const ChatDetail = ({ participants, chatId }) => {
       <Content>
         {showDropdown && (
           <SearchableDropdown
-            width='230px'
             fetchOptions={{
-              url: `/chats/${chatId}/participants/new`,
-              formatter: x => ({ id: x.id, value: x.name })
+              url: `/chats/${chatId}/participants/new`
             }}
             onChange={handleAddParticipant}
+            itemRenderer={renderDropdownItem}
+            displayProperty='name'
+            width='230px'
           />
         )}
         {map(participants, x =>
           expanded ? (
             <ParticipantWrapper key={x.id} isOnline={x.isOnline}>
-              <Photo src={x.picture} referrerPolicy='no-referrer' />
+              {renderPhoto(x)}
               <p>{x.name}</p>
               <i
                 className='fas fa-times'
@@ -76,7 +96,7 @@ const ChatDetail = ({ participants, chatId }) => {
               ></i>
             </ParticipantWrapper>
           ) : (
-            <Photo src={x.picture} referrerPolicy='no-referrer' />
+            renderPhoto(x)
           )
         )}
       </Content>
