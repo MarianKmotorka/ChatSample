@@ -5,7 +5,6 @@ using ChatSampleApi.Exceptions;
 using ChatSampleApi.Persistence;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Internal;
 
 namespace ChatSampleApi.Features.Chat.GetMyChat
 {
@@ -20,26 +19,7 @@ namespace ChatSampleApi.Features.Chat.GetMyChat
 
         public async Task<GetMyChatResponse> Handle(GetMyChatQuery request, CancellationToken cancellationToken)
         {
-            //TODO check for performance issues
-
-            var chat = await _db.Chats
-                .Include(x => x.Messages)
-                    .ThenInclude(x => x.Sender)
-                .Include(x => x.Participants)
-                    .ThenInclude(x => x.User)
-                    .ThenInclude(x => x.UnreadMessages)
-                    .ThenInclude(x => x.Message)
-                .Include(x => x.Participants)
-                    .ThenInclude(x => x.User)
-                .SingleOrNotFoundAsync(x => x.Id == request.ChatId);
-
-            if (!chat.Participants.Any(x => x.UserId == request.UserId))
-                throw new Forbidden403Exception();
-
-            chat.Participants.Single(x => x.UserId == request.UserId).User.SetUnreadMessagesAsRead(request.ChatId);
-            await _db.SaveChangesAsync(cancellationToken);
-
-            return new GetMyChatResponse
+            var response = await _db.Chats.Select(chat => new GetMyChatResponse
             {
                 Id = chat.Id,
                 Messages = chat.Messages.Select(m => new GetMyChatResponse.MessageDto
@@ -60,7 +40,20 @@ namespace ChatSampleApi.Features.Chat.GetMyChat
                     Picture = p.User.Picture,
                     IsOnline = p.User.IsOnline
                 })
-            };
+            })
+            .SingleOrNotFoundAsync(x => x.Id == request.ChatId);
+
+
+            if (response.Participants.All(x => x.Id != request.UserId))
+                throw new Forbidden403Exception();
+
+            var user =
+                await _db.Users.Include(x => x.UnreadMessages).ThenInclude(x => x.Message).SingleOrNotFoundAsync(x => x.Id == request.UserId);
+
+            user.SetUnreadMessagesAsRead(request.ChatId);
+            await _db.SaveChangesAsync(cancellationToken);
+
+            return response;
         }
     }
 }
