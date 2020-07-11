@@ -1,7 +1,12 @@
 import React, { useState, useRef, useContext } from 'react'
 import { useHistory } from 'react-router-dom'
 import { map, get } from 'lodash'
-import { DeleteFilled, PlusOutlined } from '@ant-design/icons'
+import {
+  DeleteFilled,
+  PlusOutlined,
+  SwapLeftOutlined,
+  SwapRightOutlined
+} from '@ant-design/icons'
 
 import api from '../../services/httpService'
 import CreateRoomForm from './CreateChatForm'
@@ -19,6 +24,7 @@ import {
 
 const ChatsMenu = () => {
   const [showCreateChatDialog, setShowCreateChatDialog] = useState(false)
+  const [expanded, setExpanded] = useState(false)
   const { chats, chatsFetching } = useContext(ChatContext)
   const formRef = useRef()
   const history = useHistory()
@@ -42,6 +48,21 @@ const ChatsMenu = () => {
       </Wrapper>
     )
 
+  const items = map(chats, x => {
+    const unreadMessages = get(x, 'unreadMessages', 0)
+    const name = get(x, 'name')
+    const id = get(x, 'id')
+
+    return (
+      <StyledBadge key={id} count={unreadMessages} offset={[-5, 5]}>
+        <ChatButtonLink to={`/chats/${id}`}>
+          <p>{name}</p>
+          <DeleteFilled onClick={() => deleteChat(id)} />
+        </ChatButtonLink>
+      </StyledBadge>
+    )
+  })
+
   return (
     <>
       {showCreateChatDialog && (
@@ -51,24 +72,16 @@ const ChatsMenu = () => {
       )}
       <Wrapper>
         <StyledButton
+          onClick={() => setExpanded(x => !x)}
+          shape='circle'
+          icon={expanded ? <SwapLeftOutlined /> : <SwapRightOutlined />}
+        />
+        <StyledButton
           onClick={() => setShowCreateChatDialog(true)}
           shape='circle'
           icon={<PlusOutlined />}
         />
-        {map(chats, x => {
-          const unreadMessages = get(x, 'unreadMessages', 0)
-          const name = get(x, 'name')
-          const id = get(x, 'id')
-
-          return (
-            <StyledBadge key={id} count={unreadMessages} offset={[-5, 5]}>
-              <ChatButtonLink to={`/chats/${id}`}>
-                <p>{name}</p>
-                <DeleteFilled onClick={() => deleteChat(get(x, 'id'))} />
-              </ChatButtonLink>
-            </StyledBadge>
-          )
-        })}
+        {expanded && items}
       </Wrapper>
     </>
   )

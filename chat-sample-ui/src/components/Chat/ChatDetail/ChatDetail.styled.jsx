@@ -1,4 +1,5 @@
 import styled from 'styled-components'
+import { Button } from 'antd'
 
 export const Wrapper = styled.div`
   display: flex;
@@ -6,7 +7,6 @@ export const Wrapper = styled.div`
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
-  min-width: 300px;
   padding: 0px 10px;
 `
 
@@ -14,14 +14,7 @@ export const ParticipantWrapper = styled.div`
   display: flex;
   justify-content: flex-start;
   align-items: center;
-  margin-top: 20px;
-  width: 80%;
-
-  & img {
-    border-radius: 50%;
-    width: 35px;
-    margin-right: 10px;
-  }
+  margin-top: 10px;
 
   & p {
     margin: 0;
@@ -36,7 +29,6 @@ export const ParticipantWrapper = styled.div`
     text-align: center;
     border-radius: 50%;
     margin-left: auto;
-    margin-right: 15px;
     cursor: pointer;
     transition: all 0.1s ease;
 
@@ -47,17 +39,49 @@ export const ParticipantWrapper = styled.div`
   }
 `
 
+export const Photo = styled.img`
+  border-radius: 50%;
+  width: 35px;
+  margin: 8px 10px 8px 0;
+  display: block;
+`
+
 export const Header = styled.div`
   color: ${({ theme }) => theme.black};
   font-size: 25px;
-  border-bottom: solid 2px ${({ theme }) => theme.red};
+  border-bottom: solid 1.5px ${({ theme }) => theme.red};
   margin: 15px 0;
   width: 85%;
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
 
   & i {
     cursor: pointer;
+  }
+`
+
+export const Content = styled.div`
+  overflow: auto;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  height: 100%;
+  margin: 0;
+  padding: 0 15px;
+`
+
+export const StyledButton = styled(Button)`
+  margin: 5px 8px 15px 0px;
+  transition: all 0.3s ease;
+  border: none;
+  position: sticky;
+  top: 0px;
+  z-index: 2;
+  transform: scale(1.1);
+
+  &:hover {
+    transform: scale(1.2);
+    color: ${({ theme }) => theme.red};
   }
 `

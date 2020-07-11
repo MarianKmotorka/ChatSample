@@ -18,7 +18,8 @@ const SearchableDropdown = ({
   options: initialOptions,
   onChange,
   fetchOptions,
-  error
+  error,
+  width
 }) => {
   const [text, setText] = useState('')
   const [options, setOptions] = useState(null)
@@ -71,7 +72,7 @@ const SearchableDropdown = ({
   }
 
   return (
-    <Wrapper ref={wrapperRef}>
+    <Wrapper ref={wrapperRef} width={width}>
       <Header>
         <Input
           ref={inputRef}

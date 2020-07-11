@@ -6,11 +6,8 @@ export const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   background: ${({ theme }) => theme.shadeWhite};
-  padding: 30px 5px;
+  padding: 30px 18px 30px 15px;
   max-height: 92vh;
-  width: 20%;
-  min-width: 140px;
-  max-width: 200px;
   align-items: center;
   position: relative;
   overflow-y: auto;
@@ -59,15 +56,18 @@ export const ChatButtonLink = styled(NavLink)`
   }
 
   &.active p {
-    font-weight: 500;
-    font-size: 22px;
+    font-weight: 400;
+    font-size: 20px;
     color: ${({ theme }) => theme.gold};
   }
 `
 
 export const StyledBadge = styled(Badge)`
   width: 90%;
-  margin: 7px;
+  min-width: 140px;
+  max-width: 200px;
+
+  margin: 12px 7px;
   box-shadow: 7px 7px 5px 0px rgba(170, 170, 170, 1);
   transition: all 0.3s ease;
 
