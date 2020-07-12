@@ -123,6 +123,27 @@ const ChatContextProvider = ({ children }) => {
     )
   }, [])
 
+  const onParticipantRoleChanged = useCallback(
+    (chatId, participantId, chatRole) => {
+      if (chatId !== currentChat.id) return
+
+      setParticipants(prev =>
+        map(prev, x => {
+          if (x.id === participantId) return { ...x, chatRole }
+          return x
+        })
+      )
+
+      setChats(prev =>
+        map(prev, x => {
+          if (x.id === chatId) return { ...x, chatRole }
+          return x
+        })
+      )
+    },
+    [currentChat]
+  )
+
   useEffect(() => {
     const fetchChats = async () => {
       setChatsFetching(true)
@@ -146,6 +167,7 @@ const ChatContextProvider = ({ children }) => {
     hubConnection.on('DeleteChat', deleteChat)
     hubConnection.on('DeleteParticipant', deleteParticipant)
     hubConnection.on('UserConnectedStatusChanged', userConnectedStatusChanged)
+    hubConnection.on('ParticipantRoleChanged', onParticipantRoleChanged)
 
     return () => {
       hubConnection.off('RecieveChat')
@@ -155,6 +177,7 @@ const ChatContextProvider = ({ children }) => {
       hubConnection.off('DeleteChat')
       hubConnection.off('DeleteParticipant')
       hubConnection.off('UserConnectedStatusChanged')
+      hubConnection.off('ParticipantRoleChanged')
     }
   }, [
     hubConnection,
@@ -164,7 +187,8 @@ const ChatContextProvider = ({ children }) => {
     recieveChat,
     deleteChat,
     deleteParticipant,
-    userConnectedStatusChanged
+    userConnectedStatusChanged,
+    onParticipantRoleChanged
   ])
 
   return (

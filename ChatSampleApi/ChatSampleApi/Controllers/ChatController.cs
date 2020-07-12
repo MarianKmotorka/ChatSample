@@ -70,12 +70,20 @@ namespace ChatSampleApi.Controllers
             return NoContent();
         }
 
-        [HttpGet("{chatId}/participants/new")]
-        public async Task<ActionResult<IEnumerable<GetNewParticipantsSelector.UserDto>>> GetNewParticipantsSelector(string chatId, [FromQuery] GetNewParticipantsSelector.Query request)
+        [HttpGet("{id}/participants/new")]
+        public async Task<ActionResult<IEnumerable<GetNewParticipantsSelector.UserDto>>> GetNewParticipantsSelector(string id, [FromQuery] GetNewParticipantsSelector.Query request)
         {
-            request.ChatId = chatId;
+            request.ChatId = id;
             var response = await Mediator.Send(request);
             return Ok(response);
+        }
+
+        [HttpPut("{chatId}/participants/{participantId}/set-admin-role")]
+        public async Task<ActionResult> MakeParticipantAdmin([FromRoute] MakeParticipantAdmin.Command request)
+        {
+            request.RequesterId = CurrentUserService.UserId;
+            await Mediator.Send(request);
+            return NoContent();
         }
     }
 }

@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from 'react'
-import { map, get, find } from 'lodash'
+import { map, get, find, isEmpty } from 'lodash'
 import {
   SwapLeftOutlined,
   SwapRightOutlined,
@@ -20,7 +20,8 @@ import {
   DropdownItem
 } from './ChatDetail.styled'
 import { ProfileContext } from '../../../contextProviders/ProfileContextProvider'
-import { ChatRoleType } from '../../../utils/types'
+import ContextMenu from '../../ContextMenu/ContextMenu'
+import { getContextMenuItems } from './utils'
 
 const ChatDetail = ({ participants, chatId }) => {
   const [showDropdown, setShowDropdown] = useState(false)
@@ -39,10 +40,6 @@ const ChatDetail = ({ participants, chatId }) => {
       participantId: get(user, 'id')
     })
     setShowDropdown(false)
-  }
-
-  const handleRemoveParticipant = async id => {
-    await api.delete(`/chats/${chatId}/participants/${id}`)
   }
 
   const toogleExpanded = () => {
@@ -103,25 +100,23 @@ const ChatDetail = ({ participants, chatId }) => {
         )}
 
         {map(participants, participant => {
-          const id = get(participant, 'id')
-          const name = get(participant, 'name')
+          const particiapantId = get(participant, 'id')
+          const participantName = get(participant, 'name')
           const participantRole = get(participant, 'chatRole')
 
-          const canBeRemoved =
-            id === currentUserId ||
-            (currentUserRole === ChatRoleType.Admin &&
-              participantRole !== ChatRoleType.Admin)
+          const menuItems = getContextMenuItems(
+            particiapantId,
+            currentUserId,
+            participantRole,
+            currentUserRole,
+            chatId
+          )
 
           return expanded ? (
-            <ParticipantWrapper key={id}>
+            <ParticipantWrapper key={particiapantId}>
               {renderPhoto(participant)}
-              <p>{name}</p>
-              {canBeRemoved && (
-                <i
-                  className='fas fa-times'
-                  onClick={() => handleRemoveParticipant(id)}
-                ></i>
-              )}
+              <p>{participantName}</p>
+              {!isEmpty(menuItems) && <ContextMenu items={menuItems} />}
             </ParticipantWrapper>
           ) : (
             renderPhoto(participant)

@@ -21,6 +21,7 @@ namespace ChatSampleApi.Features.Chat
         public const string DeleteParticipant = "DeleteParticipant";
         public const string GetConnectionId = "GetConnectionId";
         public const string UserConnectedStatusChanged = "UserConnectedStatusChanged";
+        public const string ParticipantRoleChanged = "ParticipantRoleChanged";
 
         private readonly ICurrentUserService _currentUserService;
         private readonly DatabaseContext _db;

@@ -23,19 +23,11 @@ export const ParticipantWrapper = styled.div`
     font-weight: 500;
   }
 
-  & i {
-    width: 20px;
-    height: 20px;
-    padding-top: 3px;
-    text-align: center;
-    border-radius: 50%;
+  & button {
     margin-left: auto;
-    cursor: pointer;
-    transition: all 0.1s ease;
 
     &:hover {
       color: ${({ theme }) => theme.red};
-      transform: scale(1.3);
     }
   }
 `
