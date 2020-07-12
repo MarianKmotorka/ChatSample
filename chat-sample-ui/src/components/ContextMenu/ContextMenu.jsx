@@ -1,10 +1,18 @@
-import React from 'react'
+import React, { useRef } from 'react'
 import PropTypes from 'prop-types'
 import { map, get } from 'lodash'
 import { Menu, Dropdown, Button } from 'antd'
 import { BarsOutlined } from '@ant-design/icons'
+import styled from 'styled-components'
 
-const ContextMenu = ({ items }) => {
+const Text = styled.p`
+  font-size: 15px;
+  line-height: 20px;
+`
+
+const ContextMenu = ({ items, className }) => {
+  const containerRef = useRef()
+
   const menu = (
     <Menu>
       {map(items, item => {
@@ -14,19 +22,25 @@ const ContextMenu = ({ items }) => {
 
         return (
           <Menu.Item key={id} onClick={onClick}>
-            <p>{text}</p>
+            <Text>{text}</Text>
           </Menu.Item>
         )
       })}
     </Menu>
   )
 
-  // TODO fix button is unable to be clicked after one use
-
   return (
-    <Dropdown overlay={menu} placement='bottomCenter' trigger='click'>
-      <Button icon={<BarsOutlined />} type='text' />
-    </Dropdown>
+    <div ref={containerRef} className={className}>
+      <Dropdown
+        overlay={menu}
+        placement='bottomCenter'
+        trigger='click'
+        getPopupContainer={() => containerRef.current}
+        arrrow
+      >
+        <Button icon={<BarsOutlined />} type='text' shape='circle-outline' />
+      </Dropdown>
+    </div>
   )
 }
 

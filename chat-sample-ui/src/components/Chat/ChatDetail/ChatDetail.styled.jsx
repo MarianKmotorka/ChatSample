@@ -1,5 +1,6 @@
 import styled from 'styled-components'
 import { Button, Badge } from 'antd'
+import ContextMenu from '../../ContextMenu/ContextMenu'
 
 export const Wrapper = styled.div`
   display: flex;
@@ -17,24 +18,20 @@ export const ParticipantWrapper = styled.div`
   align-items: center;
   margin-top: 10px;
 
-  & p {
+  & > p {
     margin-right: 10px;
     font-size: 18px;
-    font-weight: 500;
+    font-weight: 400;
   }
+`
 
-  & button {
-    margin-left: auto;
-
-    &:hover {
-      color: ${({ theme }) => theme.red};
-    }
-  }
+export const StyledMenu = styled(ContextMenu)`
+  margin-left: auto;
 `
 
 export const StyledBadge = styled(Badge)`
   display: block;
-  margin: 8px 10px 8px 0;
+  margin: 8px 13px 8px 0;
 `
 
 export const Photo = styled.img`

@@ -17,10 +17,10 @@ import {
   Content,
   Photo,
   StyledBadge,
-  DropdownItem
+  DropdownItem,
+  StyledMenu
 } from './ChatDetail.styled'
 import { ProfileContext } from '../../../contextProviders/ProfileContextProvider'
-import ContextMenu from '../../ContextMenu/ContextMenu'
 import { getContextMenuItems } from './utils'
 
 const ChatDetail = ({ participants, chatId }) => {
@@ -116,7 +116,7 @@ const ChatDetail = ({ participants, chatId }) => {
             <ParticipantWrapper key={particiapantId}>
               {renderPhoto(participant)}
               <p>{participantName}</p>
-              {!isEmpty(menuItems) && <ContextMenu items={menuItems} />}
+              {!isEmpty(menuItems) && <StyledMenu items={menuItems} />}
             </ParticipantWrapper>
           ) : (
             renderPhoto(participant)
