@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Newtonsoft.Json;
 
 namespace ChatSampleApi.Features.Chat.RemoveParticipant
 {
@@ -7,5 +8,8 @@ namespace ChatSampleApi.Features.Chat.RemoveParticipant
         public string ChatId { get; set; }
 
         public string ParticipantId { get; set; }
+
+        [JsonIgnore]
+        public string RequesterId { get; set; }
     }
 }

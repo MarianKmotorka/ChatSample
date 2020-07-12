@@ -49,7 +49,7 @@ namespace ChatSampleApi.Middleware.ErrorHandling
                     break;
                 case Forbidden403Exception _:
                     code = HttpStatusCode.Forbidden;
-                    errorResponse = ErrorResponseFactory.CreateForbiden403Response();
+                    errorResponse = ErrorResponseFactory.CreateForbiden403Response(exception.Message);
                     break;
                 default:
                     _logger.LogError(exception, string.Empty);

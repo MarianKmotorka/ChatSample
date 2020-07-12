@@ -38,7 +38,8 @@ namespace ChatSampleApi.Features.Chat.GetMyChat
                     Id = p.UserId,
                     Name = p.User.FullName,
                     Picture = p.User.Picture,
-                    IsOnline = p.User.IsOnline
+                    IsOnline = p.User.IsOnline,
+                    ChatRole = p.Role
                 })
             })
             .SingleOrNotFoundAsync(x => x.Id == request.ChatId);

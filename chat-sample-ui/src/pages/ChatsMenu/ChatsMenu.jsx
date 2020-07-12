@@ -14,6 +14,7 @@ import Backdrop from '../../components/Backdrop'
 import LoadingSpinner from '../../components/LoadingSpinner'
 import { useOnClickOutside } from '../../utils/useOnClickOutside'
 import { ChatContext } from '../../contextProviders/ChatContextProvider'
+import { ChatRoleType } from '../../utils/types'
 
 import {
   Wrapper,
@@ -33,7 +34,7 @@ const ChatsMenu = () => {
 
   const deleteChat = async id => {
     await api.delete(`/chats/${id}`)
-    history.push('/')
+    history.replace('/')
   }
 
   const createChatCallback = chatId => {
@@ -52,12 +53,13 @@ const ChatsMenu = () => {
     const unreadMessages = get(x, 'unreadMessages', 0)
     const name = get(x, 'name')
     const id = get(x, 'id')
+    const canDeleteChat = get(x, 'chatRole') === ChatRoleType.Admin
 
     return (
       <StyledBadge key={id} count={unreadMessages} offset={[-5, 5]}>
         <ChatButtonLink to={`/chats/${id}`}>
           <p>{name}</p>
-          <DeleteFilled onClick={() => deleteChat(id)} />
+          {canDeleteChat && <DeleteFilled onClick={() => deleteChat(id)} />}
         </ChatButtonLink>
       </StyledBadge>
     )

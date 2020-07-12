@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react'
 import PropTypes from 'prop-types'
 import moment from 'moment'
-import { map, last } from 'lodash'
+import { map, last, get } from 'lodash'
 import { SwapRightOutlined } from '@ant-design/icons'
 
 import ChatDetail from './ChatDetail/ChatDetail'
@@ -33,11 +33,16 @@ const Message = ({ message, forwardRef }) => (
 const Chat = ({ messages, participants, onMessageSent, chatId }) => {
   const [text, setText] = useState('')
   const lastMessageRef = useRef(null)
+  const inputRef = useRef(null)
 
   useEffect(() => {
-    lastMessageRef &&
-      lastMessageRef.current &&
-      lastMessageRef.current.scrollIntoView()
+    const input = get(inputRef, 'current')
+    input && input.focus()
+  }, [])
+
+  useEffect(() => {
+    const lastMessage = get(lastMessageRef, 'current')
+    lastMessage && lastMessage.scrollIntoView()
   }, [messages])
 
   const onMessageSentInternal = e => {
@@ -63,6 +68,7 @@ const Chat = ({ messages, participants, onMessageSent, chatId }) => {
         <form onSubmit={onMessageSentInternal}>
           <InputWrapper>
             <input
+              ref={inputRef}
               value={text}
               onChange={({ target }) => setText(target.value)}
             />

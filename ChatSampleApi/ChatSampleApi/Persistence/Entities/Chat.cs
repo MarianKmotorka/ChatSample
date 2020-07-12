@@ -55,6 +55,18 @@ namespace ChatSampleApi.Persistence.Entities
             return participant;
         }
 
+        public AuthUser AddAdmin(AuthUser user)
+        {
+            var participant = Participants.SingleOrDefault(x => x.UserId == user.Id);
+
+            if (participant is object)
+                participant.MakeUserAdmin();
+            else
+                _participants.Add(new ChatUser(user, this, ChatRole.Admin));
+
+            return user;
+        }
+
         public void RemoveParticipant(ChatUser chatUser) => _participants.Remove(chatUser);
     }
 }

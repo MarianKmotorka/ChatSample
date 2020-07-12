@@ -1,8 +1,11 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using ChatSampleApi.Exceptions;
 using ChatSampleApi.Persistence;
+using ChatSampleApi.Persistence.Entities;
+using ChatSampleApi.Persistence.Entities.JunctionEntities;
 using MediatR;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
@@ -25,7 +28,7 @@ namespace ChatSampleApi.Features.Chat.RemoveParticipant
             var chat = await _db.Chats.Include(x => x.Participants).SingleOrNotFoundAsync(x => x.Id == request.ChatId);
             var participant = chat.Participants.SingleOrDefault(x => x.UserId == request.ParticipantId);
 
-            _ = participant ?? throw new BadRequestException($"Participant with id ({request.ParticipantId}) does not exist");
+            Validate(chat.Participants, request.RequesterId, participant);
 
             chat.RemoveParticipant(participant);
 
@@ -37,6 +40,24 @@ namespace ChatSampleApi.Features.Chat.RemoveParticipant
             await RemoveUserConnectionsFromGroup(request.ParticipantId, chat.Id);
 
             return Unit.Value;
+        }
+
+        private void Validate(IReadOnlyCollection<ChatUser> participants, string requesterId, ChatUser participantToBeRemoved)
+        {
+            var requester = participants.SingleOrDefault(x => x.UserId == requesterId);
+
+            if (requester.UserId == participantToBeRemoved.UserId)
+                return;
+
+            _ = requester ?? throw new BadRequestException("You are not chat participant.");
+            _ = participantToBeRemoved ?? throw new BadRequestException($"Participant does not exist.");
+
+            if (requester.Role != ChatRole.Admin)
+                throw new Forbidden403Exception("Only participants in ADMIN role can remove participant.");
+
+            if (participantToBeRemoved.Role == ChatRole.Admin)
+                throw new BadRequestException("Participant in ADMIN role cannot be removed.");
+
         }
 
         private async Task RemoveUserConnectionsFromGroup(string userId, string groupName)

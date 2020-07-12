@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using ChatSampleApi.Exceptions;
 using ChatSampleApi.Persistence;
+using ChatSampleApi.Persistence.Entities;
 using MediatR;
 using Microsoft.AspNetCore.SignalR;
 
@@ -26,15 +27,31 @@ namespace ChatSampleApi.Features.Chat.CreateChat
             var user = await _db.Users.FindAsync(request.UserId);
 
             var newChat = new Persistence.Entities.Chat(request.Name);
-            newChat.AddParticipant(user);
+            newChat.AddAdmin(user);
 
             _db.Chats.Add(newChat);
             await _db.SaveChangesAsync();
 
-            await _hubContext.Groups.AddToGroupAsync(request.ConnectionId, newChat.Id);
-            await _hubContext.Clients.Group(newChat.Id).SendAsync(ChatHub.RecieveChat, new { newChat.Id, newChat.Name });
+            await NotifyHub(request.UserId, newChat);
 
             return newChat.Id;
+        }
+
+        private async Task NotifyHub(string userId, Persistence.Entities.Chat newChat)
+        {
+            if (!ChatHub.UserConnections.TryGetValue(userId, out var connectionIds))
+                return;
+
+            foreach (var connectionId in connectionIds)
+            {
+                await _hubContext.Groups.AddToGroupAsync(connectionId, newChat.Id);
+                await _hubContext.Clients.Client(connectionId).SendAsync(ChatHub.RecieveChat, new GetMyChatsList.ChatDto
+                {
+                    Id = newChat.Id,
+                    Name = newChat.Name,
+                    ChatRole = ChatRole.Admin
+                });
+            }
         }
     }
 }

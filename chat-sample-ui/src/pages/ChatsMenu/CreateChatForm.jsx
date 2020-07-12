@@ -11,7 +11,6 @@ import {
 
 const CreateRoomForm = ({ formRef, callback }) => {
   const [name, setName] = useState('')
-  const { connectionId } = useContext(ChatContext)
   const inputRef = useRef()
 
   useEffect(() => {
@@ -23,7 +22,7 @@ const CreateRoomForm = ({ formRef, callback }) => {
     e.preventDefault()
 
     if (name) {
-      const reponse = await api.post('/chats', { name, connectionId })
+      const reponse = await api.post('/chats', { name })
       callback(get(reponse, 'data'))
     }
   }

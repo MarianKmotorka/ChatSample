@@ -1,5 +1,5 @@
-import React, { useState } from 'react'
-import { map, get } from 'lodash'
+import React, { useState, useContext, useEffect } from 'react'
+import { map, get, find } from 'lodash'
 import {
   SwapLeftOutlined,
   SwapRightOutlined,
@@ -19,10 +19,20 @@ import {
   StyledBadge,
   DropdownItem
 } from './ChatDetail.styled'
+import { ProfileContext } from '../../../contextProviders/ProfileContextProvider'
+import { ChatRoleType } from '../../../utils/types'
 
 const ChatDetail = ({ participants, chatId }) => {
   const [showDropdown, setShowDropdown] = useState(false)
   const [expanded, setExpanded] = useState(false)
+  const [currentUserId, setCurrentUserId] = useState()
+  const { profile } = useContext(ProfileContext)
+
+  useEffect(() => {
+    if (!profile) return
+
+    setCurrentUserId(get(profile, 'id'))
+  }, [profile])
 
   const handleAddParticipant = async user => {
     await api.post(`/chats/${chatId}/participants`, {
@@ -57,6 +67,11 @@ const ChatDetail = ({ participants, chatId }) => {
     </DropdownItem>
   )
 
+  const currentUserRole = get(
+    find(participants, ['id', currentUserId]),
+    'chatRole'
+  )
+
   return (
     <Wrapper>
       <Header>
@@ -73,6 +88,7 @@ const ChatDetail = ({ participants, chatId }) => {
           />
         )}
       </Header>
+
       <Content>
         {showDropdown && (
           <SearchableDropdown
@@ -85,20 +101,32 @@ const ChatDetail = ({ participants, chatId }) => {
             width='230px'
           />
         )}
-        {map(participants, x =>
-          expanded ? (
-            <ParticipantWrapper key={x.id} isOnline={x.isOnline}>
-              {renderPhoto(x)}
-              <p>{x.name}</p>
-              <i
-                className='fas fa-times'
-                onClick={() => handleRemoveParticipant(x.id)}
-              ></i>
+
+        {map(participants, participant => {
+          const id = get(participant, 'id')
+          const name = get(participant, 'name')
+          const participantRole = get(participant, 'chatRole')
+
+          const canBeRemoved =
+            id === currentUserId ||
+            (currentUserRole === ChatRoleType.Admin &&
+              participantRole !== ChatRoleType.Admin)
+
+          return expanded ? (
+            <ParticipantWrapper key={id}>
+              {renderPhoto(participant)}
+              <p>{name}</p>
+              {canBeRemoved && (
+                <i
+                  className='fas fa-times'
+                  onClick={() => handleRemoveParticipant(id)}
+                ></i>
+              )}
             </ParticipantWrapper>
           ) : (
-            renderPhoto(x)
+            renderPhoto(participant)
           )
-        )}
+        })}
       </Content>
     </Wrapper>
   )

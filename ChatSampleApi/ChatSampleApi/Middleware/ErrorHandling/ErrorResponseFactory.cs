@@ -46,11 +46,11 @@
             };
         }
 
-        public static ErrorResponse CreateForbiden403Response()
+        public static ErrorResponse CreateForbiden403Response(string message = null)
             => new ErrorResponse
             {
                 ErrorCode = "Forbidden",
-                ErrorMessage = "You cannot access this resource.",
+                ErrorMessage = string.IsNullOrEmpty(message) ? "You cannot access this resource." : message
             };
     }
 }

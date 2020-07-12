@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using ChatSampleApi.Persistence.Entities;
 
 namespace ChatSampleApi.Features.Chat.GetMyChat
 {
@@ -20,6 +21,8 @@ namespace ChatSampleApi.Features.Chat.GetMyChat
             public string Picture { get; set; }
 
             public bool IsOnline { get; set; }
+
+            public ChatRole ChatRole { get; set; }
         }
 
         public class MessageDto

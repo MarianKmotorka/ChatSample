@@ -6,10 +6,8 @@ using ChatSampleApi.Features.Chat.CreateChat;
 using ChatSampleApi.Features.Chat.GetMyChat;
 using ChatSampleApi.Features.Chat.RemoveParticipant;
 using ChatSampleApi.Features.Chat.SendMessage;
-using ChatSampleApi.Persistence;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.SignalR;
 
 namespace ChatSampleApi.Controllers
 {
@@ -17,15 +15,6 @@ namespace ChatSampleApi.Controllers
     [Route("api/chats")]
     public class ChatController : BaseController
     {
-        private readonly DatabaseContext _db;
-        private readonly IHubContext<ChatHub> _hubContext;
-
-        public ChatController(DatabaseContext db, IHubContext<ChatHub> hubContext)
-        {
-            _db = db;
-            _hubContext = hubContext;
-        }
-
         [HttpGet("mine")]
         public async Task<ActionResult<List<object>>> GetChats()
         {
@@ -51,11 +40,7 @@ namespace ChatSampleApi.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteChat(string id)
         {
-            var chat = await _db.Chats.SingleOrNotFoundAsync(x => x.Id == id);
-            _db.Chats.Remove(chat);
-            await _db.SaveChangesAsync();
-
-            await _hubContext.Clients.Group(chat.Id).SendAsync(ChatHub.DeleteChat, id);
+            await Mediator.Send(new DeleteChat.Command { ChatId = id, UserId = CurrentUserService.UserId });
             return NoContent();
         }
 
@@ -80,6 +65,7 @@ namespace ChatSampleApi.Controllers
         [HttpDelete("{chatId}/participants/{participantId}")]
         public async Task<ActionResult> RemoveParticipant([FromRoute] RemoveParticipantCommand request)
         {
+            request.RequesterId = CurrentUserService.UserId;
             await Mediator.Send(request);
             return NoContent();
         }
