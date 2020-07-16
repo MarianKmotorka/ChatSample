@@ -1,10 +1,11 @@
 import React, { useState, useContext, useEffect } from 'react'
-import { map, get, find, isEmpty } from 'lodash'
+import { map, get, find, isEmpty, invert } from 'lodash'
 import {
   SwapLeftOutlined,
   SwapRightOutlined,
   PlusOutlined
 } from '@ant-design/icons'
+import Popover from '../../../components/Popover'
 
 import SearchableDropdown from '../../SearchableDropdown/SearchableDropdown'
 import api from '../../../services/httpService'
@@ -22,6 +23,7 @@ import {
 } from './ChatDetail.styled'
 import { ProfileContext } from '../../../contextProviders/ProfileContextProvider'
 import { getContextMenuItems } from './utils'
+import { ChatRoleType } from '../../../utils/types'
 
 const ChatDetail = ({ participants, chatId }) => {
   const [showDropdown, setShowDropdown] = useState(false)
@@ -62,6 +64,20 @@ const ChatDetail = ({ participants, chatId }) => {
       <img src={picture} referrerPolicy='no-referrer' alt='' />
       <p>{name}</p>
     </DropdownItem>
+  )
+
+  const renderName = (name, role) => (
+    <Popover
+      title={name}
+      content={
+        <p>
+          <strong>Chat role: </strong>
+          {invert(ChatRoleType)[role]}
+        </p>
+      }
+    >
+      <p>{name}</p>
+    </Popover>
   )
 
   const currentUserRole = get(
@@ -115,7 +131,7 @@ const ChatDetail = ({ participants, chatId }) => {
           return expanded ? (
             <ParticipantWrapper key={particiapantId}>
               {renderPhoto(participant)}
-              <p>{participantName}</p>
+              {renderName(participantName, participantRole)}
               {!isEmpty(menuItems) && <StyledMenu items={menuItems} />}
             </ParticipantWrapper>
           ) : (
