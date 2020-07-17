@@ -21,8 +21,9 @@ const ChatContextProvider = ({ children }) => {
   const [chats, setChats] = useState(null)
   const [chatsFetching, setChatsFetching] = useState(false)
 
-  const [currentChat, setCurrentChat] = useState(null)
-  const [currentChatFetching, setCurrentChatFetching] = useState(false)
+  const [currentChatId, setCurrentChatId] = useState(null)
+  const [messagesFetching, setMessagesFetching] = useState(false)
+  const [participantsFetching, setParticipantsFetching] = useState(false)
 
   const [messages, setMessages] = useState([])
   const [participants, setParticipants] = useState([])
@@ -36,7 +37,7 @@ const ChatContextProvider = ({ children }) => {
 
   const recieveMessage = useCallback(
     (chatId, message) => {
-      if (chatId !== get(currentChat, 'id')) {
+      if (chatId !== currentChatId) {
         setChats(prev =>
           map(prev, x => {
             if (x.id === chatId)
@@ -56,7 +57,7 @@ const ChatContextProvider = ({ children }) => {
 
       setMessages(prev => [...prev, updatedMessage])
     },
-    [currentChat, profile, beep]
+    [currentChatId, profile, beep]
   )
 
   const recieveParticipant = useCallback(
@@ -64,11 +65,11 @@ const ChatContextProvider = ({ children }) => {
       if (get(participant, 'id') === get(profile, 'id'))
         setChats([chat, ...chats])
 
-      if (chat.id !== get(currentChat, 'id')) return
+      if (chat.id !== currentChatId) return
 
       setParticipants([...participants, participant])
     },
-    [currentChat, profile, chats, participants]
+    [currentChatId, profile, chats, participants]
   )
 
   const recieveChat = useCallback(chat => {
@@ -77,10 +78,10 @@ const ChatContextProvider = ({ children }) => {
 
   const deleteChat = useCallback(
     chatId => {
-      if (chatId === currentChat.id) history.replace('/')
+      if (chatId === currentChatId) history.replace('/')
       setChats(prev => filter(prev, x => x.id !== chatId))
     },
-    [currentChat, history]
+    [currentChatId, history]
   )
 
   const deleteParticipant = useCallback(
@@ -90,21 +91,29 @@ const ChatContextProvider = ({ children }) => {
         return setChats(prev => filter(prev, x => x.id !== chatId))
       }
 
-      if (chatId !== get(currentChat, 'id')) return
+      if (chatId !== currentChatId) return
 
       setParticipants(prev => filter(prev, x => x.id !== participantId))
     },
-    [profile, currentChat, history]
+    [profile, currentChatId, history]
   )
 
-  const getChat = useCallback(async chatId => {
-    setCurrentChatFetching(true)
-    const response = await api.get(`chats/mine/${chatId}`)
-    setCurrentChatFetching(false)
+  const getParticipants = useCallback(async chatId => {
+    setParticipantsFetching(true)
+    setCurrentChatId(chatId)
 
-    setCurrentChat(get(response, 'data'))
-    setParticipants(get(response, 'data.participants'))
-    setMessages(get(response, 'data.messages'))
+    const response = await api.get(`chats/${chatId}/participants`)
+    setParticipants(get(response, 'data'))
+
+    setParticipantsFetching(false)
+  }, [])
+
+  const getMessages = useCallback(async chatId => {
+    setMessagesFetching(true)
+    setCurrentChatId(chatId)
+
+    const response = await api.get(`chats/${chatId}/messages`)
+    setMessages(get(response, 'data'))
 
     setChats(prev =>
       map(prev, x => {
@@ -112,6 +121,8 @@ const ChatContextProvider = ({ children }) => {
         return x
       })
     )
+
+    setMessagesFetching(false)
   }, [])
 
   const userConnectedStatusChanged = useCallback((userId, isOnline) => {
@@ -125,7 +136,7 @@ const ChatContextProvider = ({ children }) => {
 
   const onParticipantRoleChanged = useCallback(
     (chatId, participantId, chatRole) => {
-      if (chatId !== currentChat.id) return
+      if (chatId !== currentChatId) return
 
       setParticipants(prev =>
         map(prev, x => {
@@ -141,7 +152,7 @@ const ChatContextProvider = ({ children }) => {
         })
       )
     },
-    [currentChat]
+    [currentChatId]
   )
 
   useEffect(() => {
@@ -196,12 +207,14 @@ const ChatContextProvider = ({ children }) => {
       value={{
         chats,
         chatsFetching,
+        currentChatFetching: messagesFetching || participantsFetching,
         connectionId,
-        currentChat,
-        currentChatFetching,
+        currentChatId,
         messages,
         participants,
-        getChat
+        getMessages,
+        getParticipants,
+        setCurrentChatId
       }}
     >
       {children}

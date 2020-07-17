@@ -32,7 +32,7 @@ namespace ChatSampleApi.Features.Chat.SendMessage
             var message = chat.AddMessage(sender, request.Text);
             await _db.SaveChangesAsync();
 
-            await _hubContext.Clients.Group(chat.Id).SendAsync(ChatHub.RecieveMessage, chat.Id, new GetMyChat.GetMyChatResponse.MessageDto
+            await _hubContext.Clients.Group(chat.Id).SendAsync(ChatHub.RecieveMessage, chat.Id, new GetMessages.MessageDto
             {
                 Date = message.SentDate,
                 Id = message.Id,

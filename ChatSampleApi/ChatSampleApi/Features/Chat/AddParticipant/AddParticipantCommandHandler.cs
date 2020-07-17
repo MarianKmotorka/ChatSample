@@ -38,7 +38,7 @@ namespace ChatSampleApi.Features.Chat.AddParticipant
                     Name = chat.Name,
                     UnreadMessages = 0
                 },
-                new GetMyChat.GetMyChatResponse.ParticipantDto
+                new GetParticipants.ParticipantDto
                 {
                     Id = participant.Id,
                     Name = participant.FullName,

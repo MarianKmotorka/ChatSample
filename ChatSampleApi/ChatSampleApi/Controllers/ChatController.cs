@@ -3,7 +3,6 @@ using System.Threading.Tasks;
 using ChatSampleApi.Features.Chat;
 using ChatSampleApi.Features.Chat.AddParticipant;
 using ChatSampleApi.Features.Chat.CreateChat;
-using ChatSampleApi.Features.Chat.GetMyChat;
 using ChatSampleApi.Features.Chat.RemoveParticipant;
 using ChatSampleApi.Features.Chat.SendMessage;
 using Microsoft.AspNetCore.Authorization;
@@ -22,10 +21,30 @@ namespace ChatSampleApi.Controllers
             return Ok(response);
         }
 
-        [HttpGet("mine/{id}")]
-        public async Task<ActionResult<GetMyChatResponse>> GetChat(string id)
+        [HttpGet("{id}/messages")]
+        public async Task<ActionResult<List<GetMessages.MessageDto>>> GetMessages(string id, int skip)
         {
-            var response = await Mediator.Send(new GetMyChatQuery { ChatId = id, UserId = CurrentUserService.UserId });
+            var request = new GetMessages.Query
+            {
+                ChatId = id,
+                UserId = CurrentUserService.UserId,
+                Skip = skip
+            };
+
+            var response = await Mediator.Send(request);
+            return Ok(response);
+        }
+
+        [HttpGet("{id}/participants")]
+        public async Task<ActionResult<List<GetMessages.MessageDto>>> GetParticipants(string id)
+        {
+            var request = new GetParticipants.Query
+            {
+                ChatId = id,
+                UserId = CurrentUserService.UserId,
+            };
+
+            var response = await Mediator.Send(request);
             return Ok(response);
         }
 

@@ -6,14 +6,19 @@ import LoadingSpinner from '../../components/LoadingSpinner'
 import api from '../../services/httpService'
 
 const ChatPage = () => {
-  const { currentChatFetching, getChat, messages, participants } = useContext(
-    ChatContext
-  )
+  const {
+    currentChatFetching,
+    getParticipants,
+    getMessages,
+    messages,
+    participants
+  } = useContext(ChatContext)
   const { chatId } = useParams()
 
   useEffect(() => {
-    getChat(chatId)
-  }, [chatId, getChat])
+    getParticipants(chatId)
+    getMessages(chatId)
+  }, [chatId, getMessages, getParticipants])
 
   const handleMessageSent = async text => {
     await api.post(`/chats/${chatId}/messages`, { text })
