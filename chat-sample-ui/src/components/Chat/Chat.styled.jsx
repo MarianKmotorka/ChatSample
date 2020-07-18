@@ -46,6 +46,14 @@ export const StyledButton = styled(Button)`
   }
 `
 
+export const LoadMoreButton = styled(Button)`
+  margin-bottom: 50px;
+  display: block;
+  width: 100%;
+  border: none;
+  box-shadow: 0px 10px 20px #ededed;
+`
+
 export const MessagesWrapper = styled.div`
   overflow: auto;
   flex: 1;
@@ -71,8 +79,7 @@ export const MessageWrapper = styled.div`
   border: 1.5px grey solid;
   max-width: 55%;
 
-  background: ${({ isMyMessage, theme }) =>
-    isMyMessage ? theme.gold : theme.white};
+  background: ${({ isMyMessage, theme }) => (isMyMessage ? theme.gold : theme.white)};
 
   margin-left: ${({ isMyMessage }) => (isMyMessage ? 'auto' : '5px')};
 

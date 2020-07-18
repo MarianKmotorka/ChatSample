@@ -1,13 +1,7 @@
-import React, { useState, useContext, useRef, useEffect } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import { get } from 'lodash'
 import api from '../../services/httpService'
-import { ChatContext } from '../../contextProviders/ChatContextProvider'
-import {
-  Wrapper,
-  Header,
-  Content,
-  StyledButton
-} from './styled/CreateChatForm.styled'
+import { Wrapper, Header, Content, StyledButton } from './styled/CreateChatForm.styled'
 
 const CreateRoomForm = ({ formRef, callback }) => {
   const [name, setName] = useState('')

@@ -57,8 +57,10 @@ namespace ChatSampleApi.Features.Chat
                             Text = m.Text,
                             Date = m.SentDate
                         })
+                        .OrderByDescending(x => x.Date)
                         .Skip(request.Skip)
                         .Take(25)
+                        .OrderBy(x => x.Date)
                         .ToListAsync(cancellationToken);
             }
         }

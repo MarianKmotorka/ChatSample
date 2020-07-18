@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react'
 import PropTypes from 'prop-types'
 import moment from 'moment'
-import { map, last, get } from 'lodash'
-import { SwapRightOutlined } from '@ant-design/icons'
+import { map, get } from 'lodash'
+import { SwapRightOutlined, VerticalAlignTopOutlined } from '@ant-design/icons'
 
 import ChatDetail from './ChatDetail/ChatDetail'
 import {
@@ -14,25 +14,31 @@ import {
   MessageInfo,
   MessageDate,
   Text,
-  StyledButton
+  StyledButton,
+  LoadMoreButton
 } from './Chat.styled'
 
 const Message = ({ message, forwardRef }) => (
-  <MessageWrapper isMyMessage={message.isMyMessage}>
+  <MessageWrapper isMyMessage={message.isMyMessage} ref={forwardRef}>
     <MessageInfo>
       <img referrerPolicy='no-referrer' src={message.senderPicture} alt='' />
       <p>{message.senderName}</p>
       <MessageDate>{moment(message.date).fromNow()}</MessageDate>
     </MessageInfo>
-    <Text className='wordwrap' ref={forwardRef}>
-      {message.text}
-    </Text>
+    <Text className='wordwrap'>{message.text}</Text>
   </MessageWrapper>
 )
 
-const Chat = ({ messages, participants, onMessageSent, chatId }) => {
+const Chat = ({
+  messages,
+  participants,
+  onMessageSent,
+  chatId,
+  onLoadMore,
+  scrollToMessageId
+}) => {
   const [text, setText] = useState('')
-  const lastMessageRef = useRef(null)
+  const scrollToMessageRef = useRef()
   const inputRef = useRef(null)
 
   useEffect(() => {
@@ -41,8 +47,8 @@ const Chat = ({ messages, participants, onMessageSent, chatId }) => {
   }, [])
 
   useEffect(() => {
-    const lastMessage = get(lastMessageRef, 'current')
-    lastMessage && lastMessage.scrollIntoView()
+    const message = get(scrollToMessageRef, 'current')
+    message && message.scrollIntoView()
   }, [messages])
 
   const onMessageSentInternal = e => {
@@ -52,19 +58,20 @@ const Chat = ({ messages, participants, onMessageSent, chatId }) => {
   }
 
   const renderMessage = message => {
-    const isLast = message.id === last(messages).id
+    const commonProps = { key: message.id, message }
 
-    return isLast ? (
-      <Message key={message.id} message={message} forwardRef={lastMessageRef} />
-    ) : (
-      <Message key={message.id} message={message} />
-    )
+    if (scrollToMessageId === message.id)
+      return <Message {...commonProps} forwardRef={scrollToMessageRef} />
+    return <Message {...commonProps} />
   }
 
   return (
     <Wrapper>
       <ChatWithInput>
-        <MessagesWrapper>{map(messages, renderMessage)}</MessagesWrapper>
+        <MessagesWrapper>
+          <LoadMoreButton onClick={onLoadMore} icon={<VerticalAlignTopOutlined />} />
+          {map(messages, renderMessage)}
+        </MessagesWrapper>
         <form onSubmit={onMessageSentInternal}>
           <InputWrapper>
             <input
@@ -106,7 +113,9 @@ Chat.propTypes = {
       picture: PropTypes.string.isRequired
     })
   ).isRequired,
-  chatId: PropTypes.string.isRequired
+  chatId: PropTypes.string.isRequired,
+  onLoadMore: PropTypes.func.isRequired,
+  scrollToMessageId: PropTypes.string
 }
 
 export default Chat

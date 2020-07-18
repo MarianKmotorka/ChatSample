@@ -1,10 +1,4 @@
-import React, {
-  useState,
-  useEffect,
-  createContext,
-  useCallback,
-  useContext
-} from 'react'
+import React, { useState, useEffect, createContext, useCallback, useContext } from 'react'
 import { get, filter, map } from 'lodash'
 import useSound from 'use-sound'
 import { useHistory } from 'react-router-dom'
@@ -40,8 +34,7 @@ const ChatContextProvider = ({ children }) => {
       if (chatId !== currentChatId) {
         setChats(prev =>
           map(prev, x => {
-            if (x.id === chatId)
-              return { ...x, unreadMessages: x.unreadMessages + 1 }
+            if (x.id === chatId) return { ...x, unreadMessages: x.unreadMessages + 1 }
             return x
           })
         )
@@ -62,8 +55,7 @@ const ChatContextProvider = ({ children }) => {
 
   const recieveParticipant = useCallback(
     (chat, participant) => {
-      if (get(participant, 'id') === get(profile, 'id'))
-        setChats([chat, ...chats])
+      if (get(participant, 'id') === get(profile, 'id')) setChats([chat, ...chats])
 
       if (chat.id !== currentChatId) return
 
@@ -124,6 +116,17 @@ const ChatContextProvider = ({ children }) => {
 
     setMessagesFetching(false)
   }, [])
+
+  const getMoreMessages = useCallback(
+    async chatId => {
+      const skip = messages.length
+      const response = await api.get(`chats/${chatId}/messages?skip=${skip}`)
+
+      const moreMessages = get(response, 'data')
+      setMessages(prev => [...moreMessages, ...prev])
+    },
+    [messages.length]
+  )
 
   const userConnectedStatusChanged = useCallback((userId, isOnline) => {
     setParticipants(prev =>
@@ -213,8 +216,8 @@ const ChatContextProvider = ({ children }) => {
         messages,
         participants,
         getMessages,
-        getParticipants,
-        setCurrentChatId
+        getMoreMessages,
+        getParticipants
       }}
     >
       {children}
