@@ -14,7 +14,8 @@ const ChatPage = () => {
     getMessages,
     getMoreMessages,
     messages,
-    participants
+    participants,
+    messageCountPerPage
   } = useContext(ChatContext)
   const { chatId } = useParams()
   const [scrollToMessageId, setScrollToMessageId] = useState()
@@ -23,6 +24,7 @@ const ChatPage = () => {
   useEffect(() => {
     getParticipants(chatId)
     getMessages(chatId)
+    setShouldScrollToBottom(true)
   }, [chatId, getMessages, getParticipants])
 
   useEffect(() => {
@@ -54,6 +56,7 @@ const ChatPage = () => {
       onLoadMore={handleLoadMore}
       onMessageSent={handleMessageSent}
       scrollToMessageId={scrollToMessageId}
+      showLoadMore={messages.length >= messageCountPerPage}
     />
   )
 }

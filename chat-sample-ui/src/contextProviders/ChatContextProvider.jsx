@@ -29,6 +29,8 @@ const ChatContextProvider = ({ children }) => {
   const [beep] = useSound(newMessageBeep)
   const history = useHistory()
 
+  const messageCountPerPage = 25
+
   const recieveMessage = useCallback(
     (chatId, message) => {
       if (chatId !== currentChatId) {
@@ -104,7 +106,9 @@ const ChatContextProvider = ({ children }) => {
     setMessagesFetching(true)
     setCurrentChatId(chatId)
 
-    const response = await api.get(`chats/${chatId}/messages`)
+    const response = await api.get(
+      `chats/${chatId}/messages?count=${messageCountPerPage}`
+    )
     setMessages(get(response, 'data'))
 
     setChats(prev =>
@@ -120,7 +124,9 @@ const ChatContextProvider = ({ children }) => {
   const getMoreMessages = useCallback(
     async chatId => {
       const skip = messages.length
-      const response = await api.get(`chats/${chatId}/messages?skip=${skip}`)
+      const response = await api.get(
+        `chats/${chatId}/messages?skip=${skip}&count=${messageCountPerPage}`
+      )
 
       const moreMessages = get(response, 'data')
       setMessages(prev => [...moreMessages, ...prev])
@@ -215,6 +221,7 @@ const ChatContextProvider = ({ children }) => {
         currentChatId,
         messages,
         participants,
+        messageCountPerPage,
         getMessages,
         getMoreMessages,
         getParticipants

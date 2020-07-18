@@ -22,13 +22,14 @@ namespace ChatSampleApi.Controllers
         }
 
         [HttpGet("{id}/messages")]
-        public async Task<ActionResult<List<GetMessages.MessageDto>>> GetMessages(string id, int skip)
+        public async Task<ActionResult<List<GetMessages.MessageDto>>> GetMessages(string id, int skip, int count = 20)
         {
             var request = new GetMessages.Query
             {
                 ChatId = id,
                 UserId = CurrentUserService.UserId,
-                Skip = skip
+                Skip = skip,
+                Count = count
             };
 
             var response = await Mediator.Send(request);

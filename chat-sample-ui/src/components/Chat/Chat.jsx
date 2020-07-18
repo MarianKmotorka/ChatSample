@@ -35,7 +35,8 @@ const Chat = ({
   onMessageSent,
   chatId,
   onLoadMore,
-  scrollToMessageId
+  scrollToMessageId,
+  showLoadMore = true
 }) => {
   const [text, setText] = useState('')
   const scrollToMessageRef = useRef()
@@ -69,7 +70,9 @@ const Chat = ({
     <Wrapper>
       <ChatWithInput>
         <MessagesWrapper>
-          <LoadMoreButton onClick={onLoadMore} icon={<VerticalAlignTopOutlined />} />
+          {showLoadMore && (
+            <LoadMoreButton onClick={onLoadMore} icon={<VerticalAlignTopOutlined />} />
+          )}
           {map(messages, renderMessage)}
         </MessagesWrapper>
         <form onSubmit={onMessageSentInternal}>
@@ -115,7 +118,8 @@ Chat.propTypes = {
   ).isRequired,
   chatId: PropTypes.string.isRequired,
   onLoadMore: PropTypes.func.isRequired,
-  scrollToMessageId: PropTypes.string
+  scrollToMessageId: PropTypes.string,
+  showLoadMore: PropTypes.bool
 }
 
 export default Chat
