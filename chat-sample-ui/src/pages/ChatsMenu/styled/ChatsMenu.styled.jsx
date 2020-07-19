@@ -7,7 +7,7 @@ export const Wrapper = styled.div`
   flex-direction: column;
   background: ${({ theme }) => theme.shadeWhite};
   padding: 30px 18px 30px 15px;
-  max-height: 92vh;
+  max-height: calc(100vh - 55px);
   align-items: center;
   position: relative;
   overflow-y: auto;

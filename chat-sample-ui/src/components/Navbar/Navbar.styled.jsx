@@ -5,7 +5,7 @@ export const Wrapper = styled.div`
   display: flex;
   background: ${({ theme }) => theme.marigold};
   width: 100%;
-  height: 8vh;
+  height: 55px;
   align-items: center;
   z-index: 5;
 `

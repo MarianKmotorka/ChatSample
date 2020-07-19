@@ -7,7 +7,6 @@ import App from './App.jsx'
 import theme from './utils/theme'
 
 import 'antd/dist/antd.css'
-import './index.css'
 
 ReactDOM.render(
   <ThemeProvider theme={theme}>
