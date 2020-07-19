@@ -1,39 +1,20 @@
 import React, { useState, useEffect, useRef } from 'react'
 import PropTypes from 'prop-types'
-import moment from 'moment'
 import { map, get } from 'lodash'
 import { SwapRightOutlined, VerticalAlignTopOutlined } from '@ant-design/icons'
 
-import ChatDetail from './ChatDetail/ChatDetail'
+import Message from './Message'
 import {
-  ChatWithInput,
   Wrapper,
   MessagesWrapper,
   InputWrapper,
-  MessageWrapper,
-  MessageInfo,
-  MessageDate,
-  Text,
   StyledButton,
   LoadMoreButton
-} from './Chat.styled'
-
-const Message = ({ message, forwardRef }) => (
-  <MessageWrapper isMyMessage={message.isMyMessage} ref={forwardRef}>
-    <MessageInfo>
-      <img referrerPolicy='no-referrer' src={message.senderPicture} alt='' />
-      <p>{message.senderName}</p>
-      <MessageDate>{moment(message.date).fromNow()}</MessageDate>
-    </MessageInfo>
-    <Text className='wordwrap'>{message.text}</Text>
-  </MessageWrapper>
-)
+} from './styled/Chat.styled'
 
 const Chat = ({
   messages,
-  participants,
   onMessageSent,
-  chatId,
   onLoadMore,
   scrollToMessageId,
   showLoadMore = true
@@ -68,32 +49,29 @@ const Chat = ({
 
   return (
     <Wrapper>
-      <ChatWithInput>
-        <MessagesWrapper>
-          {showLoadMore && (
-            <LoadMoreButton onClick={onLoadMore} icon={<VerticalAlignTopOutlined />} />
-          )}
-          {map(messages, renderMessage)}
-        </MessagesWrapper>
-        <form onSubmit={onMessageSentInternal}>
-          <InputWrapper>
-            <input
-              ref={inputRef}
-              value={text}
-              onChange={({ target }) => setText(target.value)}
-            />
-            <StyledButton
-              type='primary'
-              shape='round'
-              icon={<SwapRightOutlined />}
-              onClick={onMessageSentInternal}
-            >
-              Send
-            </StyledButton>
-          </InputWrapper>
-        </form>
-      </ChatWithInput>
-      <ChatDetail participants={participants} chatId={chatId} />
+      <MessagesWrapper>
+        {showLoadMore && (
+          <LoadMoreButton onClick={onLoadMore} icon={<VerticalAlignTopOutlined />} />
+        )}
+        {map(messages, renderMessage)}
+      </MessagesWrapper>
+      <form onSubmit={onMessageSentInternal}>
+        <InputWrapper>
+          <input
+            ref={inputRef}
+            value={text}
+            onChange={({ target }) => setText(target.value)}
+          />
+          <StyledButton
+            type='primary'
+            shape='round'
+            icon={<SwapRightOutlined />}
+            onClick={onMessageSentInternal}
+          >
+            Send
+          </StyledButton>
+        </InputWrapper>
+      </form>
     </Wrapper>
   )
 }
@@ -109,14 +87,6 @@ Chat.propTypes = {
     })
   ).isRequired,
   onMessageSent: PropTypes.func.isRequired,
-  participants: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.string.isRequired,
-      name: PropTypes.string.isRequired,
-      picture: PropTypes.string.isRequired
-    })
-  ).isRequired,
-  chatId: PropTypes.string.isRequired,
   onLoadMore: PropTypes.func.isRequired,
   scrollToMessageId: PropTypes.string,
   showLoadMore: PropTypes.bool

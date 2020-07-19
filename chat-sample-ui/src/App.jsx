@@ -24,6 +24,7 @@ const App = () => {
   return (
     <>
       <GlobalStyle />
+
       <ProfileContextProvider>
         <ChatContextProvider>
           <AppWrapper>
@@ -33,15 +34,8 @@ const App = () => {
               <ContentWrapper>
                 <Switch>
                   <ProtectedRoute path='/' exact component={Home} />
-                  <ProtectedRoute
-                    path='/chats/:chatId'
-                    exact
-                    component={ChatPage}
-                  />
-                  <Route
-                    path='/google-login-callback'
-                    component={GoogleLoginCallback}
-                  />
+                  <ProtectedRoute path='/chats/:chatId' exact component={ChatPage} />
+                  <Route path='/google-login-callback' component={GoogleLoginCallback} />
                   <Route path='/login' component={LoginPage} />
                   <Route path='/logout' component={Logout} />
                   <Route path='/' render={() => 'NOT FOUND'} />

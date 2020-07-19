@@ -33,8 +33,8 @@ const ChatsMenu = () => {
   useOnClickOutside(formRef, () => setShowCreateChatDialog(false))
 
   const deleteChat = async id => {
+    history.goBack()
     await api.delete(`/chats/${id}`)
-    history.replace('/')
   }
 
   const createChatCallback = chatId => {

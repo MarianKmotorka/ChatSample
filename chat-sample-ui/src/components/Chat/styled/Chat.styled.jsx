@@ -5,13 +5,8 @@ export const Wrapper = styled.div`
   height: 100%;
   width: 100%;
   display: flex;
-`
-
-export const ChatWithInput = styled.div`
   background: #eef2f3;
-  display: flex;
   flex-direction: column;
-  flex: 1;
 `
 
 export const InputWrapper = styled.div`

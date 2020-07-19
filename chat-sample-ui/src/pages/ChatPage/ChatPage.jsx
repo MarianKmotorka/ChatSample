@@ -2,10 +2,13 @@ import React, { useContext, useEffect, useState } from 'react'
 import { get, last, first } from 'lodash'
 import { useParams } from 'react-router-dom'
 import Chat from '../../components/Chat/Chat'
+import ChatDetail from './ChatDetail/ChatDetail'
 
 import { ChatContext } from '../../contextProviders/ChatContextProvider'
 import LoadingSpinner from '../../components/LoadingSpinner'
 import api from '../../services/httpService'
+
+import { Wrapper } from './styled/ChatPage.styled'
 
 const ChatPage = () => {
   const {
@@ -49,15 +52,16 @@ const ChatPage = () => {
   if (currentChatFetching) return <LoadingSpinner />
 
   return (
-    <Chat
-      chatId={chatId}
-      messages={messages}
-      participants={participants}
-      onLoadMore={handleLoadMore}
-      onMessageSent={handleMessageSent}
-      scrollToMessageId={scrollToMessageId}
-      showLoadMore={messages.length >= messageCountPerPage}
-    />
+    <Wrapper>
+      <Chat
+        messages={messages}
+        onLoadMore={handleLoadMore}
+        onMessageSent={handleMessageSent}
+        scrollToMessageId={scrollToMessageId}
+        showLoadMore={messages.length >= messageCountPerPage}
+      />
+      <ChatDetail participants={participants} chatId={chatId} />
+    </Wrapper>
   )
 }
 

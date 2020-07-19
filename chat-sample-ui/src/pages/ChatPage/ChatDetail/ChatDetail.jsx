@@ -1,14 +1,14 @@
 import React, { useState, useContext, useEffect } from 'react'
 import { map, get, find, isEmpty, invert } from 'lodash'
-import {
-  SwapLeftOutlined,
-  SwapRightOutlined,
-  PlusOutlined
-} from '@ant-design/icons'
+import { SwapLeftOutlined, SwapRightOutlined, PlusOutlined } from '@ant-design/icons'
+import PropTypes from 'prop-types'
+
 import Popover from '../../../components/Popover'
 
-import SearchableDropdown from '../../SearchableDropdown/SearchableDropdown'
 import api from '../../../services/httpService'
+import SearchableDropdown from '../../../components/SearchableDropdown/SearchableDropdown'
+import { ProfileContext } from '../../../contextProviders/ProfileContextProvider'
+import { ChatRoleType } from '../../../utils/types'
 
 import {
   Wrapper,
@@ -20,10 +20,8 @@ import {
   StyledBadge,
   DropdownItem,
   StyledMenu
-} from './ChatDetail.styled'
-import { ProfileContext } from '../../../contextProviders/ProfileContextProvider'
+} from './styled/ChatDetail.styled'
 import { getContextMenuItems } from './utils'
-import { ChatRoleType } from '../../../utils/types'
 
 const ChatDetail = ({ participants, chatId }) => {
   const [showDropdown, setShowDropdown] = useState(false)
@@ -80,10 +78,7 @@ const ChatDetail = ({ participants, chatId }) => {
     </Popover>
   )
 
-  const currentUserRole = get(
-    find(participants, ['id', currentUserId]),
-    'chatRole'
-  )
+  const currentUserRole = get(find(participants, ['id', currentUserId]), 'chatRole')
 
   return (
     <Wrapper>
@@ -141,6 +136,17 @@ const ChatDetail = ({ participants, chatId }) => {
       </Content>
     </Wrapper>
   )
+}
+
+ChatDetail.propTypes = {
+  chatId: PropTypes.string.isRequired,
+  participants: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.string.isRequired,
+      name: PropTypes.string.isRequired,
+      picture: PropTypes.string.isRequired
+    })
+  ).isRequired
 }
 
 export default ChatDetail
