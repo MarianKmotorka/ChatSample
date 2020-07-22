@@ -137,11 +137,9 @@ namespace ChatSampleApi.Services
 
         private AuthUser CreateUser(GoogleUserInfoModel model)
         {
-            var newUser = new AuthUser
+            var newUser = new AuthUser(model.Email)
             {
                 Id = Guid.NewGuid().ToString(),
-                Email = model.Email,
-                UserName = model.Email,
                 EmailConfirmed = model.IsEmailVerified,
                 FullName = model.Name,
                 Picture = model.PictureUrl

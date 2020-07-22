@@ -3,7 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30114.105
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChatSampleApi", "ChatSampleApi\ChatSampleApi.csproj", "{A94DF31B-EB55-49B0-BADF-26D1C4F02599}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChatSampleApi", "ChatSampleApi\ChatSampleApi.csproj", "{A94DF31B-EB55-49B0-BADF-26D1C4F02599}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{42A45584-D6AC-4EDF-84F9-5EE9B651074C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChatSampleApi.IntegrationTests", "ChatSampleApi.IntegrationTests\ChatSampleApi.IntegrationTests.csproj", "{89FD3BC3-23ED-4ACD-B7A7-4C4C2FEAD446}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,9 +19,16 @@ Global
 		{A94DF31B-EB55-49B0-BADF-26D1C4F02599}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A94DF31B-EB55-49B0-BADF-26D1C4F02599}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A94DF31B-EB55-49B0-BADF-26D1C4F02599}.Release|Any CPU.Build.0 = Release|Any CPU
+		{89FD3BC3-23ED-4ACD-B7A7-4C4C2FEAD446}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{89FD3BC3-23ED-4ACD-B7A7-4C4C2FEAD446}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{89FD3BC3-23ED-4ACD-B7A7-4C4C2FEAD446}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{89FD3BC3-23ED-4ACD-B7A7-4C4C2FEAD446}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{89FD3BC3-23ED-4ACD-B7A7-4C4C2FEAD446} = {42A45584-D6AC-4EDF-84F9-5EE9B651074C}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {212F92BF-EA7C-4C96-9F59-5A7F3C5D0FA7}

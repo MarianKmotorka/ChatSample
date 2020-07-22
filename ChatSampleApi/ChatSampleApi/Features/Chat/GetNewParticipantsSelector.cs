@@ -2,9 +2,11 @@
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using ChatSampleApi.Exceptions;
 using ChatSampleApi.Persistence;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 
 namespace ChatSampleApi.Features.Chat
 {
@@ -15,6 +17,9 @@ namespace ChatSampleApi.Features.Chat
             public string ChatId { get; set; }
 
             public string Text { get; set; }
+
+            [JsonIgnore]
+            public string UserId { get; set; }
         }
 
         public class Handler : IRequestHandler<Query, List<UserDto>>
@@ -30,6 +35,9 @@ namespace ChatSampleApi.Features.Chat
             {
                 var chat = await _db.Chats.Include(x => x.Participants).SingleOrNotFoundAsync(x => x.Id == request.ChatId);
                 var participantIds = chat.Participants.Select(x => x.UserId);
+
+                if (participantIds.All(x => x != request.UserId))
+                    throw new Forbidden403Exception("You are not part of a chat");
 
                 var query = _db.Users.Where(x => !participantIds.Contains(x.Id))
                     .Select(x => new UserDto

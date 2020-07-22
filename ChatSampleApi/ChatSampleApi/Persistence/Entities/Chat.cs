@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using ChatSampleApi.Exceptions;
 using ChatSampleApi.Persistence.Entities.JunctionEntities;
@@ -34,12 +33,7 @@ namespace ChatSampleApi.Persistence.Entities
             if (!Participants.Any(x => x.UserId == sender.Id))
                 throw new Forbidden403Exception();
 
-            var message = new Message
-            {
-                Sender = sender,
-                SentDate = DateTime.Now,
-                Text = text
-            };
+            var message = new Message(text, sender, this);
 
             _messages.Add(message);
 

@@ -94,6 +94,7 @@ namespace ChatSampleApi.Controllers
         public async Task<ActionResult<IEnumerable<GetNewParticipantsSelector.UserDto>>> GetNewParticipantsSelector(string id, [FromQuery] GetNewParticipantsSelector.Query request)
         {
             request.ChatId = id;
+            request.UserId = CurrentUserService.UserId;
             var response = await Mediator.Send(request);
             return Ok(response);
         }

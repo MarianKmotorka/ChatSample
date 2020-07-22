@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using ChatSampleApi.Persistence.Entities.JunctionEntities;
 using Microsoft.AspNetCore.Identity;
 
@@ -6,6 +7,13 @@ namespace ChatSampleApi.Persistence.Entities
 {
     public class AuthUser : IdentityUser<string>
     {
+        public AuthUser(string email)
+        {
+            UserName = email;
+            Email = email;
+            Id = Guid.NewGuid().ToString();
+        }
+
         public string FullName { get; set; }
 
         public string Picture { get; set; }
