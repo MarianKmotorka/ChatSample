@@ -1,5 +1,7 @@
-﻿using System.Threading;
+﻿using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
+using ChatSampleApi.Exceptions;
 using ChatSampleApi.Persistence;
 using MediatR;
 using Microsoft.AspNetCore.SignalR;
@@ -28,6 +30,9 @@ namespace ChatSampleApi.Features.Chat.SendMessage
                 .SingleOrNotFoundAsync(x => x.Id == request.ChatId);
 
             var sender = await _db.Users.FindAsync(request.UserId);
+
+            if (chat.Participants.All(x => x.UserId != sender.Id))
+                throw new Forbidden403Exception("You are not chat participant.");
 
             var message = chat.AddMessage(sender, request.Text);
             await _db.SaveChangesAsync();

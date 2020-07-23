@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
-using ChatSampleApi.Exceptions;
 using ChatSampleApi.Persistence.Entities.JunctionEntities;
 
 namespace ChatSampleApi.Persistence.Entities
@@ -31,7 +31,7 @@ namespace ChatSampleApi.Persistence.Entities
         public Message AddMessage(AuthUser sender, string text)
         {
             if (!Participants.Any(x => x.UserId == sender.Id))
-                throw new Forbidden403Exception();
+                throw new InvalidOperationException("Sender is not a chat participant.");
 
             var message = new Message(text, sender, this);
 

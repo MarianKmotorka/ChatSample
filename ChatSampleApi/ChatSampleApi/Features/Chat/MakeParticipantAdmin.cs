@@ -64,5 +64,3 @@ namespace ChatSampleApi.Features.Chat
         }
     }
 }
-
-// TODO show which user is admin -> popup -> show name, role, lastActive
