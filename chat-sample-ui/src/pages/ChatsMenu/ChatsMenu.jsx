@@ -25,7 +25,7 @@ import {
 
 const ChatsMenu = () => {
   const [showCreateChatDialog, setShowCreateChatDialog] = useState(false)
-  const [expanded, setExpanded] = useState(false)
+  const [expanded, setExpanded] = useState(true)
   const { chats, chatsFetching } = useContext(ChatContext)
   const formRef = useRef()
   const history = useHistory()

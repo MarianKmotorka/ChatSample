@@ -25,7 +25,7 @@ import { getContextMenuItems } from './utils'
 
 const ChatDetail = ({ participants, chatId }) => {
   const [showDropdown, setShowDropdown] = useState(false)
-  const [expanded, setExpanded] = useState(false)
+  const [expanded, setExpanded] = useState(true)
   const [currentUserId, setCurrentUserId] = useState()
   const { profile } = useContext(ProfileContext)
 

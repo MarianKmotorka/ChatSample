@@ -41,12 +41,13 @@ export const Content = styled.div`
   justify-content: center;
   align-items: center;
 
-  & button {
+  button {
     padding: 8px;
     outline: transparent;
     border-radius: 6px;
     border: transparent;
-    width: 50%;
+    width: 80%;
+    max-width: 300px;
     display: flex;
     align-items: center;
     justify-content: flex-start;
@@ -54,21 +55,21 @@ export const Content = styled.div`
     font-size: 20px;
     background: ${({ theme }) => theme.gold};
 
-    & p {
+    p {
       margin: 0;
       font-weight: 500;
       color: ${({ theme }) => theme.blackCoffee};
       margin: 0 auto;
     }
 
-    &:hover {
+    :hover {
       background: ${({ theme }) => theme.blackCoffee};
       p {
         color: ${({ theme }) => theme.gold};
       }
     }
 
-    & img {
+    img {
       width: 15%;
     }
   }

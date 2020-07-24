@@ -4,6 +4,7 @@ import { map, get } from 'lodash'
 import { SwapRightOutlined, VerticalAlignTopOutlined } from '@ant-design/icons'
 
 import Message from './Message'
+import { getMessageShape } from './utils'
 import {
   Wrapper,
   MessagesWrapper,
@@ -40,7 +41,11 @@ const Chat = ({
   }
 
   const renderMessage = message => {
-    const commonProps = { key: message.id, message }
+    const commonProps = {
+      key: message.id,
+      message,
+      shape: getMessageShape(messages, message)
+    }
 
     if (scrollToMessageId === message.id)
       return <Message {...commonProps} forwardRef={scrollToMessageRef} />
