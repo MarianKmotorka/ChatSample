@@ -7,11 +7,14 @@ export const Wrapper = styled.div`
   align-items: flex-start;
   margin: 2px;
   max-width: 55%;
-
-  justify-content: ${({ isMyMessage }) => (isMyMessage ? 'flex-end' : 'flex-start')};
-  margin-left: ${({ isMyMessage }) => (isMyMessage ? 'auto' : '5px')};
-
   color: ${({ theme }) => theme.black};
+  justify-content: ${({ isMyMessage }) => (isMyMessage ? 'flex-end' : 'flex-start')};
+
+  margin-left: ${({ isMyMessage }) => (isMyMessage ? 'auto' : '5px')};
+  margin-top: ${({ shape, isMyMessage }) =>
+    (shape === MessageShape.TOP || shape === MessageShape.STANDALONE) && !isMyMessage
+      ? '40px'
+      : 0};
 
   @media only screen and (max-width: 650px) {
     max-width: 80%;
@@ -31,10 +34,8 @@ export const Text = styled.p`
   line-height: 20px;
   padding: 4px 12px;
   border: 1px grey solid;
-  border-radius: ${props => getMessageBorderRadius(props)};
-  margin-bottom: ${({ shape }) => (shape === MessageShape.BOTTOM ? '10px' : 0)};
   word-break: break-all;
-
+  border-radius: ${props => getMessageBorderRadius(props)};
   background: ${({ isMyMessage, theme }) => (isMyMessage ? theme.gold : theme.white)};
 `
 

@@ -22,7 +22,7 @@ const Message = memo(({ message, forwardRef, shape = MessageShape.STANDALONE }) 
   const tooltipPlacement = isMyMessage ? 'left' : 'right'
 
   return (
-    <Wrapper isMyMessage={isMyMessage} ref={forwardRef}>
+    <Wrapper isMyMessage={isMyMessage} shape={shape} ref={forwardRef}>
       {!isMyMessage && (
         <Tooltip text={name} placement='left'>
           <Avatar referrerPolicy='no-referrer' src={picture} isHidden={!showAvatar} />

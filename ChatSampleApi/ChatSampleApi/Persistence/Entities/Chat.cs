@@ -45,7 +45,9 @@ namespace ChatSampleApi.Persistence.Entities
 
         public AuthUser AddParticipant(AuthUser participant)
         {
-            _participants.Add(new ChatUser(participant, this));
+            if (!_participants.Any(x => x.UserId == participant.Id))
+                _participants.Add(new ChatUser(participant, this));
+
             return participant;
         }
 

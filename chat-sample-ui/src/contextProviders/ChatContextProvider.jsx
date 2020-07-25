@@ -29,7 +29,7 @@ const ChatContextProvider = ({ children }) => {
   const [beep] = useSound(newMessageBeep)
   const history = useHistory()
 
-  const messageCountPerPage = 25
+  const messageCountPerPage = 50
 
   const recieveMessage = useCallback(
     (chatId, message) => {
