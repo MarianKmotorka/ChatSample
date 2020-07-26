@@ -54,7 +54,7 @@ const Chat = ({
 
   return (
     <Wrapper>
-      <MessagesWrapper>
+      <MessagesWrapper spaceFromTop={!showLoadMore && 10}>
         {showLoadMore && (
           <LoadMoreButton onClick={onLoadMore} icon={<VerticalAlignTopOutlined />} />
         )}

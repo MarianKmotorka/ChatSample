@@ -1,20 +1,13 @@
 import React, { useState, useRef, useContext } from 'react'
 import { useHistory } from 'react-router-dom'
 import { map, get } from 'lodash'
-import {
-  DeleteFilled,
-  PlusOutlined,
-  SwapLeftOutlined,
-  SwapRightOutlined
-} from '@ant-design/icons'
+import { PlusOutlined, SwapLeftOutlined, SwapRightOutlined } from '@ant-design/icons'
 
-import api from '../../services/httpService'
 import CreateRoomForm from './CreateChatForm'
 import Backdrop from '../../components/Backdrop'
 import LoadingSpinner from '../../components/LoadingSpinner'
 import { useOnClickOutside } from '../../utils/useOnClickOutside'
 import { ChatContext } from '../../contextProviders/ChatContextProvider'
-import { ChatRoleType } from '../../utils/types'
 
 import {
   Wrapper,
@@ -32,11 +25,6 @@ const ChatsMenu = () => {
 
   useOnClickOutside(formRef, () => setShowCreateChatDialog(false))
 
-  const deleteChat = async id => {
-    history.goBack()
-    await api.delete(`/chats/${id}`)
-  }
-
   const createChatCallback = chatId => {
     setShowCreateChatDialog(false)
     history.push(`/chats/${chatId}`)
@@ -53,13 +41,11 @@ const ChatsMenu = () => {
     const unreadMessages = get(x, 'unreadMessages', 0)
     const name = get(x, 'name')
     const id = get(x, 'id')
-    const canDeleteChat = get(x, 'chatRole') === ChatRoleType.Admin
 
     return (
       <StyledBadge key={id} count={unreadMessages} offset={[-5, 5]}>
         <ChatButtonLink to={`/chats/${id}`}>
           <p>{name}</p>
-          {canDeleteChat && <DeleteFilled onClick={() => deleteChat(id)} />}
         </ChatButtonLink>
       </StyledBadge>
     )

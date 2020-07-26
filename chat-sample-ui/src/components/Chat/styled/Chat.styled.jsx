@@ -15,8 +15,8 @@ export const InputWrapper = styled.div`
   align-items: center;
   padding: 10px;
 
-  & input {
-    flex: 4;
+  input {
+    flex: 1;
     font-size: 16px;
     padding: 6px 15px;
     outline: none;
@@ -32,11 +32,11 @@ export const StyledButton = styled(Button)`
   background: ${({ theme }) => theme.marigold};
   color: ${({ theme }) => theme.blackCoffee};
   border: none;
-  max-width: 200px;
-  margin: 0 15px 0 25px;
-  font-size: 15px;
+  max-width: 150px;
+  margin: 0 15px 0 20px;
+  font-size: 16px;
 
-  &:hover {
+  :hover {
     background: ${({ theme }) => theme.red};
   }
 `
@@ -53,6 +53,8 @@ export const MessagesWrapper = styled.div`
   overflow: auto;
   flex: 1;
   background: ${({ theme }) => theme.white};
+  padding-top: ${({ spaceFromTop }) => (spaceFromTop ? `${spaceFromTop}px` : '0px')};
+  padding-bottom: 6px;
 
   ::-webkit-scrollbar {
     width: 7px;

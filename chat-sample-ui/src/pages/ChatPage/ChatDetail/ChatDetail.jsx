@@ -1,7 +1,14 @@
 import React, { useState, useContext, useEffect } from 'react'
-import { map, get, find, isEmpty, invert } from 'lodash'
-import { SwapLeftOutlined, SwapRightOutlined, PlusOutlined } from '@ant-design/icons'
 import PropTypes from 'prop-types'
+import { map, get, find, invert } from 'lodash'
+import { useHistory } from 'react-router-dom'
+import {
+  SwapLeftOutlined,
+  SwapRightOutlined,
+  PlusOutlined,
+  DeleteOutlined
+} from '@ant-design/icons'
+import { Modal } from 'antd'
 
 import Popover from '../../../components/Popover'
 
@@ -22,12 +29,16 @@ import {
   StyledMenu
 } from './styled/ChatDetail.styled'
 import { getContextMenuItems } from './utils'
+import Tooltip from '../../../components/Tooltip'
 
 const ChatDetail = ({ participants, chatId }) => {
   const [showDropdown, setShowDropdown] = useState(false)
-  const [expanded, setExpanded] = useState(true)
   const [currentUserId, setCurrentUserId] = useState()
+  const [expanded, setExpanded] = useState(true)
+  const [showDeleteChatModal, setShowDeleteChatModal] = useState(false)
+
   const { profile } = useContext(ProfileContext)
+  const history = useHistory()
 
   useEffect(() => {
     if (!profile) return
@@ -40,6 +51,11 @@ const ChatDetail = ({ participants, chatId }) => {
       participantId: get(user, 'id')
     })
     setShowDropdown(false)
+  }
+
+  const handleDeleteChat = async () => {
+    history.goBack()
+    await api.delete(`/chats/${chatId}`)
   }
 
   const toogleExpanded = () => {
@@ -79,21 +95,35 @@ const ChatDetail = ({ participants, chatId }) => {
   )
 
   const currentUserRole = get(find(participants, ['id', currentUserId]), 'chatRole')
+  const canDeleteChat = currentUserRole === ChatRoleType.Admin
 
   return (
-    <Wrapper>
+    <Wrapper width={expanded ? '300px' : 'auto'}>
       <Header>
-        <StyledButton
-          onClick={toogleExpanded}
-          shape='circle'
-          icon={expanded ? <SwapRightOutlined /> : <SwapLeftOutlined />}
-        />
-        {expanded && (
+        <Tooltip text={expanded ? 'Collapse' : 'Expand'} placement='top'>
           <StyledButton
-            onClick={() => setShowDropdown(x => !x)}
+            onClick={toogleExpanded}
             shape='circle'
-            icon={<PlusOutlined />}
+            icon={expanded ? <SwapRightOutlined /> : <SwapLeftOutlined />}
           />
+        </Tooltip>
+        {expanded && (
+          <Tooltip text={showDropdown ? 'Hide' : 'Add participant'} placement='top'>
+            <StyledButton
+              onClick={() => setShowDropdown(x => !x)}
+              shape='circle'
+              icon={<PlusOutlined />}
+            />
+          </Tooltip>
+        )}
+        {expanded && canDeleteChat && (
+          <Tooltip text='Delete chat' placement='top'>
+            <StyledButton
+              onClick={() => setShowDeleteChatModal(true)}
+              shape='circle'
+              icon={<DeleteOutlined />}
+            />
+          </Tooltip>
         )}
       </Header>
 
@@ -106,7 +136,6 @@ const ChatDetail = ({ participants, chatId }) => {
             onChange={handleAddParticipant}
             itemRenderer={renderDropdownItem}
             displayProperty='name'
-            width='230px'
           />
         )}
 
@@ -127,13 +156,24 @@ const ChatDetail = ({ participants, chatId }) => {
             <ParticipantWrapper key={particiapantId}>
               {renderPhoto(participant)}
               {renderName(participantName, participantRole)}
-              {!isEmpty(menuItems) && <StyledMenu items={menuItems} />}
+              <StyledMenu items={menuItems} />
             </ParticipantWrapper>
           ) : (
             renderPhoto(participant)
           )
         })}
       </Content>
+
+      <Modal
+        title='Do you really want to delete this chat ?'
+        onOk={handleDeleteChat}
+        onCancel={() => setShowDeleteChatModal(false)}
+        okText='Yes, delete chat.'
+        cancelText='No, go back.'
+        visible={showDeleteChatModal}
+      >
+        <p>Be aware that this action can not be reversed! </p>
+      </Modal>
     </Wrapper>
   )
 }

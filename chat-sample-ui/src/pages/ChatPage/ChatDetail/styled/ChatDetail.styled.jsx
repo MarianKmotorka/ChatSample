@@ -9,7 +9,8 @@ export const Wrapper = styled.div`
   justify-content: flex-start;
   align-items: center;
   padding: 0px 10px;
-  max-width: 300px;
+  max-width: 350px;
+  width: ${({ width }) => width || 'auto'};
 `
 
 export const ParticipantWrapper = styled.div`
@@ -17,6 +18,7 @@ export const ParticipantWrapper = styled.div`
   justify-content: flex-start;
   align-items: center;
   margin-top: 10px;
+  width: 100%;
 
   & > p {
     margin-right: 10px;
@@ -60,6 +62,7 @@ export const Content = styled.div`
   justify-content: flex-start;
   align-items: center;
   height: 100%;
+  width: 100%;
   margin: 0;
   padding: 0 15px;
 `

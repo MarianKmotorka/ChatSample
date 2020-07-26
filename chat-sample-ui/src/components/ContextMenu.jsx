@@ -1,6 +1,6 @@
 import React, { useRef } from 'react'
 import PropTypes from 'prop-types'
-import { map, get } from 'lodash'
+import { map, get, isEmpty } from 'lodash'
 import { Menu, Dropdown, Button } from 'antd'
 import { BarsOutlined } from '@ant-design/icons'
 import styled from 'styled-components'
@@ -12,6 +12,8 @@ const Text = styled.p`
 
 const ContextMenu = ({ items, className }) => {
   const containerRef = useRef()
+
+  if (isEmpty(items)) return null
 
   const menu = (
     <Menu>
