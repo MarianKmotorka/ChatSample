@@ -11,7 +11,7 @@ export const Wrapper = styled.div`
 
 export const InputWrapper = styled.div`
   display: flex;
-  background: ${({ theme }) => theme.lighGray};
+  background: ${({ theme }) => theme.lightGray};
   align-items: center;
   padding: 10px;
 

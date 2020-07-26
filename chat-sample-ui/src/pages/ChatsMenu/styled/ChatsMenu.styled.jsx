@@ -26,10 +26,8 @@ export const Wrapper = styled.div`
 export const ChatButtonLink = styled(NavLink)`
   height: 100%;
   min-height: 55px;
-  border-radius: 5px;
-
-  background: ${({ theme }) => theme.blue};
-  color: ${({ theme }) => theme.white};
+  background: ${({ theme }) => theme.lightGray};
+  color: ${({ theme }) => theme.black};
 
   text-decoration: none;
   font-size: 18px;
@@ -39,26 +37,26 @@ export const ChatButtonLink = styled(NavLink)`
   justify-content: center;
   align-items: center;
   position: relative;
+  transition: none;
 
-  & svg {
+  svg {
     color: ${({ theme }) => theme.gray};
     position: absolute;
     bottom: 1px;
     right: 1px;
 
-    &:hover {
+    :hover {
       color: ${({ theme }) => theme.red};
     }
   }
 
-  &:hover {
-    color: ${({ theme }) => theme.white};
+  :hover {
+    color: ${({ theme }) => theme.black};
   }
 
-  &.active p {
-    font-weight: 400;
-    font-size: 20px;
-    color: ${({ theme }) => theme.gold};
+  &.active {
+    color: ${({ theme }) => theme.white};
+    background: ${({ theme }) => theme.blue};
   }
 `
 
@@ -71,7 +69,7 @@ export const StyledBadge = styled(Badge)`
   box-shadow: 7px 7px 5px 0px rgba(170, 170, 170, 1);
   transition: all 0.3s ease;
 
-  &:hover {
+  :hover {
     color: ${({ theme }) => theme.white};
     box-shadow: 9px 13px 5px 0px rgba(170, 170, 170, 1);
     transform: translateY(-8px);
@@ -87,7 +85,7 @@ export const StyledButton = styled(Button)`
   top: 0px;
   z-index: 2;
 
-  &:hover {
+  :hover {
     transform: scale(1.3);
     color: ${({ theme }) => theme.red};
   }

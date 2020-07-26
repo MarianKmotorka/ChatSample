@@ -22,7 +22,7 @@ export const Header = styled.div`
 
 export const Content = styled.div`
   flex: 1;
-  background: ${({ theme }) => theme.lighGray};
+  background: ${({ theme }) => theme.lightGray};
   border-radius: 0 0 20px 20px;
   display: flex;
   flex-direction: column;

@@ -51,7 +51,7 @@ export const Item = styled.div`
   font-size: 18px;
 
   &:hover {
-    background: ${({ theme }) => theme.lighGray};
+    background: ${({ theme }) => theme.lightGray};
   }
 `
 

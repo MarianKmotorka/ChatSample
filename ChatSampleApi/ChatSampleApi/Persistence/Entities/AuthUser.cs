@@ -12,6 +12,8 @@ namespace ChatSampleApi.Persistence.Entities
             UserName = email;
             Email = email;
             Id = Guid.NewGuid().ToString();
+
+            _unreadMessages = new List<UserUnreadMessage>();
         }
 
         public string FullName { get; set; }

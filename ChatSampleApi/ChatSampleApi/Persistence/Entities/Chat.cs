@@ -14,10 +14,6 @@ namespace ChatSampleApi.Persistence.Entities
             _messages = new List<Message>();
         }
 
-        private Chat()
-        {
-        }
-
         public string Id { get; }
 
         public string Name { get; private set; }
@@ -34,7 +30,6 @@ namespace ChatSampleApi.Persistence.Entities
                 throw new InvalidOperationException("Sender is not a chat participant.");
 
             var message = new Message(text, sender, this);
-
             _messages.Add(message);
 
             foreach (var chatUser in Participants.Where(x => x.UserId != sender.Id))
