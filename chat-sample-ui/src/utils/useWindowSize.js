@@ -1,9 +1,9 @@
 import { useEffect, useState, useCallback } from 'react'
 
-const XS = 640
-const SM = 768
-const MD = 1024
-const LG = 1280
+export const XS = 640
+export const SM = 768
+export const MD = 1024
+export const LG = 1280
 
 export const useWindowSize = () => {
   const isClient = typeof window === 'object'
@@ -11,12 +11,7 @@ export const useWindowSize = () => {
   const getSize = useCallback(
     () => ({
       width: isClient ? window.innerWidth : undefined,
-      height: isClient ? window.innerHeight : undefined,
-      xs: window.innerWidth < XS,
-      sm: window.innerWidth > XS && window.innerWidth < SM,
-      md: window.innerWidth > SM && window.innerWidth < MD,
-      lg: window.innerWidth > MD && window.innerWidth < LG,
-      xl: window.innerWidth > LG
+      height: isClient ? window.innerHeight : undefined
     }),
     [isClient]
   )
@@ -36,3 +31,5 @@ export const useWindowSize = () => {
 
   return windowSize
 }
+
+export default useWindowSize
