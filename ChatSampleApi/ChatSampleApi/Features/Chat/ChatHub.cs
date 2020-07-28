@@ -49,8 +49,8 @@ namespace ChatSampleApi.Features.Chat
 
         public override async Task OnDisconnectedAsync(Exception exception)
         {
+            RemoveUserConnection();
             await RemoveUserFromGroups();
-            RemoveUserConnections();
             await base.OnDisconnectedAsync(exception);
         }
 
@@ -80,22 +80,33 @@ namespace ChatSampleApi.Features.Chat
         private async Task RemoveUserFromGroups()
         {
             var userId = _currentUserService.UserId;
-            await SetUserOnlineStatus(userId, isOnline: false);
-            var groups = await _db.Chats.Where(x => x.Participants.Any(p => p.UserId == _currentUserService.UserId)).ToListAsync();
+            var userIsOffline = !_userConnections.ContainsKey(userId);
+
+            if (userIsOffline)
+                await SetUserOnlineStatus(userId, isOnline: false);
+
+            var groups = await _db.Chats.Where(x => x.Participants.Any(p => p.UserId == userId)).ToListAsync();
 
             foreach (var group in groups)
             {
-                await Clients.Group(group.Id).SendAsync(UserConnectedStatusChanged, userId, false);
+                if (userIsOffline)
+                    await Clients.Group(group.Id).SendAsync(UserConnectedStatusChanged, userId, false);
+
                 await Groups.RemoveFromGroupAsync(Context.ConnectionId, group.Id);
             }
         }
 
-        private void RemoveUserConnections()
+        private void RemoveUserConnection()
         {
             var userId = _currentUserService.UserId;
 
-            if (_userConnections.ContainsKey(userId))
-                _userConnections[userId].Remove(Context.ConnectionId);
+            if (!_userConnections.ContainsKey(userId))
+                return;
+
+            _userConnections[userId].Remove(Context.ConnectionId);
+
+            if (_userConnections[userId].Count == 0)
+                _userConnections.Remove(userId);
         }
 
         private async Task SetUserOnlineStatus(string userId, bool isOnline = true)

@@ -1,9 +1,15 @@
 import React from 'react'
+import { isLoggedIn } from '../../services/authService'
 import { Wrapper, Card, Header, Content } from './styled/Login.styled'
 import config from '../../utils/config.json'
 import googleIcon from '../../img/google.png'
+import { useHistory } from 'react-router-dom'
 
 const Login = () => {
+  const history = useHistory()
+
+  if (isLoggedIn) history.replace('/')
+
   const onGoogleLoginClick = () => {
     const queryParams = [
       `client_id=${config.GOOGLE_CLIENT_ID}`,

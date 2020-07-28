@@ -31,7 +31,9 @@ const CreateRoomForm = ({ formRef, callback }) => {
           value={name}
           onChange={({ target }) => setName(target.value)}
         />
-        <StyledButton type='primary'>Create</StyledButton>
+        <StyledButton type='primary' onClick={createChat}>
+          Create
+        </StyledButton>
       </Content>
     </Wrapper>
   )

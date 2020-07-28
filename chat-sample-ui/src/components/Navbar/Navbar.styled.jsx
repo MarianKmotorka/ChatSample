@@ -15,7 +15,7 @@ export const Logo = styled(Link)`
   padding: 10px 0 10px 30px;
   color: ${({ theme }) => theme.blackCoffee};
 
-  &:hover {
+  :hover {
     color: ${({ theme }) => theme.blackCoffee};
   }
 `
@@ -26,7 +26,7 @@ export const Links = styled.div`
   justify-content: flex-end;
   margin-right: 30px;
 
-  & a {
+  a {
     text-decoration: none;
     margin: 0 12px;
     font-size: 20px;
@@ -45,15 +45,15 @@ export const ProfileWrapper = styled.div`
   margin-right: 20px;
   border-radius: 30px;
   background: ${({ theme }) => theme.blackCoffee};
-  & > p {
+  p {
     color: ${({ theme }) => theme.white};
     padding-right: 13px;
     margin: 0;
   }
 
-  & > img {
+  img {
     border-radius: 50%;
     margin-right: 5px;
-    width: 27px;
+    height: 30px;
   }
 `
