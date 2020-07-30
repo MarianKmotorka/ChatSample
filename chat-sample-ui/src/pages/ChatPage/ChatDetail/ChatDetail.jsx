@@ -54,8 +54,8 @@ const ChatDetail = ({ participants, chatId }) => {
   }
 
   const handleDeleteChat = async () => {
-    history.goBack()
     await api.delete(`/chats/${chatId}`)
+    history.goBack()
   }
 
   const toogleExpanded = () => {

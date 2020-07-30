@@ -86,7 +86,7 @@ export const UserName = styled.p`
 
 export const Avatar = styled.img`
   border-radius: 50%;
-  margin-right: 10px;
+  margin-right: ${({ marginRight }) => marginRight || '5px'};
   margin-left: auto;
   height: 30px;
 `

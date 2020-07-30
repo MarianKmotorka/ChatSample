@@ -38,6 +38,7 @@ const Navbar = () => {
         onClick={() => setLinksExpanded(prev => !prev)}
         referrerPolicy='no-referrer'
         src={get(profile, 'picture')}
+        marginRight='20px'
       />
       {linksExpanded && (
         <ExpandedLinksWrapper>

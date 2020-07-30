@@ -2,7 +2,7 @@ import { useEffect, useState, useCallback } from 'react'
 
 export const XS = 640
 export const SM = 768
-export const MD = 1024
+export const MD = 900
 export const LG = 1280
 
 export const useWindowSize = () => {

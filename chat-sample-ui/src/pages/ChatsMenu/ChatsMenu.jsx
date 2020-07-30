@@ -1,6 +1,6 @@
-import React, { useState, useRef, useContext } from 'react'
+import React, { useState, useRef, useContext, useEffect } from 'react'
 import { useHistory } from 'react-router-dom'
-import { map, get } from 'lodash'
+import { map, get, head } from 'lodash'
 import { PlusOutlined, SwapLeftOutlined, SwapRightOutlined } from '@ant-design/icons'
 
 import CreateRoomForm from './CreateChatForm'
@@ -13,8 +13,11 @@ import {
   Wrapper,
   ChatButtonLink,
   StyledButton,
-  StyledBadge
+  StyledBadge,
+  ButtonsWrapper,
+  ItemsWrapper
 } from './styled/ChatsMenu.styled'
+import useWindowSize, { MD } from '../../utils/useWindowSize'
 
 const ChatsMenu = () => {
   const [showCreateChatDialog, setShowCreateChatDialog] = useState(false)
@@ -22,8 +25,15 @@ const ChatsMenu = () => {
   const { chats, chatsFetching } = useContext(ChatContext)
   const formRef = useRef()
   const history = useHistory()
+  const { width } = useWindowSize()
 
   useOnClickOutside(formRef, () => setShowCreateChatDialog(false))
+
+  useEffect(() => {
+    if (width > MD) setExpanded(true)
+    else setExpanded(false)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [width > MD])
 
   const createChatCallback = chatId => {
     setShowCreateChatDialog(false)
@@ -45,7 +55,7 @@ const ChatsMenu = () => {
     return (
       <StyledBadge key={id} count={unreadMessages} offset={[-5, 5]}>
         <ChatButtonLink to={`/chats/${id}`}>
-          <p>{name}</p>
+          <p>{expanded ? name : head(name)}</p>
         </ChatButtonLink>
       </StyledBadge>
     )
@@ -58,18 +68,22 @@ const ChatsMenu = () => {
           <CreateRoomForm formRef={formRef} callback={createChatCallback} />
         </Backdrop>
       )}
-      <Wrapper>
-        <StyledButton
-          onClick={() => setExpanded(x => !x)}
-          shape='circle'
-          icon={expanded ? <SwapLeftOutlined /> : <SwapRightOutlined />}
-        />
-        <StyledButton
-          onClick={() => setShowCreateChatDialog(true)}
-          shape='circle'
-          icon={<PlusOutlined />}
-        />
-        {expanded && items}
+      <Wrapper width={expanded ? '200px' : '70px'}>
+        <ButtonsWrapper>
+          {width > MD && (
+            <StyledButton
+              onClick={() => setExpanded(x => !x)}
+              shape='circle'
+              icon={expanded ? <SwapLeftOutlined /> : <SwapRightOutlined />}
+            />
+          )}
+          <StyledButton
+            onClick={() => setShowCreateChatDialog(true)}
+            shape='circle'
+            icon={<PlusOutlined />}
+          />
+        </ButtonsWrapper>
+        <ItemsWrapper>{items}</ItemsWrapper>
       </Wrapper>
     </>
   )
