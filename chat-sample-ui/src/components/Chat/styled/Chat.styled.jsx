@@ -3,7 +3,7 @@ import { Button } from 'antd'
 
 export const Wrapper = styled.div`
   height: 100%;
-  width: 100%;
+  flex: 1;
   display: flex;
   background: #eef2f3;
   flex-direction: column;

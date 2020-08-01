@@ -26,14 +26,14 @@ const ChatsMenu = () => {
   const formRef = useRef()
   const history = useHistory()
   const { width } = useWindowSize()
+  const isWiderThanMedium = width > MD
 
   useOnClickOutside(formRef, () => setShowCreateChatDialog(false))
 
   useEffect(() => {
-    if (width > MD) setExpanded(true)
+    if (isWiderThanMedium) setExpanded(true)
     else setExpanded(false)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [width > MD])
+  }, [isWiderThanMedium])
 
   const createChatCallback = chatId => {
     setShowCreateChatDialog(false)
@@ -70,7 +70,7 @@ const ChatsMenu = () => {
       )}
       <Wrapper expanded={expanded}>
         <ButtonsWrapper>
-          {width > MD && (
+          {isWiderThanMedium && (
             <StyledButton
               onClick={() => setExpanded(x => !x)}
               shape='circle'

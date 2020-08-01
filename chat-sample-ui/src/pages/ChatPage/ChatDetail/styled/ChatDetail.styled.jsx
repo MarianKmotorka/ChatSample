@@ -9,8 +9,12 @@ export const Wrapper = styled.div`
   justify-content: flex-start;
   align-items: center;
   padding: 0px 10px;
-  max-width: 350px;
   width: ${({ width }) => width || 'auto'};
+  height: 100%;
+
+  position: ${({ renderOver }) => (renderOver ? 'absolute' : 'static')};
+  top: 0px;
+  right: 0px;
 `
 
 export const ParticipantWrapper = styled.div`
