@@ -68,7 +68,7 @@ const ChatsMenu = () => {
           <CreateRoomForm formRef={formRef} callback={createChatCallback} />
         </Backdrop>
       )}
-      <Wrapper width={expanded ? '200px' : '70px'}>
+      <Wrapper expanded={expanded}>
         <ButtonsWrapper>
           {width > MD && (
             <StyledButton
