@@ -1,6 +1,7 @@
 import styled from 'styled-components'
 import { getMessageBorderRadius } from '../utils'
 import { MessageShape } from '../Message'
+import { MD } from '../../../utils/useWindowSize'
 
 export const Wrapper = styled.div`
   display: flex;
@@ -16,7 +17,7 @@ export const Wrapper = styled.div`
       ? '40px'
       : 0};
 
-  @media only screen and (max-width: 650px) {
+  @media only screen and (max-width: ${`${MD}px`}) {
     max-width: 80%;
   }
 `

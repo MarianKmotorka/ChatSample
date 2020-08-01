@@ -9,8 +9,12 @@ export const Wrapper = styled.div`
   justify-content: flex-start;
   align-items: center;
   padding: 0px 10px;
-  max-width: 350px;
   width: ${({ width }) => width || 'auto'};
+  height: 100%;
+
+  position: ${({ renderOver }) => (renderOver ? 'absolute' : 'static')};
+  top: 0px;
+  right: 0px;
 `
 
 export const ParticipantWrapper = styled.div`
@@ -44,7 +48,7 @@ export const Photo = styled.img`
 export const Header = styled.div`
   color: ${({ theme }) => theme.black};
   font-size: 25px;
-  border-bottom: solid 1.5px ${({ theme }) => theme.red};
+  border-bottom: solid 1.5px ${({ theme }) => theme.darkGold};
   margin: 15px 0;
   width: 85%;
   display: flex;

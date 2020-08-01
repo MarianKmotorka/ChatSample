@@ -10,12 +10,14 @@ import {
 } from '@ant-design/icons'
 import { Modal } from 'antd'
 
-import Popover from '../../../components/Popover'
-
 import api from '../../../services/httpService'
+import Tooltip from '../../../components/Tooltip'
+import Popover from '../../../components/Popover'
 import SearchableDropdown from '../../../components/SearchableDropdown/SearchableDropdown'
 import { ProfileContext } from '../../../contextProviders/ProfileContextProvider'
 import { ChatRoleType } from '../../../utils/types'
+import useWindowSize, { SM } from '../../../utils/useWindowSize'
+import { getContextMenuItems } from './utils'
 
 import {
   Wrapper,
@@ -28,8 +30,6 @@ import {
   DropdownItem,
   StyledMenu
 } from './styled/ChatDetail.styled'
-import { getContextMenuItems } from './utils'
-import Tooltip from '../../../components/Tooltip'
 
 const ChatDetail = ({ participants, chatId }) => {
   const [showDropdown, setShowDropdown] = useState(false)
@@ -39,12 +39,22 @@ const ChatDetail = ({ participants, chatId }) => {
 
   const { profile } = useContext(ProfileContext)
   const history = useHistory()
+  const { width } = useWindowSize()
+  const isWiderThanSmall = width > SM
 
   useEffect(() => {
     if (!profile) return
-
     setCurrentUserId(get(profile, 'id'))
   }, [profile])
+
+  useEffect(() => {
+    if (isWiderThanSmall) {
+      setExpanded(true)
+    } else {
+      setExpanded(false)
+      setShowDropdown(false)
+    }
+  }, [isWiderThanSmall])
 
   const handleAddParticipant = async user => {
     await api.post(`/chats/${chatId}/participants`, {
@@ -54,8 +64,8 @@ const ChatDetail = ({ participants, chatId }) => {
   }
 
   const handleDeleteChat = async () => {
-    history.goBack()
     await api.delete(`/chats/${chatId}`)
+    history.goBack()
   }
 
   const toogleExpanded = () => {
@@ -98,7 +108,10 @@ const ChatDetail = ({ participants, chatId }) => {
   const canDeleteChat = currentUserRole === ChatRoleType.Admin
 
   return (
-    <Wrapper width={expanded ? '300px' : 'auto'}>
+    <Wrapper
+      width={expanded ? '300px' : 'auto'}
+      renderOver={!isWiderThanSmall && expanded}
+    >
       <Header>
         <Tooltip text={expanded ? 'Collapse' : 'Expand'} placement='top'>
           <StyledButton
@@ -168,11 +181,11 @@ const ChatDetail = ({ participants, chatId }) => {
         title='Do you really want to delete this chat ?'
         onOk={handleDeleteChat}
         onCancel={() => setShowDeleteChatModal(false)}
-        okText='Yes, delete chat.'
+        okText='Yes, delete the chat.'
         cancelText='No, go back.'
         visible={showDeleteChatModal}
       >
-        <p>Be aware that this action can not be reversed! </p>
+        <p>Be aware of that this action can not be reversed! </p>
       </Modal>
     </Wrapper>
   )

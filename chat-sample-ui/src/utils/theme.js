@@ -6,10 +6,12 @@ const theme = {
   dimGray: '#6D6A75',
   blackCoffee: '#37323E',
   gold: '#DEB841',
+  darkGold: '#86580c',
   marigold: '#DE9E36',
   blue: '#298cfb',
   red: '#ff4d4f',
-  black: '#000000'
+  black: '#000000',
+  green: '#057a5e'
 }
 
 export default theme
