@@ -48,7 +48,7 @@ export const Photo = styled.img`
 export const Header = styled.div`
   color: ${({ theme }) => theme.black};
   font-size: 25px;
-  border-bottom: solid 1.5px ${({ theme }) => theme.red};
+  border-bottom: solid 1.5px ${({ theme }) => theme.darkGold};
   margin: 15px 0;
   width: 85%;
   display: flex;
