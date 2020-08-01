@@ -53,7 +53,7 @@ const ChatsMenu = () => {
     const id = get(x, 'id')
 
     return (
-      <StyledBadge key={id} count={unreadMessages} offset={[-5, 5]}>
+      <StyledBadge expanded={expanded} key={id} count={unreadMessages} offset={[-5, 5]}>
         <ChatButtonLink to={`/chats/${id}`}>
           <p>{expanded ? name : head(name)}</p>
         </ChatButtonLink>
@@ -83,7 +83,7 @@ const ChatsMenu = () => {
             icon={<PlusOutlined />}
           />
         </ButtonsWrapper>
-        <ItemsWrapper>{items}</ItemsWrapper>
+        <ItemsWrapper expanded={expanded}>{items}</ItemsWrapper>
       </Wrapper>
     </>
   )
