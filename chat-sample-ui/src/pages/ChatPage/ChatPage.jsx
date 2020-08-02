@@ -8,7 +8,7 @@ import { ChatContext } from '../../contextProviders/ChatContextProvider'
 import LoadingSpinner from '../../components/LoadingSpinner'
 import api from '../../services/httpService'
 
-import { Wrapper } from './styled/ChatPage.styled'
+import { Wrapper, InnerWrapper, TopBar } from './styled/ChatPage.styled'
 
 const ChatPage = () => {
   const {
@@ -53,14 +53,17 @@ const ChatPage = () => {
 
   return (
     <Wrapper>
-      <Chat
-        messages={messages}
-        onLoadMore={handleLoadMore}
-        onMessageSent={handleMessageSent}
-        scrollToMessageId={scrollToMessageId}
-        showLoadMore={messages.length >= messageCountPerPage}
-      />
-      <ChatDetail participants={participants} chatId={chatId} />
+      <TopBar />
+      <InnerWrapper>
+        <Chat
+          messages={messages}
+          onLoadMore={handleLoadMore}
+          onMessageSent={handleMessageSent}
+          scrollToMessageId={scrollToMessageId}
+          showLoadMore={messages.length >= messageCountPerPage}
+        />
+        <ChatDetail participants={participants} chatId={chatId} />
+      </InnerWrapper>
     </Wrapper>
   )
 }

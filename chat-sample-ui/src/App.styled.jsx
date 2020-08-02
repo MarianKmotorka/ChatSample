@@ -1,5 +1,4 @@
-import styled from 'styled-components'
-import { createGlobalStyle } from 'styled-components'
+import styled, { createGlobalStyle } from 'styled-components'
 
 export const AppWrapper = styled.div`
   height: 100%;
@@ -14,6 +13,7 @@ export const ContentWrapper = styled.div`
   width: 100%;
   height: calc(100vh - 55px);
 `
+
 export const GlobalStyle = createGlobalStyle`
   * {
   margin: 0;
