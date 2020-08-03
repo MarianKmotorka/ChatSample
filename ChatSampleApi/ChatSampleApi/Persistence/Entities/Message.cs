@@ -33,5 +33,11 @@ namespace ChatSampleApi.Persistence.Entities
         public string ChatId { get; private set; }
 
         public DateTime SentDate { get; private set; }
+
+        public bool IsDeleted { get; private set; }
+
+        public void SetDeleted() => IsDeleted = true;
+
+        public void Recover() => IsDeleted = false;
     }
 }

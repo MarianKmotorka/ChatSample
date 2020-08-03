@@ -41,12 +41,12 @@ namespace ChatSampleApi.Features.Chat
                     throw new Forbidden403Exception("You are not chat participant.");
 
                 var user =
-                    await _db.Users.Include(x => x.UnreadMessages).ThenInclude(x => x.Message).SingleOrNotFoundAsync(x => x.Id == request.UserId);
+                    await _db.Users.Include(x => x.UnreadMessages).ThenInclude(x => x.Message).SingleOrNotFoundAsync(x => x.Id == request.UserId, cancellationToken);
 
                 user.SetUnreadMessagesAsRead(request.ChatId);
                 await _db.SaveChangesAsync(cancellationToken);
 
-                return
+                var messages =
                     await _db.Messages
                         .Where(x => x.ChatId == request.ChatId)
                         .Select(m => new MessageDto
@@ -57,13 +57,25 @@ namespace ChatSampleApi.Features.Chat
                             SenderName = m.Sender.FullName,
                             SenderPicture = m.Sender.Picture,
                             Text = m.Text,
-                            Date = m.SentDate
+                            Date = m.SentDate,
+                            IsDeleted = m.IsDeleted
                         })
                         .OrderByDescending(x => x.Date)
                         .Skip(request.Skip)
                         .Take(request.Count)
                         .OrderBy(x => x.Date)
                         .ToListAsync(cancellationToken);
+
+                return RemoveDeletedMessagesText(messages);
+            }
+
+            private List<MessageDto> RemoveDeletedMessagesText(List<MessageDto> messages)
+            {
+                foreach (var message in messages)
+                    if (message.IsDeleted)
+                        message.Text = null;
+
+                return messages;
             }
         }
 
@@ -82,6 +94,8 @@ namespace ChatSampleApi.Features.Chat
             public string Text { get; set; }
 
             public DateTime Date { get; set; }
+
+            public bool IsDeleted { get; set; }
         }
     }
 }
