@@ -9,9 +9,9 @@ import {
 } from '@ant-design/icons'
 import { Modal } from 'antd'
 
-import Tooltip from '../../../components/Tooltip'
-import Popover from '../../../components/Popover'
-import SearchableDropdown from '../../../components/SearchableDropdown/SearchableDropdown'
+import Tooltip from '../../Tooltip'
+import Popover from '../../Popover'
+import SearchableDropdown from '../../SearchableDropdown/SearchableDropdown'
 import { ProfileContext } from '../../../contextProviders/ProfileContextProvider'
 import { ChatRoleType } from '../../../utils/types'
 import useWindowSize, { SM } from '../../../utils/useWindowSize'
@@ -27,7 +27,7 @@ import {
   StyledBadge,
   DropdownItem,
   StyledMenu
-} from './styled/ChatDetail.styled'
+} from './ChatDetail.styled'
 
 const ChatDetail = ({
   participants,

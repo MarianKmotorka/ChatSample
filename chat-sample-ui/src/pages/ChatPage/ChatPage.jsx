@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from 'react'
 import { get, last, first } from 'lodash'
 import { useParams, useHistory } from 'react-router-dom'
 import Chat from '../../components/Chat/Chat'
-import ChatDetail from './ChatDetail/ChatDetail'
+import ChatDetail from '../../components/Chat/Detail/ChatDetail'
 
 import { ChatContext } from '../../contextProviders/ChatContextProvider'
 import LoadingSpinner from '../../components/LoadingSpinner'
