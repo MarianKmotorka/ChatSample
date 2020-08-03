@@ -98,6 +98,10 @@ const ChatDetail = ({
 
   const currentUserRole = get(find(participants, ['id', currentUserId]), 'chatRole')
   const canDeleteChat = currentUserRole === ChatRoleType.Admin
+  const handleParticipantAddedInternal = participant => {
+    onAddParticipant(participant)
+    setShowDropdown(false)
+  }
 
   return (
     <Wrapper
@@ -138,7 +142,7 @@ const ChatDetail = ({
             fetchOptions={{
               url: `/chats/${chatId}/participants/new`
             }}
-            onChange={onAddParticipant}
+            onChange={handleParticipantAddedInternal}
             itemRenderer={renderDropdownItem}
             displayProperty='name'
           />
