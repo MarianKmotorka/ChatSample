@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { get, last, first } from 'lodash'
-import { useParams } from 'react-router-dom'
+import { useParams, useHistory } from 'react-router-dom'
 import Chat from '../../components/Chat/Chat'
 import ChatDetail from './ChatDetail/ChatDetail'
 
@@ -20,7 +20,10 @@ const ChatPage = () => {
     participants,
     messageCountPerPage
   } = useContext(ChatContext)
+
   const { chatId } = useParams()
+  const history = useHistory()
+
   const [scrollToMessageId, setScrollToMessageId] = useState()
   const [shouldScrollToBottom, setShouldScrollToBottom] = useState(true)
 
@@ -37,6 +40,8 @@ const ChatPage = () => {
     lastMessage && setScrollToMessageId(lastMessage)
   }, [messages, shouldScrollToBottom])
 
+  if (currentChatFetching) return <LoadingSpinner />
+
   const handleMessageSent = async text => {
     setShouldScrollToBottom(true)
     await api.post(`/chats/${chatId}/messages`, { text })
@@ -45,11 +50,31 @@ const ChatPage = () => {
   const handleLoadMore = async () => {
     setScrollToMessageId(get(first(messages), 'id'))
     setShouldScrollToBottom(false)
-
     await getMoreMessages(chatId)
   }
 
-  if (currentChatFetching) return <LoadingSpinner />
+  const handleMessageDeleted = async id => {
+    await api.delete(`/chats/${chatId}/messages/${id}`)
+  }
+
+  const handleAddParticipant = async user => {
+    await api.post(`/chats/${chatId}/participants`, {
+      participantId: get(user, 'id')
+    })
+  }
+
+  const handleChatDeleted = async () => {
+    await api.delete(`/chats/${chatId}`)
+    history.goBack()
+  }
+
+  const handleParticipantDeleted = async id => {
+    await api.delete(`/chats/${chatId}/participants/${id}`)
+  }
+
+  const handleSetParticipantAsAdmin = async id => {
+    await api.put(`/chats/${chatId}/participants/${id}/set-admin-role`)
+  }
 
   return (
     <Wrapper>
@@ -59,8 +84,16 @@ const ChatPage = () => {
         onMessageSent={handleMessageSent}
         scrollToMessageId={scrollToMessageId}
         showLoadMore={messages.length >= messageCountPerPage}
+        onDeleteMessage={handleMessageDeleted}
       />
-      <ChatDetail participants={participants} chatId={chatId} />
+      <ChatDetail
+        participants={participants}
+        chatId={chatId}
+        onAddParticipant={handleAddParticipant}
+        onDeleteParticipant={handleParticipantDeleted}
+        onSetParticipantAsAdmin={handleSetParticipantAsAdmin}
+        onDeleteChat={handleChatDeleted}
+      />
     </Wrapper>
   )
 }

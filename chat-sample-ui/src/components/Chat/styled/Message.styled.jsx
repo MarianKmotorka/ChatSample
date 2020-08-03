@@ -2,10 +2,11 @@ import styled from 'styled-components'
 import { getMessageBorderRadius } from '../utils'
 import { MessageShape } from '../Message'
 import { MD } from '../../../utils/useWindowSize'
+import { Button } from 'antd'
 
-export const Wrapper = styled.div`
+export const InnerWrapper = styled.div`
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   margin: 2px;
   max-width: 55%;
   color: ${({ theme }) => theme.black};
@@ -52,4 +53,8 @@ export const MessageDate = styled.p`
   font-size: 12px;
   font-style: italic;
   margin-left: auto;
+`
+
+export const DeleteButton = styled(Button)`
+  opacity: ${({ visible }) => (visible ? 1 : 0)};
 `
