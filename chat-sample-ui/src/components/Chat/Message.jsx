@@ -2,10 +2,16 @@ import React, { memo, useState } from 'react'
 import { get, values } from 'lodash'
 import moment from 'moment'
 import PropTypes from 'prop-types'
-import { DeleteFilled } from '@ant-design/icons'
+import { DeleteFilled, SyncOutlined } from '@ant-design/icons'
 
 import Tooltip from '../../components/Tooltip'
-import { InnerWrapper, Text, Avatar, DeleteButton } from './styled/Message.styled'
+import {
+  InnerWrapper,
+  Text,
+  Avatar,
+  ActionButton,
+  DeletedText
+} from './styled/Message.styled'
 
 export const MessageShape = {
   TOP: 'top',
@@ -15,31 +21,43 @@ export const MessageShape = {
 }
 
 const Message = memo(
-  ({ message, forwardRef, onDelete, shape = MessageShape.STANDALONE }) => {
-    const [showDelete, setShowDelete] = useState(false)
+  ({ message, forwardRef, onDelete, onRecover, shape = MessageShape.STANDALONE }) => {
+    const [hovered, setHovered] = useState(false)
 
     const id = get(message, 'id')
     const name = get(message, 'senderName')
     const picture = get(message, 'senderPicture')
+    const isDeleted = get(message, 'isDeleted')
     const isMyMessage = get(message, 'isMyMessage')
     const date = moment(get(message, 'date')).format('MMMM Do YYYY, H:mm')
+    const text = isDeleted ? <DeletedText>Deleted</DeletedText> : get(message, 'text')
 
     const showAvatar = shape === MessageShape.STANDALONE || shape === MessageShape.BOTTOM
 
     return (
       <div
-        onMouseEnter={() => setShowDelete(true)}
-        onMouseLeave={() => setShowDelete(false)}
+        onMouseEnter={() => setHovered(true)}
+        onMouseLeave={() => setHovered(false)}
         ref={forwardRef}
       >
         <InnerWrapper isMyMessage={isMyMessage} shape={shape}>
-          {isMyMessage && (
-            <DeleteButton
+          {!isDeleted && isMyMessage && (
+            <ActionButton
               icon={<DeleteFilled />}
               type='text'
               shape='circle-outline'
               onClick={() => onDelete(id)}
-              visible={showDelete}
+              visible={hovered}
+            />
+          )}
+
+          {isDeleted && isMyMessage && (
+            <ActionButton
+              icon={<SyncOutlined />}
+              type='text'
+              shape='circle-outline'
+              onClick={() => onRecover(id)}
+              visible={hovered}
             />
           )}
 
@@ -51,7 +69,7 @@ const Message = memo(
 
           <Tooltip text={date} placement='right'>
             <Text isMyMessage={message.isMyMessage} shape={shape}>
-              {message.text}
+              {text}
             </Text>
           </Tooltip>
 
@@ -77,7 +95,8 @@ Message.propTypes = {
     senderPicture: PropTypes.string.isRequired
   }).isRequired,
   shape: PropTypes.oneOf(values(MessageShape)),
-  onDelete: PropTypes.func.isRequired
+  onDelete: PropTypes.func.isRequired,
+  onRecover: PropTypes.func.isRequired
 }
 
 export default Message

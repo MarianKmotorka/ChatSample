@@ -108,7 +108,15 @@ namespace ChatSampleApi.Controllers
         }
 
         [HttpDelete("{chatId}/messages/{messageId}")]
-        public async Task<ActionResult> MakeParticipantAdmin([FromRoute] DeleteMessage.Command request)
+        public async Task<ActionResult> DeleteMessage([FromRoute] DeleteMessage.Command request)
+        {
+            request.AuthUserId = CurrentUserService.UserId;
+            await Mediator.Send(request);
+            return NoContent();
+        }
+
+        [HttpPut("{chatId}/messages/{messageId}/recover")]
+        public async Task<ActionResult> RecoverMessage([FromRoute] RecoverMessage.Command request)
         {
             request.AuthUserId = CurrentUserService.UserId;
             await Mediator.Send(request);

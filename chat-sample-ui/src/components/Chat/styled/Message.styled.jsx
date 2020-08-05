@@ -7,7 +7,7 @@ import { Button } from 'antd'
 export const InnerWrapper = styled.div`
   display: flex;
   align-items: center;
-  margin: 2px;
+  margin: 1px;
   max-width: 55%;
   color: ${({ theme }) => theme.black};
   justify-content: ${({ isMyMessage }) => (isMyMessage ? 'flex-end' : 'flex-start')};
@@ -55,6 +55,12 @@ export const MessageDate = styled.p`
   margin-left: auto;
 `
 
-export const DeleteButton = styled(Button)`
+export const ActionButton = styled(Button)`
   opacity: ${({ visible }) => (visible ? 1 : 0)};
+`
+
+export const DeletedText = styled.i`
+  color: ${({ theme }) => theme.dimGray};
+  margin: 0;
+  padding: 0;
 `

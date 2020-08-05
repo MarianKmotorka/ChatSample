@@ -78,6 +78,17 @@ const ChatContextProvider = ({ children }) => {
     [currentChatId, history]
   )
 
+  const deleteMessage = useCallback(messageId => {
+    setMessages(prev =>
+      map(prev, m => {
+        if (m.id === messageId) {
+          return { ...m, isDeleted: true, text: '' }
+        }
+        return m
+      })
+    )
+  }, [])
+
   const deleteParticipant = useCallback(
     (chatId, participantId) => {
       if (get(profile, 'id') === participantId) {
@@ -164,6 +175,17 @@ const ChatContextProvider = ({ children }) => {
     [currentChatId]
   )
 
+  const recoverMessage = useCallback((messageId, text) => {
+    setMessages(prev =>
+      map(prev, m => {
+        if (m.id === messageId) {
+          return { ...m, isDeleted: false, text }
+        }
+        return m
+      })
+    )
+  }, [])
+
   useEffect(() => {
     const fetchChats = async () => {
       setChatsFetching(true)
@@ -185,9 +207,11 @@ const ChatContextProvider = ({ children }) => {
     hubConnection.on('RecieveMessage', recieveMessage)
     hubConnection.on('RecieveParticipant', recieveParticipant)
     hubConnection.on('DeleteChat', deleteChat)
+    hubConnection.on('DeleteMessage', deleteMessage)
     hubConnection.on('DeleteParticipant', deleteParticipant)
     hubConnection.on('UserConnectedStatusChanged', userConnectedStatusChanged)
     hubConnection.on('ParticipantRoleChanged', onParticipantRoleChanged)
+    hubConnection.on('RecoverMessage', recoverMessage)
 
     return () => {
       hubConnection.off('RecieveChat')
@@ -198,6 +222,7 @@ const ChatContextProvider = ({ children }) => {
       hubConnection.off('DeleteParticipant')
       hubConnection.off('UserConnectedStatusChanged')
       hubConnection.off('ParticipantRoleChanged')
+      hubConnection.off('RecoverMessage')
     }
   }, [
     hubConnection,
@@ -206,9 +231,11 @@ const ChatContextProvider = ({ children }) => {
     recieveParticipant,
     recieveChat,
     deleteChat,
+    deleteMessage,
     deleteParticipant,
     userConnectedStatusChanged,
-    onParticipantRoleChanged
+    onParticipantRoleChanged,
+    recoverMessage
   ])
 
   return (

@@ -73,7 +73,7 @@ namespace ChatSampleApi.Features.Chat
             {
                 foreach (var message in messages)
                     if (message.IsDeleted)
-                        message.Text = null;
+                        message.Text = string.Empty;
 
                 return messages;
             }

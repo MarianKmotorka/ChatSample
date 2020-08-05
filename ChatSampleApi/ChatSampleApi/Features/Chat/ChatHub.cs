@@ -18,10 +18,12 @@ namespace ChatSampleApi.Features.Chat
         public const string RecieveParticipant = "RecieveParticipant";
         public const string RecieveChat = "RecieveChat";
         public const string DeleteChat = "DeleteChat";
+        public const string DeleteMessage = "DeleteMessage";
         public const string DeleteParticipant = "DeleteParticipant";
         public const string GetConnectionId = "GetConnectionId";
         public const string UserConnectedStatusChanged = "UserConnectedStatusChanged";
         public const string ParticipantRoleChanged = "ParticipantRoleChanged";
+        public const string RecoverMessage = "RecoverMessage";
 
         private readonly ICurrentUserService _currentUserService;
         private readonly DatabaseContext _db;

@@ -54,7 +54,15 @@ const ChatPage = () => {
   }
 
   const handleMessageDeleted = async id => {
+    setScrollToMessageId(null)
+    setShouldScrollToBottom(false)
     await api.delete(`/chats/${chatId}/messages/${id}`)
+  }
+
+  const handleMessageRecovered = async id => {
+    setScrollToMessageId(null)
+    setShouldScrollToBottom(false)
+    await api.put(`/chats/${chatId}/messages/${id}/recover`)
   }
 
   const handleAddParticipant = async user => {
@@ -85,6 +93,7 @@ const ChatPage = () => {
         scrollToMessageId={scrollToMessageId}
         showLoadMore={messages.length >= messageCountPerPage}
         onDeleteMessage={handleMessageDeleted}
+        onRecoverMessage={handleMessageRecovered}
       />
       <ChatDetail
         participants={participants}

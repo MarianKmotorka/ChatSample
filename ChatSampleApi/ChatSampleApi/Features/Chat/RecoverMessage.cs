@@ -9,7 +9,7 @@ using Newtonsoft.Json;
 
 namespace ChatSampleApi.Features.Chat
 {
-    public class DeleteMessage
+    public class RecoverMessage
     {
         public class Command : IRequest
         {
@@ -40,10 +40,10 @@ namespace ChatSampleApi.Features.Chat
                     .SingleOrNotFoundAsync(x => x.Id == request.MessageId, cancellationToken);
 
                 if (message.SenderId != request.AuthUserId)
-                    throw new Forbidden403Exception("Message can be deleted only by its sender.");
+                    throw new Forbidden403Exception("Message can be recoverd only by its sender.");
 
-                message.SetDeleted();
-                await _hubContext.Clients.Group(request.ChatId).SendAsync(ChatHub.DeleteMessage, message.Id, cancellationToken);
+                message.Recover();
+                await _hubContext.Clients.Group(request.ChatId).SendAsync(ChatHub.RecoverMessage, message.Id, message.Text, cancellationToken);
 
                 await _db.SaveChangesAsync(cancellationToken);
                 return Unit.Value;

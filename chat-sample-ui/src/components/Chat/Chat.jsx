@@ -19,6 +19,7 @@ const Chat = ({
   onLoadMore,
   scrollToMessageId,
   onDeleteMessage,
+  onRecoverMessage,
   showLoadMore = true
 }) => {
   const [text, setText] = useState('')
@@ -46,7 +47,8 @@ const Chat = ({
       key: message.id,
       message,
       shape: getMessageShape(messages, message),
-      onDelete: onDeleteMessage
+      onDelete: onDeleteMessage,
+      onRecover: onRecoverMessage
     }
 
     if (scrollToMessageId === message.id)
@@ -96,6 +98,7 @@ Chat.propTypes = {
   onMessageSent: PropTypes.func.isRequired,
   onLoadMore: PropTypes.func.isRequired,
   onDeleteMessage: PropTypes.func.isRequired,
+  onRecoverMessage: PropTypes.func.isRequired,
   scrollToMessageId: PropTypes.string,
   showLoadMore: PropTypes.bool
 }
