@@ -25,43 +25,34 @@ const ChatPage = () => {
   const history = useHistory()
 
   const [scrollToMessageId, setScrollToMessageId] = useState()
-  const [shouldScrollToBottom, setShouldScrollToBottom] = useState(true)
+  const lastMessageId = get(last(messages), 'id')
+
+  useEffect(() => setScrollToMessageId(lastMessageId), [lastMessageId])
 
   useEffect(() => {
     getParticipants(chatId)
     getMessages(chatId)
-    setShouldScrollToBottom(true)
   }, [chatId, getMessages, getParticipants])
-
-  useEffect(() => {
-    if (!shouldScrollToBottom) return
-
-    var lastMessage = get(last(messages), 'id')
-    lastMessage && setScrollToMessageId(lastMessage)
-  }, [messages, shouldScrollToBottom])
 
   if (currentChatFetching) return <LoadingSpinner />
 
   const handleMessageSent = async text => {
-    setShouldScrollToBottom(true)
+    setScrollToMessageId(lastMessageId)
     await api.post(`/chats/${chatId}/messages`, { text })
   }
 
   const handleLoadMore = async () => {
     setScrollToMessageId(get(first(messages), 'id'))
-    setShouldScrollToBottom(false)
     await getMoreMessages(chatId)
   }
 
   const handleMessageDeleted = async id => {
     setScrollToMessageId(null)
-    setShouldScrollToBottom(false)
     await api.delete(`/chats/${chatId}/messages/${id}`)
   }
 
   const handleMessageRecovered = async id => {
     setScrollToMessageId(null)
-    setShouldScrollToBottom(false)
     await api.put(`/chats/${chatId}/messages/${id}/recover`)
   }
 

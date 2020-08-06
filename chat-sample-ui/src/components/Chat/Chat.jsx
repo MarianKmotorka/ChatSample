@@ -42,27 +42,22 @@ const Chat = ({
     text && onMessageSent(text)
   }
 
-  const renderMessage = message => {
-    const commonProps = {
-      key: message.id,
-      message,
-      shape: getMessageShape(messages, message),
-      onDelete: onDeleteMessage,
-      onRecover: onRecoverMessage
-    }
-
-    if (scrollToMessageId === message.id)
-      return <Message {...commonProps} forwardRef={scrollToMessageRef} />
-    return <Message {...commonProps} />
-  }
-
   return (
     <Wrapper>
       <MessagesWrapper spaceFromTop={!showLoadMore && 10}>
         {showLoadMore && (
           <LoadMoreButton onClick={onLoadMore} icon={<VerticalAlignTopOutlined />} />
         )}
-        {map(messages, renderMessage)}
+        {map(messages, message => (
+          <Message
+            key={message.id}
+            message={message}
+            forwardRef={scrollToMessageId === message.id ? scrollToMessageRef : null}
+            shape={getMessageShape(messages, message)}
+            onDelete={onDeleteMessage}
+            onRecover={onRecoverMessage}
+          />
+        ))}
       </MessagesWrapper>
       <form onSubmit={onMessageSentInternal}>
         <InputWrapper>
