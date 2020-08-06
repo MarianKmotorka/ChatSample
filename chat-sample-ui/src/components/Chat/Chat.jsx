@@ -1,10 +1,11 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useRef } from 'react'
 import PropTypes from 'prop-types'
-import { map, get } from 'lodash'
+import { map } from 'lodash'
 import { SwapRightOutlined, VerticalAlignTopOutlined } from '@ant-design/icons'
 
 import Message from './Message'
 import { getMessageShape } from './utils'
+
 import {
   Wrapper,
   MessagesWrapper,
@@ -12,6 +13,7 @@ import {
   StyledButton,
   LoadMoreButton
 } from './styled/Chat.styled'
+import { useFocusWhenMounted, useScrollTo } from './hooks'
 
 const Chat = ({
   messages,
@@ -22,19 +24,12 @@ const Chat = ({
   onRecoverMessage,
   showLoadMore = true
 }) => {
-  const [text, setText] = useState('')
+  const [text, setText] = useState()
   const scrollToMessageRef = useRef()
-  const inputRef = useRef(null)
-
-  useEffect(() => {
-    const input = get(inputRef, 'current')
-    input && input.focus()
-  }, [])
-
-  useEffect(() => {
-    const message = get(scrollToMessageRef, 'current')
-    message && message.scrollIntoView()
-  }, [messages])
+  const messagesWrapperRef = useRef()
+  const inputRef = useRef()
+  useFocusWhenMounted(inputRef)
+  useScrollTo(scrollToMessageRef, [messages])
 
   const onMessageSentInternal = e => {
     e.preventDefault()
@@ -42,28 +37,33 @@ const Chat = ({
     text && onMessageSent(text)
   }
 
+  const renderMessage = message => {
+    const ref = scrollToMessageId === message.id ? scrollToMessageRef : null
+    return (
+      <Message
+        key={message.id}
+        message={message}
+        forwardRef={ref}
+        shape={getMessageShape(messages, message)}
+        onDelete={onDeleteMessage}
+        onRecover={onRecoverMessage}
+      />
+    )
+  }
+
   return (
     <Wrapper>
-      <MessagesWrapper spaceFromTop={!showLoadMore && 10}>
+      <MessagesWrapper spaceFromTop={!showLoadMore && 10} ref={messagesWrapperRef}>
         {showLoadMore && (
           <LoadMoreButton onClick={onLoadMore} icon={<VerticalAlignTopOutlined />} />
         )}
-        {map(messages, message => (
-          <Message
-            key={message.id}
-            message={message}
-            forwardRef={scrollToMessageId === message.id ? scrollToMessageRef : null}
-            shape={getMessageShape(messages, message)}
-            onDelete={onDeleteMessage}
-            onRecover={onRecoverMessage}
-          />
-        ))}
+        {map(messages, renderMessage)}
       </MessagesWrapper>
       <form onSubmit={onMessageSentInternal}>
         <InputWrapper>
           <input
             ref={inputRef}
-            value={text}
+            value={text || ''}
             onChange={({ target }) => setText(target.value)}
           />
           <StyledButton
