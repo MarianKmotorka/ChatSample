@@ -18,7 +18,8 @@ const ChatPage = () => {
     getMoreMessages,
     messages,
     participants,
-    messageCountPerPage
+    totalMessagesCount,
+    FETCH_MESSAGES_PAGE_SIZE
   } = useContext(ChatContext)
 
   const { chatId } = useParams()
@@ -82,9 +83,10 @@ const ChatPage = () => {
         onLoadMore={handleLoadMore}
         onMessageSent={handleMessageSent}
         scrollToMessageId={scrollToMessageId}
-        showLoadMore={messages.length >= messageCountPerPage}
+        showLoadMore={messages.length >= FETCH_MESSAGES_PAGE_SIZE}
         onDeleteMessage={handleMessageDeleted}
         onRecoverMessage={handleMessageRecovered}
+        canLoadMore={totalMessagesCount > messages.length}
       />
       <ChatDetail
         participants={participants}

@@ -1,7 +1,7 @@
-import React, { useState, useRef } from 'react'
+import React, { useState, useRef, useCallback } from 'react'
 import PropTypes from 'prop-types'
-import { map } from 'lodash'
-import { SwapRightOutlined, VerticalAlignTopOutlined } from '@ant-design/icons'
+import { map, first } from 'lodash'
+import { SwapRightOutlined } from '@ant-design/icons'
 
 import Message from './Message'
 import { getMessageShape } from './utils'
@@ -10,8 +10,7 @@ import {
   Wrapper,
   MessagesWrapper,
   InputWrapper,
-  StyledButton,
-  LoadMoreButton
+  StyledButton
 } from './styled/Chat.styled'
 import { useFocusWhenMounted, useScrollTo } from './hooks'
 
@@ -22,14 +21,27 @@ const Chat = ({
   scrollToMessageId,
   onDeleteMessage,
   onRecoverMessage,
-  showLoadMore = true
+  canLoadMore
 }) => {
   const [text, setText] = useState()
   const scrollToMessageRef = useRef()
-  const messagesWrapperRef = useRef()
   const inputRef = useRef()
   useFocusWhenMounted(inputRef)
   useScrollTo(scrollToMessageRef, [messages])
+
+  const observer = useRef()
+  const topMessageRef = useCallback(
+    node => {
+      if (observer.current) observer.current.disconnect()
+      observer.current = new IntersectionObserver(entries => {
+        if (entries[0].isIntersecting && canLoadMore) {
+          onLoadMore()
+        }
+      })
+      if (node) observer.current.observe(node)
+    },
+    [onLoadMore, canLoadMore]
+  )
 
   const onMessageSentInternal = e => {
     e.preventDefault()
@@ -38,7 +50,13 @@ const Chat = ({
   }
 
   const renderMessage = message => {
-    const ref = scrollToMessageId === message.id ? scrollToMessageRef : null
+    const ref =
+      scrollToMessageId === message.id
+        ? scrollToMessageRef
+        : first(messages) === message
+        ? topMessageRef
+        : null
+
     return (
       <Message
         key={message.id}
@@ -53,12 +71,7 @@ const Chat = ({
 
   return (
     <Wrapper>
-      <MessagesWrapper spaceFromTop={!showLoadMore && 10} ref={messagesWrapperRef}>
-        {showLoadMore && (
-          <LoadMoreButton onClick={onLoadMore} icon={<VerticalAlignTopOutlined />} />
-        )}
-        {map(messages, renderMessage)}
-      </MessagesWrapper>
+      <MessagesWrapper>{map(messages, renderMessage)}</MessagesWrapper>
       <form onSubmit={onMessageSentInternal}>
         <InputWrapper>
           <input
