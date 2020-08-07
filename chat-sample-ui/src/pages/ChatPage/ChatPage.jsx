@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState, useCallback } from 'react'
 import { get, last, first } from 'lodash'
 import { useParams, useHistory } from 'react-router-dom'
 import Chat from '../../components/Chat/Chat'
@@ -13,6 +13,7 @@ import { Wrapper } from './styled/ChatPage.styled'
 const ChatPage = () => {
   const {
     currentChatFetching,
+    moreMessagesFetching,
     getParticipants,
     getMessages,
     getMoreMessages,
@@ -27,6 +28,7 @@ const ChatPage = () => {
 
   const [scrollToMessageId, setScrollToMessageId] = useState()
   const lastMessageId = get(last(messages), 'id')
+  const firstMessageId = get(first(messages), 'id')
 
   useEffect(() => setScrollToMessageId(lastMessageId), [lastMessageId])
 
@@ -35,27 +37,31 @@ const ChatPage = () => {
     getMessages(chatId)
   }, [chatId, getMessages, getParticipants])
 
-  if (currentChatFetching) return <LoadingSpinner />
-
   const handleMessageSent = async text => {
     setScrollToMessageId(lastMessageId)
     await api.post(`/chats/${chatId}/messages`, { text })
   }
 
   const handleLoadMore = async () => {
-    setScrollToMessageId(get(first(messages), 'id'))
+    setScrollToMessageId(firstMessageId)
     await getMoreMessages(chatId)
   }
 
-  const handleMessageDeleted = async id => {
-    setScrollToMessageId(null)
-    await api.delete(`/chats/${chatId}/messages/${id}`)
-  }
+  const handleMessageDeleted = useCallback(
+    async id => {
+      setScrollToMessageId(null)
+      await api.delete(`/chats/${chatId}/messages/${id}`)
+    },
+    [chatId]
+  )
 
-  const handleMessageRecovered = async id => {
-    setScrollToMessageId(null)
-    await api.put(`/chats/${chatId}/messages/${id}/recover`)
-  }
+  const handleMessageRecovered = useCallback(
+    async id => {
+      setScrollToMessageId(null)
+      await api.put(`/chats/${chatId}/messages/${id}/recover`)
+    },
+    [chatId]
+  )
 
   const handleAddParticipant = async user => {
     await api.post(`/chats/${chatId}/participants`, {
@@ -76,6 +82,8 @@ const ChatPage = () => {
     await api.put(`/chats/${chatId}/participants/${id}/set-admin-role`)
   }
 
+  if (currentChatFetching) return <LoadingSpinner />
+
   return (
     <Wrapper>
       <Chat
@@ -87,6 +95,7 @@ const ChatPage = () => {
         onDeleteMessage={handleMessageDeleted}
         onRecoverMessage={handleMessageRecovered}
         canLoadMore={totalMessagesCount > messages.length}
+        moreMessagesFetching={moreMessagesFetching}
       />
       <ChatDetail
         participants={participants}

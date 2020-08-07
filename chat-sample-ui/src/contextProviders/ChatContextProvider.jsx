@@ -18,6 +18,7 @@ const ChatContextProvider = ({ children }) => {
   const [chatsFetching, setChatsFetching] = useState(false)
   const [currentChatId, setCurrentChatId] = useState(null)
   const [messagesFetching, setMessagesFetching] = useState(false)
+  const [moreMessagesFetching, setMoreMessagesFetching] = useState(false)
   const [participantsFetching, setParticipantsFetching] = useState(false)
   const [messages, setMessages] = useState([])
   const [participants, setParticipants] = useState([])
@@ -129,6 +130,7 @@ const ChatContextProvider = ({ children }) => {
 
   const getMoreMessages = useCallback(
     async chatId => {
+      setMoreMessagesFetching(true)
       const response = await api.get(
         `chats/${chatId}/messages?skip=${messages.length}&count=${FETCH_MESSAGES_PAGE_SIZE}`
       )
@@ -136,6 +138,7 @@ const ChatContextProvider = ({ children }) => {
       const moreMessages = get(response, 'data.data')
       setMessages(prev => [...moreMessages, ...prev])
       setTotalMessagesCount(get(response, 'data.totalCount'))
+      setMoreMessagesFetching(false)
     },
     [messages.length]
   )
@@ -212,6 +215,7 @@ const ChatContextProvider = ({ children }) => {
       hubConnection.off('RecieveMessage')
       hubConnection.off('RecieveParticipant')
       hubConnection.off('DeleteChat')
+      hubConnection.off('DeleteMessage')
       hubConnection.off('DeleteParticipant')
       hubConnection.off('UserConnectedStatusChanged')
       hubConnection.off('ParticipantRoleChanged')
@@ -236,6 +240,7 @@ const ChatContextProvider = ({ children }) => {
         chats,
         chatsFetching,
         currentChatFetching: messagesFetching || participantsFetching,
+        moreMessagesFetching,
         currentChatId,
         messages,
         participants,

@@ -4,6 +4,7 @@ import { map, first } from 'lodash'
 import { SwapRightOutlined } from '@ant-design/icons'
 
 import Message from './Message'
+import MessagesLoadingSpinner from './MessagesLoadingSpinner'
 import { getMessageShape } from './utils'
 
 import {
@@ -21,7 +22,8 @@ const Chat = ({
   scrollToMessageId,
   onDeleteMessage,
   onRecoverMessage,
-  canLoadMore
+  canLoadMore,
+  moreMessagesFetching
 }) => {
   const [text, setText] = useState()
   const scrollToMessageRef = useRef()
@@ -71,7 +73,10 @@ const Chat = ({
 
   return (
     <Wrapper>
-      <MessagesWrapper>{map(messages, renderMessage)}</MessagesWrapper>
+      <MessagesWrapper>
+        {moreMessagesFetching && <MessagesLoadingSpinner />}
+        {map(messages, renderMessage)}
+      </MessagesWrapper>
       <form onSubmit={onMessageSentInternal}>
         <InputWrapper>
           <input
@@ -107,8 +112,9 @@ Chat.propTypes = {
   onLoadMore: PropTypes.func.isRequired,
   onDeleteMessage: PropTypes.func.isRequired,
   onRecoverMessage: PropTypes.func.isRequired,
-  scrollToMessageId: PropTypes.string,
-  showLoadMore: PropTypes.bool
+  canLoadMore: PropTypes.bool.isRequired,
+  moreMessagesFetching: PropTypes.bool.isRequired,
+  scrollToMessageId: PropTypes.string
 }
 
 export default Chat
