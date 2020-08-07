@@ -41,19 +41,11 @@ export const StyledButton = styled(Button)`
   }
 `
 
-export const LoadMoreButton = styled(Button)`
-  margin-bottom: 50px;
-  display: block;
-  width: 100%;
-  border: none;
-  box-shadow: 0px 10px 20px #ededed;
-`
-
 export const MessagesWrapper = styled.div`
   overflow: auto;
   flex: 1;
   background: ${({ theme }) => theme.white};
-  padding-top: ${({ spaceFromTop }) => (spaceFromTop ? `${spaceFromTop}px` : '0px')};
+  padding-top: 10px;
   padding-bottom: 6px;
 
   ::-webkit-scrollbar {
