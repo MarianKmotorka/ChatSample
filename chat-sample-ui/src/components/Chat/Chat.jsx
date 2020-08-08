@@ -79,7 +79,9 @@ const Chat = ({
       </MessagesWrapper>
       <form onSubmit={onMessageSentInternal}>
         <InputWrapper>
-          <EmojiListButton onSelect={emoji => setText(prev => prev + emoji)} />
+          <EmojiListButton
+            onSelect={useCallback(emoji => setText(prev => prev + emoji), [])}
+          />
 
           <input
             ref={inputRef}

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { memo } from 'react'
 import { map } from 'lodash'
 import { Button, Tabs } from 'antd'
 import styled from 'styled-components'
@@ -13,7 +13,7 @@ const StyledTabPane = styled(Tabs.TabPane)`
   max-height: 50vh;
 `
 
-const EmojiList = ({ onSelect }) => {
+const EmojiList = memo(({ onSelect }) => {
   const getEmojiButtons = emojiList => {
     return map(emojiList, x => (
       <Button
@@ -47,6 +47,6 @@ const EmojiList = ({ onSelect }) => {
       <StyledButton type='text' icon={<SmileTwoTone />} />
     </Popover>
   )
-}
+})
 
 export default EmojiList
