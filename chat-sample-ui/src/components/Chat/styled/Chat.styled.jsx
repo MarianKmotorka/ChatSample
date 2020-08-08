@@ -28,16 +28,15 @@ export const InputWrapper = styled.div`
 `
 
 export const StyledButton = styled(Button)`
-  flex: 1;
-  background: ${({ theme }) => theme.marigold};
-  color: ${({ theme }) => theme.blackCoffee};
-  border: none;
-  max-width: 150px;
-  margin: 0 15px 0 20px;
-  font-size: 16px;
-
-  :hover {
-    background: ${({ theme }) => theme.red};
+  color: ${({ theme, color }) => theme[color]};
+  margin-right: 5px;
+  svg,
+  i {
+    font-size: 25px;
+  }
+  :hover,
+  :focus {
+    color: ${({ theme }) => theme.blue};
   }
 `
 

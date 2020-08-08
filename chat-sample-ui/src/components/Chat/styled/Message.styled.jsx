@@ -36,7 +36,7 @@ export const Text = styled.p`
   line-height: 20px;
   padding: 4px 12px;
   border: 1px grey solid;
-  word-break: break-all;
+  word-break: break-word;
   border-radius: ${props => getMessageBorderRadius(props)};
   background: ${({ isMyMessage, theme }) => (isMyMessage ? theme.gold : theme.white)};
 `

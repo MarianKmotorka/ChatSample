@@ -1,7 +1,7 @@
 import React, { useState, useRef, useCallback } from 'react'
 import PropTypes from 'prop-types'
 import { map, first } from 'lodash'
-import { SwapRightOutlined } from '@ant-design/icons'
+import { SmileTwoTone } from '@ant-design/icons'
 
 import Message from './Message'
 import MessagesLoadingSpinner from './MessagesLoadingSpinner'
@@ -79,19 +79,21 @@ const Chat = ({
       </MessagesWrapper>
       <form onSubmit={onMessageSentInternal}>
         <InputWrapper>
+          <StyledButton type='text' icon={<SmileTwoTone />} />
+
           <input
             ref={inputRef}
             value={text || ''}
             onChange={({ target }) => setText(target.value)}
           />
+
           <StyledButton
-            type='primary'
+            type='text'
             shape='round'
-            icon={<SwapRightOutlined />}
+            color='marigold'
+            icon={<i className='fas fa-paper-plane fa-5x' />}
             onClick={onMessageSentInternal}
-          >
-            Send
-          </StyledButton>
+          />
         </InputWrapper>
       </form>
     </Wrapper>
