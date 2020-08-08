@@ -1,9 +1,9 @@
 import React, { useState, useRef, useCallback } from 'react'
 import PropTypes from 'prop-types'
 import { map, first } from 'lodash'
-import { SmileTwoTone } from '@ant-design/icons'
 
 import Message from './Message'
+import EmojiListButton from './EmojiListButton'
 import MessagesLoadingSpinner from './MessagesLoadingSpinner'
 import { getMessageShape } from './utils'
 
@@ -25,7 +25,7 @@ const Chat = ({
   canLoadMore,
   moreMessagesFetching
 }) => {
-  const [text, setText] = useState()
+  const [text, setText] = useState('')
   const scrollToMessageRef = useRef()
   const inputRef = useRef()
   useFocusWhenMounted(inputRef)
@@ -79,11 +79,11 @@ const Chat = ({
       </MessagesWrapper>
       <form onSubmit={onMessageSentInternal}>
         <InputWrapper>
-          <StyledButton type='text' icon={<SmileTwoTone />} />
+          <EmojiListButton onSelect={emoji => setText(prev => prev + emoji)} />
 
           <input
             ref={inputRef}
-            value={text || ''}
+            value={text}
             onChange={({ target }) => setText(target.value)}
           />
 

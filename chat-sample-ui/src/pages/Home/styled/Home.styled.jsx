@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import office from '../../../img/office.jpg'
+import office from '../../../assets/img/office.jpg'
 
 export const Wrapper = styled.div`
   height: 100%;

@@ -46,14 +46,4 @@ export const MessagesWrapper = styled.div`
   background: ${({ theme }) => theme.white};
   padding-top: 10px;
   padding-bottom: 6px;
-
-  ::-webkit-scrollbar {
-    width: 7px;
-    background: transparent;
-  }
-
-  ::-webkit-scrollbar-thumb {
-    background: #999;
-    border-radius: 5px;
-  }
 `

@@ -81,14 +81,4 @@ export const ItemsWrapper = styled.div`
   overflow-x: hidden;
   padding: ${({ expanded }) => (expanded ? '0 25px 0 15px' : '0 8px')};
   width: 100%;
-
-  ::-webkit-scrollbar {
-    width: 7px;
-    background: transparent;
-  }
-
-  ::-webkit-scrollbar-thumb {
-    background: #999;
-    border-radius: 5px;
-  }
 `
