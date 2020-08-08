@@ -17,6 +17,7 @@ const EmojiList = memo(({ onSelect }) => {
   const getEmojiButtons = emojiList => {
     return map(emojiList, x => (
       <Button
+        key={x}
         onClick={() => onSelect(x)}
         icon={<h6 style={{ fontSize: 25 }}>{x}</h6>}
         type='text'
