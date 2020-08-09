@@ -12,6 +12,15 @@ export const Wrapper = styled.div`
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
+
+  .banner--appear {
+    transform: scale(0.1);
+  }
+
+  .banner--appear-active {
+    transform: scale(1);
+    transition: transform 1000ms cubic-bezier(0.25, 1, 0.5, 1);
+  }
 `
 
 export const Banner = styled.div`

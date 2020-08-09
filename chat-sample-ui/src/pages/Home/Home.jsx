@@ -1,14 +1,17 @@
 import React from 'react'
+import { CSSTransition } from 'react-transition-group'
 import { Wrapper, Banner, HugeText } from './styled/Home.styled'
 
 const Home = () => {
   return (
     <Wrapper>
-      <Banner>
-        <HugeText color='marigold'>Welcome</HugeText>
-        <HugeText>to the</HugeText>
-        <HugeText color='red'>chat</HugeText>
-      </Banner>
+      <CSSTransition appear in timeout={1000} classNames='banner-'>
+        <Banner>
+          <HugeText color='marigold'>Welcome</HugeText>
+          <HugeText>to the</HugeText>
+          <HugeText color='red'>chat</HugeText>
+        </Banner>
+      </CSSTransition>
     </Wrapper>
   )
 }
