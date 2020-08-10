@@ -3,7 +3,7 @@ import { get } from 'lodash'
 import api from '../../services/httpService'
 import { Wrapper, Header, Content, StyledButton } from './styled/CreateChatForm.styled'
 
-const CreateRoomForm = ({ formRef, callback }) => {
+const CreateChatForm = ({ formRef, callback }) => {
   const [name, setName] = useState('')
   const inputRef = useRef()
 
@@ -39,4 +39,4 @@ const CreateRoomForm = ({ formRef, callback }) => {
   )
 }
 
-export default CreateRoomForm
+export default CreateChatForm

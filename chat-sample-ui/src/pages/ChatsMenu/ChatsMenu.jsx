@@ -2,8 +2,9 @@ import React, { useState, useRef, useContext, useEffect } from 'react'
 import { useHistory } from 'react-router-dom'
 import { map, get, head } from 'lodash'
 import { PlusOutlined, SwapLeftOutlined, SwapRightOutlined } from '@ant-design/icons'
+import { CSSTransition } from 'react-transition-group'
 
-import CreateRoomForm from './CreateChatForm'
+import CreateChatForm from './CreateChatForm'
 import Backdrop from '../../components/Backdrop'
 import LoadingSpinner from '../../components/LoadingSpinner'
 import { useOnClickOutside } from '../../utils/useOnClickOutside'
@@ -15,7 +16,8 @@ import {
   StyledButton,
   StyledBadge,
   ButtonsWrapper,
-  ItemsWrapper
+  ItemsWrapper,
+  AnimationClassesWrapper
 } from './styled/ChatsMenu.styled'
 import useWindowSize, { MD } from '../../utils/useWindowSize'
 
@@ -62,30 +64,40 @@ const ChatsMenu = () => {
   })
 
   return (
-    <>
-      {showCreateChatDialog && (
+    <AnimationClassesWrapper expanded={expanded}>
+      <CSSTransition
+        in={showCreateChatDialog}
+        unmountOnExit
+        timeout={500}
+        classNames='dialog-'
+      >
         <Backdrop>
-          <CreateRoomForm formRef={formRef} callback={createChatCallback} />
+          <CreateChatForm formRef={formRef} callback={createChatCallback} />
         </Backdrop>
-      )}
-      <Wrapper expanded={expanded}>
-        <ButtonsWrapper>
-          {isWiderThanMedium && (
+      </CSSTransition>
+
+      <CSSTransition in={expanded} appear timeout={400} classNames='wrapper-'>
+        <Wrapper>
+          <ButtonsWrapper>
+            {isWiderThanMedium && (
+              <StyledButton
+                onClick={() => setExpanded(x => !x)}
+                shape='circle'
+                icon={expanded ? <SwapLeftOutlined /> : <SwapRightOutlined />}
+              />
+            )}
+
             <StyledButton
-              onClick={() => setExpanded(x => !x)}
+              onClick={() => setShowCreateChatDialog(true)}
               shape='circle'
-              icon={expanded ? <SwapLeftOutlined /> : <SwapRightOutlined />}
+              icon={<PlusOutlined />}
             />
-          )}
-          <StyledButton
-            onClick={() => setShowCreateChatDialog(true)}
-            shape='circle'
-            icon={<PlusOutlined />}
-          />
-        </ButtonsWrapper>
-        <ItemsWrapper expanded={expanded}>{items}</ItemsWrapper>
-      </Wrapper>
-    </>
+          </ButtonsWrapper>
+
+          <ItemsWrapper expanded={expanded}>{items}</ItemsWrapper>
+        </Wrapper>
+      </CSSTransition>
+    </AnimationClassesWrapper>
   )
 }
 

@@ -55,8 +55,8 @@ export const MessageDate = styled.p`
   margin-left: auto;
 `
 
-export const ActionButton = styled(Button)`
-  opacity: ${({ visible }) => (visible ? 1 : 0)};
+export const StyledButton = styled(Button)`
+  opacity: ${({ opacity = 1 }) => opacity};
 `
 
 export const DeletedText = styled.i`

@@ -9,7 +9,7 @@ import {
   InnerWrapper,
   Text,
   Avatar,
-  ActionButton,
+  StyledButton,
   DeletedText
 } from './styled/Message.styled'
 
@@ -42,22 +42,22 @@ const Message = memo(
       >
         <InnerWrapper isMyMessage={isMyMessage} shape={shape}>
           {!isDeleted && isMyMessage && (
-            <ActionButton
+            <StyledButton
               icon={<DeleteFilled />}
               type='text'
               shape='circle-outline'
               onClick={() => onDelete(id)}
-              visible={hovered}
+              opacity={hovered ? 1 : 0}
             />
           )}
 
           {isDeleted && isMyMessage && (
-            <ActionButton
+            <StyledButton
               icon={<SyncOutlined />}
               type='text'
               shape='circle-outline'
               onClick={() => onRecover(id)}
-              visible={hovered}
+              opacity={hovered ? 1 : 0}
             />
           )}
 
