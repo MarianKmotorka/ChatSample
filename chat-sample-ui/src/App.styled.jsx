@@ -2,15 +2,17 @@ import styled, { createGlobalStyle } from 'styled-components'
 
 export const AppWrapper = styled.div`
   height: 100%;
+  display: flex;
+  flex-direction: column;
 `
 
 export const MenuAndContentWrapper = styled.div`
   display: flex;
+  flex: 1;
 `
 
 export const ContentWrapper = styled.div`
   flex: 1;
-  width: 100%;
   height: calc(100vh - 55px);
 `
 
@@ -36,14 +38,8 @@ export const GlobalStyle = createGlobalStyle`
  html,
  body,
  body > div {
-   height: 100%;
-   overflow: hidden;
+   height: 100vh;
  }
-
- code {
-   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-     monospace;
-  }
 
   p {
     margin:0;

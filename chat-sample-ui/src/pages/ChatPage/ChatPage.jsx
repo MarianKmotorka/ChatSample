@@ -4,11 +4,12 @@ import { useParams, useHistory } from 'react-router-dom'
 import Chat from '../../components/Chat/Chat'
 import ChatDetail from '../../components/Chat/Detail/ChatDetail'
 
+import TopBar from './TopBar'
 import { ChatContext } from '../../contextProviders/ChatContextProvider'
 import LoadingSpinner from '../../components/LoadingSpinner'
 import api from '../../services/httpService'
 
-import { Wrapper, InnerWrapper, TopBar } from './styled/ChatPage.styled'
+import { Wrapper, InnerWrapper } from './styled/ChatPage.styled'
 
 const ChatPage = () => {
   const {
