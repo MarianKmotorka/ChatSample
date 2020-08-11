@@ -5,31 +5,29 @@ import { useHistory } from 'react-router-dom'
 
 import useHub from '../utils/useHub'
 import api from '../services/httpService'
+import { API_URL } from '../utils/config.json'
 import { isLoggedIn } from '../services/authService'
 import { ProfileContext } from './ProfileContextProvider'
 import newMessageBeep from '../sounds/newMessageBeep.mp3'
 
+const FETCH_MESSAGES_PAGE_SIZE = 50
 export const ChatContext = createContext()
 
 const ChatContextProvider = ({ children }) => {
   const [chats, setChats] = useState(null)
   const [chatsFetching, setChatsFetching] = useState(false)
-
   const [currentChatId, setCurrentChatId] = useState(null)
   const [messagesFetching, setMessagesFetching] = useState(false)
+  const [moreMessagesFetching, setMoreMessagesFetching] = useState(false)
   const [participantsFetching, setParticipantsFetching] = useState(false)
-
   const [messages, setMessages] = useState([])
   const [participants, setParticipants] = useState([])
+  const [totalMessagesCount, setTotalMessagesCount] = useState(0)
 
-  const [connectionId, setConnectionId] = useState(null)
-
-  const { hubConnection } = useHub('https://localhost:5001/api/chat-hub')
+  const { hubConnection } = useHub(`${API_URL}/chat-hub`)
   const { profile } = useContext(ProfileContext)
   const [beep] = useSound(newMessageBeep)
   const history = useHistory()
-
-  const messageCountPerPage = 50
 
   const recieveMessage = useCallback(
     (chatId, message) => {
@@ -41,8 +39,7 @@ const ChatContextProvider = ({ children }) => {
           })
         )
 
-        beep()
-        return
+        return beep()
       }
 
       const updatedMessage = {
@@ -51,17 +48,15 @@ const ChatContextProvider = ({ children }) => {
       }
 
       setMessages(prev => [...prev, updatedMessage])
+      setTotalMessagesCount(prev => prev + 1)
     },
     [currentChatId, profile, beep]
   )
 
   const recieveParticipant = useCallback(
     (chat, participant) => {
-      if (get(participant, 'id') === get(profile, 'id')) setChats([chat, ...chats])
-
-      if (chat.id !== currentChatId) return
-
-      setParticipants([...participants, participant])
+      if (participant.id === profile.id) setChats([chat, ...chats])
+      if (chat.id === currentChatId) setParticipants([...participants, participant])
     },
     [currentChatId, profile, chats, participants]
   )
@@ -77,6 +72,17 @@ const ChatContextProvider = ({ children }) => {
     },
     [currentChatId, history]
   )
+
+  const deleteMessage = useCallback(messageId => {
+    setMessages(prev =>
+      map(prev, m => {
+        if (m.id === messageId) {
+          return { ...m, isDeleted: true, text: '' }
+        }
+        return m
+      })
+    )
+  }, [])
 
   const deleteParticipant = useCallback(
     (chatId, participantId) => {
@@ -107,9 +113,9 @@ const ChatContextProvider = ({ children }) => {
     setCurrentChatId(chatId)
 
     const response = await api.get(
-      `chats/${chatId}/messages?count=${messageCountPerPage}`
+      `chats/${chatId}/messages?count=${FETCH_MESSAGES_PAGE_SIZE}`
     )
-    setMessages(get(response, 'data'))
+    setMessages(get(response, 'data.data'))
 
     setChats(prev =>
       map(prev, x => {
@@ -118,18 +124,21 @@ const ChatContextProvider = ({ children }) => {
       })
     )
 
+    setTotalMessagesCount(get(response, 'data.totalCount'))
     setMessagesFetching(false)
   }, [])
 
   const getMoreMessages = useCallback(
     async chatId => {
-      const skip = messages.length
+      setMoreMessagesFetching(true)
       const response = await api.get(
-        `chats/${chatId}/messages?skip=${skip}&count=${messageCountPerPage}`
+        `chats/${chatId}/messages?skip=${messages.length}&count=${FETCH_MESSAGES_PAGE_SIZE}`
       )
 
-      const moreMessages = get(response, 'data')
+      const moreMessages = get(response, 'data.data')
       setMessages(prev => [...moreMessages, ...prev])
+      setTotalMessagesCount(get(response, 'data.totalCount'))
+      setMoreMessagesFetching(false)
     },
     [messages.length]
   )
@@ -164,6 +173,17 @@ const ChatContextProvider = ({ children }) => {
     [currentChatId]
   )
 
+  const recoverMessage = useCallback((messageId, text) => {
+    setMessages(prev =>
+      map(prev, m => {
+        if (m.id === messageId) {
+          return { ...m, isDeleted: false, text }
+        }
+        return m
+      })
+    )
+  }, [])
+
   useEffect(() => {
     const fetchChats = async () => {
       setChatsFetching(true)
@@ -181,34 +201,37 @@ const ChatContextProvider = ({ children }) => {
     if (!hubConnection) return
 
     hubConnection.on('RecieveChat', recieveChat)
-    hubConnection.on('GetConnectionId', setConnectionId)
     hubConnection.on('RecieveMessage', recieveMessage)
     hubConnection.on('RecieveParticipant', recieveParticipant)
     hubConnection.on('DeleteChat', deleteChat)
+    hubConnection.on('DeleteMessage', deleteMessage)
     hubConnection.on('DeleteParticipant', deleteParticipant)
     hubConnection.on('UserConnectedStatusChanged', userConnectedStatusChanged)
     hubConnection.on('ParticipantRoleChanged', onParticipantRoleChanged)
+    hubConnection.on('RecoverMessage', recoverMessage)
 
     return () => {
       hubConnection.off('RecieveChat')
-      hubConnection.off('GetConnectionId')
       hubConnection.off('RecieveMessage')
       hubConnection.off('RecieveParticipant')
       hubConnection.off('DeleteChat')
+      hubConnection.off('DeleteMessage')
       hubConnection.off('DeleteParticipant')
       hubConnection.off('UserConnectedStatusChanged')
       hubConnection.off('ParticipantRoleChanged')
+      hubConnection.off('RecoverMessage')
     }
   }, [
     hubConnection,
     recieveMessage,
-    setConnectionId,
     recieveParticipant,
     recieveChat,
     deleteChat,
+    deleteMessage,
     deleteParticipant,
     userConnectedStatusChanged,
-    onParticipantRoleChanged
+    onParticipantRoleChanged,
+    recoverMessage
   ])
 
   return (
@@ -217,11 +240,12 @@ const ChatContextProvider = ({ children }) => {
         chats,
         chatsFetching,
         currentChatFetching: messagesFetching || participantsFetching,
-        connectionId,
+        moreMessagesFetching,
         currentChatId,
         messages,
         participants,
-        messageCountPerPage,
+        totalMessagesCount,
+        FETCH_MESSAGES_PAGE_SIZE,
         getMessages,
         getMoreMessages,
         getParticipants

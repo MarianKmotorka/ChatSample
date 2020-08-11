@@ -2,11 +2,12 @@ import styled from 'styled-components'
 import { getMessageBorderRadius } from '../utils'
 import { MessageShape } from '../Message'
 import { MD } from '../../../utils/useWindowSize'
+import { Button } from 'antd'
 
-export const Wrapper = styled.div`
+export const InnerWrapper = styled.div`
   display: flex;
-  align-items: flex-start;
-  margin: 2px;
+  align-items: center;
+  margin: 1px;
   max-width: 55%;
   color: ${({ theme }) => theme.black};
   justify-content: ${({ isMyMessage }) => (isMyMessage ? 'flex-end' : 'flex-start')};
@@ -35,7 +36,7 @@ export const Text = styled.p`
   line-height: 20px;
   padding: 4px 12px;
   border: 1px grey solid;
-  word-break: break-all;
+  word-break: break-word;
   border-radius: ${props => getMessageBorderRadius(props)};
   background: ${({ isMyMessage, theme }) => (isMyMessage ? theme.gold : theme.white)};
 `
@@ -52,4 +53,14 @@ export const MessageDate = styled.p`
   font-size: 12px;
   font-style: italic;
   margin-left: auto;
+`
+
+export const StyledButton = styled(Button)`
+  opacity: ${({ opacity = 1 }) => opacity};
+`
+
+export const DeletedText = styled.i`
+  color: ${({ theme }) => theme.dimGray};
+  margin: 0;
+  padding: 0;
 `

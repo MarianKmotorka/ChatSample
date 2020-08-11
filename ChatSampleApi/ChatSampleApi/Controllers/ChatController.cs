@@ -5,6 +5,7 @@ using ChatSampleApi.Features.Chat.AddParticipant;
 using ChatSampleApi.Features.Chat.CreateChat;
 using ChatSampleApi.Features.Chat.RemoveParticipant;
 using ChatSampleApi.Features.Chat.SendMessage;
+using ChatSampleApi.Pagination;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -15,21 +16,20 @@ namespace ChatSampleApi.Controllers
     public class ChatController : BaseController
     {
         [HttpGet("mine")]
-        public async Task<ActionResult<List<object>>> GetChats()
+        public async Task<ActionResult<List<GetMyChatsList.ChatDto>>> GetChats()
         {
             var response = await Mediator.Send(new GetMyChatsList.Query { UserId = CurrentUserService.UserId });
             return Ok(response);
         }
 
         [HttpGet("{id}/messages")]
-        public async Task<ActionResult<List<GetMessages.MessageDto>>> GetMessages(string id, int skip, int count = 20)
+        public async Task<ActionResult<PagedResponse<GetMessages.MessageDto>>> GetMessages(string id, [FromQuery] PaginationQuery paginationQuery)
         {
             var request = new GetMessages.Query
             {
                 ChatId = id,
                 UserId = CurrentUserService.UserId,
-                Skip = skip,
-                Count = count
+                PaginationQuery = paginationQuery
             };
 
             var response = await Mediator.Send(request);
@@ -37,7 +37,7 @@ namespace ChatSampleApi.Controllers
         }
 
         [HttpGet("{id}/participants")]
-        public async Task<ActionResult<List<GetMessages.MessageDto>>> GetParticipants(string id)
+        public async Task<ActionResult<PagedResponse<GetParticipants.ParticipantDto>>> GetParticipants(string id)
         {
             var request = new GetParticipants.Query
             {
@@ -103,6 +103,22 @@ namespace ChatSampleApi.Controllers
         public async Task<ActionResult> MakeParticipantAdmin([FromRoute] MakeParticipantAdmin.Command request)
         {
             request.RequesterId = CurrentUserService.UserId;
+            await Mediator.Send(request);
+            return NoContent();
+        }
+
+        [HttpDelete("{chatId}/messages/{messageId}")]
+        public async Task<ActionResult> DeleteMessage([FromRoute] DeleteMessage.Command request)
+        {
+            request.AuthUserId = CurrentUserService.UserId;
+            await Mediator.Send(request);
+            return NoContent();
+        }
+
+        [HttpPut("{chatId}/messages/{messageId}/recover")]
+        public async Task<ActionResult> RecoverMessage([FromRoute] RecoverMessage.Command request)
+        {
+            request.AuthUserId = CurrentUserService.UserId;
             await Mediator.Send(request);
             return NoContent();
         }

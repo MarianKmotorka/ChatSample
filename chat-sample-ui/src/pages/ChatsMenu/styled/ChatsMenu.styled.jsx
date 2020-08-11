@@ -7,9 +7,8 @@ export const Wrapper = styled.div`
   flex-direction: column;
   background: ${({ theme }) => theme.shadeWhite};
   padding: 30px 0;
-  max-height: calc(100vh - 55px);
-  min-width: 70px;
-  width: ${({ expanded }) => (expanded ? '200px' : '70px')};
+  height: calc(100vh - 55px);
+  min-width: 80px;
   align-items: center;
 `
 
@@ -81,14 +80,41 @@ export const ItemsWrapper = styled.div`
   overflow-x: hidden;
   padding: ${({ expanded }) => (expanded ? '0 25px 0 15px' : '0 8px')};
   width: 100%;
+`
 
-  ::-webkit-scrollbar {
-    width: 7px;
-    background: transparent;
+export const AnimationClassesWrapper = styled.div`
+  .wrapper--appear {
+    width: ${({ expanded }) => (expanded ? '200px' : '80px')};
+  }
+  .wrapper--enter {
+    width: 80px;
+  }
+  .wrapper--enter-active,
+  .wrapper--enter-done {
+    width: 200px;
+    transition: width 400ms;
+  }
+  .wrapper--exit {
+    width: 200px;
+  }
+  .wrapper--exit-active,
+  .wrapper--exit-done {
+    width: 80px;
+    transition: width 400ms;
   }
 
-  ::-webkit-scrollbar-thumb {
-    background: #999;
-    border-radius: 5px;
+  .dialog--enter form {
+    transform: translateX(-50vw);
+  }
+  .dialog--enter-active form {
+    transform: translateX(0);
+    transition: transform 500ms cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  .dialog--exit form {
+    transform: translateX(0);
+  }
+  .dialog--exit-active form {
+    transform: translateX(50vw);
+    transition: transform 500ms cubic-bezier(0.64, 0, 0.78, 0);
   }
 `

@@ -1,38 +1,49 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useRef, useCallback } from 'react'
 import PropTypes from 'prop-types'
-import { map, get } from 'lodash'
-import { SwapRightOutlined, VerticalAlignTopOutlined } from '@ant-design/icons'
+import { map, first } from 'lodash'
 
 import Message from './Message'
+import EmojiListButton from './EmojiListButton'
+import MessagesLoadingSpinner from './MessagesLoadingSpinner'
 import { getMessageShape } from './utils'
+
 import {
   Wrapper,
   MessagesWrapper,
   InputWrapper,
-  StyledButton,
-  LoadMoreButton
+  StyledButton
 } from './styled/Chat.styled'
+import { useFocusWhenMounted, useScrollTo } from './hooks'
 
 const Chat = ({
   messages,
   onMessageSent,
   onLoadMore,
   scrollToMessageId,
-  showLoadMore = true
+  onDeleteMessage,
+  onRecoverMessage,
+  canLoadMore,
+  moreMessagesFetching
 }) => {
   const [text, setText] = useState('')
   const scrollToMessageRef = useRef()
-  const inputRef = useRef(null)
+  const inputRef = useRef()
+  useFocusWhenMounted(inputRef)
+  useScrollTo(scrollToMessageRef, [messages])
 
-  useEffect(() => {
-    const input = get(inputRef, 'current')
-    input && input.focus()
-  }, [])
-
-  useEffect(() => {
-    const message = get(scrollToMessageRef, 'current')
-    message && message.scrollIntoView()
-  }, [messages])
+  const observer = useRef()
+  const topMessageRef = useCallback(
+    node => {
+      if (observer.current) observer.current.disconnect()
+      observer.current = new IntersectionObserver(entries => {
+        if (entries[0].isIntersecting && canLoadMore) {
+          onLoadMore()
+        }
+      })
+      if (node) observer.current.observe(node)
+    },
+    [onLoadMore, canLoadMore]
+  )
 
   const onMessageSentInternal = e => {
     e.preventDefault()
@@ -41,40 +52,50 @@ const Chat = ({
   }
 
   const renderMessage = message => {
-    const commonProps = {
-      key: message.id,
-      message,
-      shape: getMessageShape(messages, message)
-    }
+    const ref =
+      scrollToMessageId === message.id
+        ? scrollToMessageRef
+        : first(messages) === message
+        ? topMessageRef
+        : null
 
-    if (scrollToMessageId === message.id)
-      return <Message {...commonProps} forwardRef={scrollToMessageRef} />
-    return <Message {...commonProps} />
+    return (
+      <Message
+        key={message.id}
+        message={message}
+        forwardRef={ref}
+        shape={getMessageShape(messages, message)}
+        onDelete={onDeleteMessage}
+        onRecover={onRecoverMessage}
+      />
+    )
   }
 
   return (
     <Wrapper>
-      <MessagesWrapper spaceFromTop={!showLoadMore && 10}>
-        {showLoadMore && (
-          <LoadMoreButton onClick={onLoadMore} icon={<VerticalAlignTopOutlined />} />
-        )}
+      <MessagesWrapper>
+        {moreMessagesFetching && <MessagesLoadingSpinner />}
         {map(messages, renderMessage)}
       </MessagesWrapper>
       <form onSubmit={onMessageSentInternal}>
         <InputWrapper>
+          <EmojiListButton
+            onSelect={useCallback(emoji => setText(prev => prev + emoji), [])}
+          />
+
           <input
             ref={inputRef}
             value={text}
             onChange={({ target }) => setText(target.value)}
           />
+
           <StyledButton
-            type='primary'
+            type='text'
             shape='round'
-            icon={<SwapRightOutlined />}
+            color='marigold'
+            icon={<i className='fas fa-paper-plane fa-5x' />}
             onClick={onMessageSentInternal}
-          >
-            Send
-          </StyledButton>
+          />
         </InputWrapper>
       </form>
     </Wrapper>
@@ -93,8 +114,11 @@ Chat.propTypes = {
   ).isRequired,
   onMessageSent: PropTypes.func.isRequired,
   onLoadMore: PropTypes.func.isRequired,
-  scrollToMessageId: PropTypes.string,
-  showLoadMore: PropTypes.bool
+  onDeleteMessage: PropTypes.func.isRequired,
+  onRecoverMessage: PropTypes.func.isRequired,
+  canLoadMore: PropTypes.bool.isRequired,
+  moreMessagesFetching: PropTypes.bool.isRequired,
+  scrollToMessageId: PropTypes.string
 }
 
 export default Chat

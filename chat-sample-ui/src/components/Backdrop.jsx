@@ -4,7 +4,7 @@ const Backdrop = styled.div`
   width: 100%;
   height: 100%;
   position: absolute;
-  background: rgba(0, 0, 0, 0.7);
+  background: rgba(0, 0, 0, 0.5);
   display: flex;
   justify-content: center;
   align-items: center;

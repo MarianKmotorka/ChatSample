@@ -21,6 +21,16 @@ export const GlobalStyle = createGlobalStyle`
   box-sizing: border-box;
   font-family: 'Poppins', sans-serif;
   font-weight: 300;
+
+  ::-webkit-scrollbar {
+    width: 7px;
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: #999;
+    border-radius: 5px;
+  }
 }
 
  html,

@@ -1,10 +1,17 @@
-import React, { memo } from 'react'
+import React, { memo, useState } from 'react'
 import { get, values } from 'lodash'
 import moment from 'moment'
 import PropTypes from 'prop-types'
+import { DeleteFilled, SyncOutlined } from '@ant-design/icons'
 
 import Tooltip from '../../components/Tooltip'
-import { Wrapper, Text, Avatar } from './styled/Message.styled'
+import {
+  InnerWrapper,
+  Text,
+  Avatar,
+  StyledButton,
+  DeletedText
+} from './styled/Message.styled'
 
 export const MessageShape = {
   TOP: 'top',
@@ -13,34 +20,69 @@ export const MessageShape = {
   STANDALONE: 'standalone'
 }
 
-const Message = memo(({ message, forwardRef, shape = MessageShape.STANDALONE }) => {
-  const isMyMessage = get(message, 'isMyMessage')
-  const name = get(message, 'senderName')
-  const picture = get(message, 'senderPicture')
-  const date = moment(get(message, 'date')).format('MMMM Do YYYY, H:mm')
-  const showAvatar = shape === MessageShape.STANDALONE || shape === MessageShape.BOTTOM
-  const tooltipPlacement = isMyMessage ? 'left' : 'right'
+const Message = memo(
+  ({ message, forwardRef, onDelete, onRecover, shape = MessageShape.STANDALONE }) => {
+    const [hovered, setHovered] = useState(false)
 
-  return (
-    <Wrapper isMyMessage={isMyMessage} shape={shape} ref={forwardRef}>
-      {!isMyMessage && (
-        <Tooltip text={name} placement='left'>
-          <Avatar referrerPolicy='no-referrer' src={picture} isHidden={!showAvatar} />
-        </Tooltip>
-      )}
-      <Tooltip text={date} placement={tooltipPlacement}>
-        <Text isMyMessage={message.isMyMessage} shape={shape}>
-          {message.text}
-        </Text>
-      </Tooltip>
-      {isMyMessage && (
-        <Tooltip text={name} placement='right'>
-          <Avatar referrerPolicy='no-referrer' src={picture} isHidden={!showAvatar} />
-        </Tooltip>
-      )}
-    </Wrapper>
-  )
-})
+    const id = get(message, 'id')
+    const name = get(message, 'senderName')
+    const picture = get(message, 'senderPicture')
+    const isDeleted = get(message, 'isDeleted')
+    const isMyMessage = get(message, 'isMyMessage')
+    const date = moment(get(message, 'date')).format('MMMM Do YYYY, H:mm')
+    const text = isDeleted ? <DeletedText>Deleted</DeletedText> : get(message, 'text')
+
+    const showAvatar = shape === MessageShape.STANDALONE || shape === MessageShape.BOTTOM
+
+    return (
+      <div
+        onMouseEnter={() => setHovered(true)}
+        onMouseLeave={() => setHovered(false)}
+        ref={forwardRef}
+      >
+        <InnerWrapper isMyMessage={isMyMessage} shape={shape}>
+          {!isDeleted && isMyMessage && (
+            <StyledButton
+              icon={<DeleteFilled />}
+              type='text'
+              shape='circle-outline'
+              onClick={() => onDelete(id)}
+              opacity={hovered ? 1 : 0}
+            />
+          )}
+
+          {isDeleted && isMyMessage && (
+            <StyledButton
+              icon={<SyncOutlined />}
+              type='text'
+              shape='circle-outline'
+              onClick={() => onRecover(id)}
+              opacity={hovered ? 1 : 0}
+            />
+          )}
+
+          {!isMyMessage && (
+            <Tooltip text={name} placement='left'>
+              <Avatar referrerPolicy='no-referrer' src={picture} isHidden={!showAvatar} />
+            </Tooltip>
+          )}
+
+          <Tooltip text={date} placement='right'>
+            <Text isMyMessage={message.isMyMessage} shape={shape}>
+              {text}
+            </Text>
+          </Tooltip>
+
+          {isMyMessage && (
+            <Tooltip text={name} placement='right'>
+              <Avatar referrerPolicy='no-referrer' src={picture} isHidden={!showAvatar} />
+            </Tooltip>
+          )}
+        </InnerWrapper>
+      </div>
+    )
+  }
+)
 
 Message.propTypes = {
   message: PropTypes.shape({
@@ -52,7 +94,9 @@ Message.propTypes = {
     isMyMessage: PropTypes.bool.isRequired,
     senderPicture: PropTypes.string.isRequired
   }).isRequired,
-  shape: PropTypes.oneOf(values(MessageShape))
+  shape: PropTypes.oneOf(values(MessageShape)),
+  onDelete: PropTypes.func.isRequired,
+  onRecover: PropTypes.func.isRequired
 }
 
 export default Message

@@ -28,41 +28,22 @@ export const InputWrapper = styled.div`
 `
 
 export const StyledButton = styled(Button)`
-  flex: 1;
-  background: ${({ theme }) => theme.marigold};
-  color: ${({ theme }) => theme.blackCoffee};
-  border: none;
-  max-width: 150px;
-  margin: 0 15px 0 20px;
-  font-size: 16px;
-
-  :hover {
-    background: ${({ theme }) => theme.red};
+  color: ${({ theme, color }) => theme[color]};
+  margin-right: 5px;
+  svg,
+  i {
+    font-size: 25px;
   }
-`
-
-export const LoadMoreButton = styled(Button)`
-  margin-bottom: 50px;
-  display: block;
-  width: 100%;
-  border: none;
-  box-shadow: 0px 10px 20px #ededed;
+  :hover,
+  :focus {
+    color: ${({ theme }) => theme.blue};
+  }
 `
 
 export const MessagesWrapper = styled.div`
   overflow: auto;
   flex: 1;
   background: ${({ theme }) => theme.white};
-  padding-top: ${({ spaceFromTop }) => (spaceFromTop ? `${spaceFromTop}px` : '0px')};
+  padding-top: 10px;
   padding-bottom: 6px;
-
-  ::-webkit-scrollbar {
-    width: 7px;
-    background: transparent;
-  }
-
-  ::-webkit-scrollbar-thumb {
-    background: #999;
-    border-radius: 5px;
-  }
 `

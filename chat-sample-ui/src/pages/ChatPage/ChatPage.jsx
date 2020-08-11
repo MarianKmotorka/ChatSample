@@ -1,8 +1,8 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState, useCallback } from 'react'
 import { get, last, first } from 'lodash'
-import { useParams } from 'react-router-dom'
+import { useParams, useHistory } from 'react-router-dom'
 import Chat from '../../components/Chat/Chat'
-import ChatDetail from './ChatDetail/ChatDetail'
+import ChatDetail from '../../components/Chat/Detail/ChatDetail'
 
 import { ChatContext } from '../../contextProviders/ChatContextProvider'
 import LoadingSpinner from '../../components/LoadingSpinner'
@@ -13,40 +13,72 @@ import { Wrapper, InnerWrapper, TopBar } from './styled/ChatPage.styled'
 const ChatPage = () => {
   const {
     currentChatFetching,
+    moreMessagesFetching,
     getParticipants,
     getMessages,
     getMoreMessages,
     messages,
     participants,
-    messageCountPerPage
+    totalMessagesCount
   } = useContext(ChatContext)
+
   const { chatId } = useParams()
+  const history = useHistory()
+
   const [scrollToMessageId, setScrollToMessageId] = useState()
-  const [shouldScrollToBottom, setShouldScrollToBottom] = useState(true)
+  const lastMessageId = get(last(messages), 'id')
+  const firstMessageId = get(first(messages), 'id')
+
+  useEffect(() => setScrollToMessageId(lastMessageId), [lastMessageId])
 
   useEffect(() => {
     getParticipants(chatId)
     getMessages(chatId)
-    setShouldScrollToBottom(true)
   }, [chatId, getMessages, getParticipants])
 
-  useEffect(() => {
-    if (!shouldScrollToBottom) return
-
-    var lastMessage = get(last(messages), 'id')
-    lastMessage && setScrollToMessageId(lastMessage)
-  }, [messages, shouldScrollToBottom])
-
   const handleMessageSent = async text => {
-    setShouldScrollToBottom(true)
+    setScrollToMessageId(lastMessageId)
     await api.post(`/chats/${chatId}/messages`, { text })
   }
 
   const handleLoadMore = async () => {
-    setScrollToMessageId(get(first(messages), 'id'))
-    setShouldScrollToBottom(false)
-
+    setScrollToMessageId(firstMessageId)
     await getMoreMessages(chatId)
+  }
+
+  const handleMessageDeleted = useCallback(
+    async id => {
+      setScrollToMessageId(null)
+      await api.delete(`/chats/${chatId}/messages/${id}`)
+    },
+    [chatId]
+  )
+
+  const handleMessageRecovered = useCallback(
+    async id => {
+      setScrollToMessageId(null)
+      await api.put(`/chats/${chatId}/messages/${id}/recover`)
+    },
+    [chatId]
+  )
+
+  const handleAddParticipant = async user => {
+    await api.post(`/chats/${chatId}/participants`, {
+      participantId: get(user, 'id')
+    })
+  }
+
+  const handleChatDeleted = async () => {
+    await api.delete(`/chats/${chatId}`)
+    history.goBack()
+  }
+
+  const handleParticipantDeleted = async id => {
+    await api.delete(`/chats/${chatId}/participants/${id}`)
+  }
+
+  const handleSetParticipantAsAdmin = async id => {
+    await api.put(`/chats/${chatId}/participants/${id}/set-admin-role`)
   }
 
   if (currentChatFetching) return <LoadingSpinner />
@@ -60,9 +92,19 @@ const ChatPage = () => {
           onLoadMore={handleLoadMore}
           onMessageSent={handleMessageSent}
           scrollToMessageId={scrollToMessageId}
-          showLoadMore={messages.length >= messageCountPerPage}
+          onDeleteMessage={handleMessageDeleted}
+          onRecoverMessage={handleMessageRecovered}
+          canLoadMore={totalMessagesCount > messages.length}
+          moreMessagesFetching={moreMessagesFetching}
         />
-        <ChatDetail participants={participants} chatId={chatId} />
+        <ChatDetail
+          participants={participants}
+          chatId={chatId}
+          onAddParticipant={handleAddParticipant}
+          onDeleteParticipant={handleParticipantDeleted}
+          onSetParticipantAsAdmin={handleSetParticipantAsAdmin}
+          onDeleteChat={handleChatDeleted}
+        />
       </InnerWrapper>
     </Wrapper>
   )

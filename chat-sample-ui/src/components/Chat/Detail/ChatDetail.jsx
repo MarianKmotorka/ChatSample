@@ -1,7 +1,6 @@
 import React, { useState, useContext, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { map, get, find, invert } from 'lodash'
-import { useHistory } from 'react-router-dom'
 import {
   SwapLeftOutlined,
   SwapRightOutlined,
@@ -10,10 +9,9 @@ import {
 } from '@ant-design/icons'
 import { Modal } from 'antd'
 
-import api from '../../../services/httpService'
-import Tooltip from '../../../components/Tooltip'
-import Popover from '../../../components/Popover'
-import SearchableDropdown from '../../../components/SearchableDropdown/SearchableDropdown'
+import Tooltip from '../../Tooltip'
+import Popover from '../../Popover'
+import SearchableDropdown from '../../SearchableDropdown/SearchableDropdown'
 import { ProfileContext } from '../../../contextProviders/ProfileContextProvider'
 import { ChatRoleType } from '../../../utils/types'
 import useWindowSize, { SM } from '../../../utils/useWindowSize'
@@ -29,16 +27,22 @@ import {
   StyledBadge,
   DropdownItem,
   StyledMenu
-} from './styled/ChatDetail.styled'
+} from './ChatDetail.styled'
 
-const ChatDetail = ({ participants, chatId }) => {
+const ChatDetail = ({
+  participants,
+  chatId,
+  onAddParticipant,
+  onDeleteChat,
+  onDeleteParticipant,
+  onSetParticipantAsAdmin
+}) => {
   const [showDropdown, setShowDropdown] = useState(false)
   const [currentUserId, setCurrentUserId] = useState()
   const [expanded, setExpanded] = useState(true)
   const [showDeleteChatModal, setShowDeleteChatModal] = useState(false)
 
   const { profile } = useContext(ProfileContext)
-  const history = useHistory()
   const { width } = useWindowSize()
   const isWiderThanSmall = width > SM
 
@@ -55,18 +59,6 @@ const ChatDetail = ({ participants, chatId }) => {
       setShowDropdown(false)
     }
   }, [isWiderThanSmall])
-
-  const handleAddParticipant = async user => {
-    await api.post(`/chats/${chatId}/participants`, {
-      participantId: get(user, 'id')
-    })
-    setShowDropdown(false)
-  }
-
-  const handleDeleteChat = async () => {
-    await api.delete(`/chats/${chatId}`)
-    history.goBack()
-  }
 
   const toogleExpanded = () => {
     setExpanded(x => !x)
@@ -106,6 +98,10 @@ const ChatDetail = ({ participants, chatId }) => {
 
   const currentUserRole = get(find(participants, ['id', currentUserId]), 'chatRole')
   const canDeleteChat = currentUserRole === ChatRoleType.Admin
+  const handleParticipantAddedInternal = participant => {
+    onAddParticipant(participant)
+    setShowDropdown(false)
+  }
 
   return (
     <Wrapper
@@ -146,7 +142,7 @@ const ChatDetail = ({ participants, chatId }) => {
             fetchOptions={{
               url: `/chats/${chatId}/participants/new`
             }}
-            onChange={handleAddParticipant}
+            onChange={handleParticipantAddedInternal}
             itemRenderer={renderDropdownItem}
             displayProperty='name'
           />
@@ -157,13 +153,14 @@ const ChatDetail = ({ participants, chatId }) => {
           const participantName = get(participant, 'name')
           const participantRole = get(participant, 'chatRole')
 
-          const menuItems = getContextMenuItems(
+          const menuItems = getContextMenuItems({
             particiapantId,
             currentUserId,
             participantRole,
             currentUserRole,
-            chatId
-          )
+            onDeleteParticipant,
+            onSetParticipantAsAdmin
+          })
 
           return expanded ? (
             <ParticipantWrapper key={particiapantId}>
@@ -179,7 +176,7 @@ const ChatDetail = ({ participants, chatId }) => {
 
       <Modal
         title='Do you really want to delete this chat ?'
-        onOk={handleDeleteChat}
+        onOk={onDeleteChat}
         onCancel={() => setShowDeleteChatModal(false)}
         okText='Yes, delete the chat.'
         cancelText='No, go back.'
@@ -199,7 +196,11 @@ ChatDetail.propTypes = {
       name: PropTypes.string.isRequired,
       picture: PropTypes.string.isRequired
     })
-  ).isRequired
+  ).isRequired,
+  onAddParticipant: PropTypes.func.isRequired,
+  onSetParticipantAsAdmin: PropTypes.func.isRequired,
+  onDeleteParticipant: PropTypes.func.isRequired,
+  onDeleteChat: PropTypes.func.isRequired
 }
 
 export default ChatDetail
