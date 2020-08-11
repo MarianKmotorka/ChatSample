@@ -86,7 +86,7 @@ const ChatPage = () => {
 
   return (
     <Wrapper>
-      <TopBar />
+      <TopBar onDeleteChat={handleChatDeleted} />
       <InnerWrapper>
         <Chat
           messages={messages}
@@ -104,7 +104,6 @@ const ChatPage = () => {
           onAddParticipant={handleAddParticipant}
           onDeleteParticipant={handleParticipantDeleted}
           onSetParticipantAsAdmin={handleSetParticipantAsAdmin}
-          onDeleteChat={handleChatDeleted}
         />
       </InnerWrapper>
     </Wrapper>

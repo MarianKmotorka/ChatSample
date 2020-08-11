@@ -39,9 +39,10 @@ export const GlobalStyle = createGlobalStyle`
  body,
  body > div {
    height: 100vh;
+   overflow: hidden;
  }
 
-  p {
+  p, h1, h2, h3, h4, h5, h6 {
     margin:0;
   }
 `

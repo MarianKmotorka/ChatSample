@@ -1,13 +1,7 @@
 import React, { useState, useContext, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { map, get, find, invert } from 'lodash'
-import {
-  SwapLeftOutlined,
-  SwapRightOutlined,
-  PlusOutlined,
-  DeleteOutlined
-} from '@ant-design/icons'
-import { Modal } from 'antd'
+import { SwapLeftOutlined, SwapRightOutlined, PlusOutlined } from '@ant-design/icons'
 
 import Tooltip from '../../Tooltip'
 import Popover from '../../Popover'
@@ -33,23 +27,16 @@ const ChatDetail = ({
   participants,
   chatId,
   onAddParticipant,
-  onDeleteChat,
   onDeleteParticipant,
   onSetParticipantAsAdmin
 }) => {
   const [showDropdown, setShowDropdown] = useState(false)
-  const [currentUserId, setCurrentUserId] = useState()
   const [expanded, setExpanded] = useState(true)
-  const [showDeleteChatModal, setShowDeleteChatModal] = useState(false)
 
   const { profile } = useContext(ProfileContext)
   const { width } = useWindowSize()
   const isWiderThanSmall = width > SM
-
-  useEffect(() => {
-    if (!profile) return
-    setCurrentUserId(get(profile, 'id'))
-  }, [profile])
+  const currentUserId = profile?.id
 
   useEffect(() => {
     if (isWiderThanSmall) {
@@ -97,7 +84,6 @@ const ChatDetail = ({
   )
 
   const currentUserRole = get(find(participants, ['id', currentUserId]), 'chatRole')
-  const canDeleteChat = currentUserRole === ChatRoleType.Admin
   const handleParticipantAddedInternal = participant => {
     onAddParticipant(participant)
     setShowDropdown(false)
@@ -122,15 +108,6 @@ const ChatDetail = ({
               onClick={() => setShowDropdown(x => !x)}
               shape='circle'
               icon={<PlusOutlined />}
-            />
-          </Tooltip>
-        )}
-        {expanded && canDeleteChat && (
-          <Tooltip text='Delete chat' placement='top'>
-            <StyledButton
-              onClick={() => setShowDeleteChatModal(true)}
-              shape='circle'
-              icon={<DeleteOutlined />}
             />
           </Tooltip>
         )}
@@ -173,17 +150,6 @@ const ChatDetail = ({
           )
         })}
       </Content>
-
-      <Modal
-        title='Do you really want to delete this chat ?'
-        onOk={onDeleteChat}
-        onCancel={() => setShowDeleteChatModal(false)}
-        okText='Yes, delete the chat.'
-        cancelText='No, go back.'
-        visible={showDeleteChatModal}
-      >
-        <p>Be aware of that this action can not be reversed! </p>
-      </Modal>
     </Wrapper>
   )
 }
@@ -199,8 +165,7 @@ ChatDetail.propTypes = {
   ).isRequired,
   onAddParticipant: PropTypes.func.isRequired,
   onSetParticipantAsAdmin: PropTypes.func.isRequired,
-  onDeleteParticipant: PropTypes.func.isRequired,
-  onDeleteChat: PropTypes.func.isRequired
+  onDeleteParticipant: PropTypes.func.isRequired
 }
 
 export default ChatDetail
