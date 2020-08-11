@@ -84,7 +84,7 @@ export const ItemsWrapper = styled.div`
 
 export const AnimationClassesWrapper = styled.div`
   .wrapper--appear {
-    width: ${({ expanded }) => (expanded ? '200px' : '70px')};
+    width: ${({ expanded }) => (expanded ? '200px' : '80px')};
   }
   .wrapper--enter {
     width: 80px;
