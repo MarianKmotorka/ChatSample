@@ -25,8 +25,9 @@ const ChatPage = () => {
 
   const { chatId } = useParams()
   const history = useHistory()
-
   const [scrollToMessageId, setScrollToMessageId] = useState()
+  const [showChatDetail, setShowChatDetail] = useState(false)
+
   const lastMessageId = get(last(messages), 'id')
   const firstMessageId = get(first(messages), 'id')
 
@@ -86,7 +87,10 @@ const ChatPage = () => {
 
   return (
     <Wrapper>
-      <TopBar onDeleteChat={handleChatDeleted} />
+      <TopBar
+        onDeleteChat={handleChatDeleted}
+        onToggleChatDetail={() => setShowChatDetail(prev => !prev)}
+      />
       <InnerWrapper>
         <Chat
           messages={messages}
@@ -98,13 +102,15 @@ const ChatPage = () => {
           canLoadMore={totalMessagesCount > messages.length}
           moreMessagesFetching={moreMessagesFetching}
         />
-        <ChatDetail
-          participants={participants}
-          chatId={chatId}
-          onAddParticipant={handleAddParticipant}
-          onDeleteParticipant={handleParticipantDeleted}
-          onSetParticipantAsAdmin={handleSetParticipantAsAdmin}
-        />
+        {showChatDetail && (
+          <ChatDetail
+            participants={participants}
+            chatId={chatId}
+            onAddParticipant={handleAddParticipant}
+            onDeleteParticipant={handleParticipantDeleted}
+            onSetParticipantAsAdmin={handleSetParticipantAsAdmin}
+          />
+        )}
       </InnerWrapper>
     </Wrapper>
   )

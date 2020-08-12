@@ -1,35 +1,45 @@
 import React, { useContext, useState } from 'react'
 import { find } from 'lodash'
-import { DeleteOutlined } from '@ant-design/icons'
 import { Button, Modal } from 'antd'
-import { ChatRoleType } from '../../utils/types'
-import { Wrapper, ChatName } from './styled/TopBar.styled'
+import { DeleteOutlined, UserSwitchOutlined } from '@ant-design/icons'
+
 import { ChatContext } from '../../contextProviders/ChatContextProvider'
 import { ProfileContext } from '../../contextProviders/ProfileContextProvider'
+import { ChatRoleType } from '../../utils/types'
 import Tooltip from '../../components/Tooltip'
 
-const TopBar = ({ onDeleteChat }) => {
+import { Wrapper, ChatName, ButtonsWrapper } from './styled/TopBar.styled'
+
+const TopBar = ({ onDeleteChat, onToggleChatDetail }) => {
   const [showDeleteChatModal, setShowDeleteChatModal] = useState(false)
   const { currentChatId, chats, participants } = useContext(ChatContext)
   const { profile } = useContext(ProfileContext)
-  const currentChat = find(chats, ['id', currentChatId])
 
+  const currentChat = find(chats, ['id', currentChatId])
   const currentUserRole = find(participants, ['id', profile?.id])?.chatRole
   const canDeleteChat = currentUserRole === ChatRoleType.Admin
 
   return (
     <Wrapper>
       <ChatName>{currentChat?.name}</ChatName>
-      {canDeleteChat && (
-        <Tooltip text='Delete chat' placement='top'>
+      <ButtonsWrapper>
+        {canDeleteChat && (
+          <Tooltip text='Delete chat' placement='top'>
+            <Button
+              onClick={() => setShowDeleteChatModal(true)}
+              shape='circle'
+              icon={<DeleteOutlined />}
+            />
+          </Tooltip>
+        )}
+        <Tooltip text='Participants' placement='topRight'>
           <Button
-            onClick={() => setShowDeleteChatModal(true)}
+            onClick={onToggleChatDetail}
             shape='circle'
-            size='large'
-            icon={<DeleteOutlined />}
+            icon={<UserSwitchOutlined />}
           />
         </Tooltip>
-      )}
+      </ButtonsWrapper>
 
       <Modal
         title='Do you really want to delete this chat ?'

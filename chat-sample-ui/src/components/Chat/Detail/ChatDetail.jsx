@@ -1,15 +1,15 @@
-import React, { useState, useContext, useEffect } from 'react'
+import React, { useState, useContext } from 'react'
 import PropTypes from 'prop-types'
 import { map, get, find, invert } from 'lodash'
 import { SwapLeftOutlined, SwapRightOutlined, PlusOutlined } from '@ant-design/icons'
 
 import Tooltip from '../../Tooltip'
 import Popover from '../../Popover'
-import SearchableDropdown from '../../SearchableDropdown/SearchableDropdown'
-import { ProfileContext } from '../../../contextProviders/ProfileContextProvider'
+import { getContextMenuItems } from './utils'
 import { ChatRoleType } from '../../../utils/types'
 import useWindowSize, { SM } from '../../../utils/useWindowSize'
-import { getContextMenuItems } from './utils'
+import SearchableDropdown from '../../SearchableDropdown/SearchableDropdown'
+import { ProfileContext } from '../../../contextProviders/ProfileContextProvider'
 
 import {
   Wrapper,
@@ -32,20 +32,11 @@ const ChatDetail = ({
 }) => {
   const [showDropdown, setShowDropdown] = useState(false)
   const [expanded, setExpanded] = useState(true)
-
   const { profile } = useContext(ProfileContext)
   const { width } = useWindowSize()
+
   const isWiderThanSmall = width > SM
   const currentUserId = profile?.id
-
-  useEffect(() => {
-    if (isWiderThanSmall) {
-      setExpanded(true)
-    } else {
-      setExpanded(false)
-      setShowDropdown(false)
-    }
-  }, [isWiderThanSmall])
 
   const toogleExpanded = () => {
     setExpanded(x => !x)
@@ -95,13 +86,15 @@ const ChatDetail = ({
       renderOver={!isWiderThanSmall && expanded}
     >
       <Header>
-        <Tooltip text={expanded ? 'Collapse' : 'Expand'} placement='top'>
-          <StyledButton
-            onClick={toogleExpanded}
-            shape='circle'
-            icon={expanded ? <SwapRightOutlined /> : <SwapLeftOutlined />}
-          />
-        </Tooltip>
+        {isWiderThanSmall && (
+          <Tooltip text={expanded ? 'Collapse' : 'Expand'} placement='top'>
+            <StyledButton
+              onClick={toogleExpanded}
+              shape='circle'
+              icon={expanded ? <SwapRightOutlined /> : <SwapLeftOutlined />}
+            />
+          </Tooltip>
+        )}
         {expanded && (
           <Tooltip text={showDropdown ? 'Hide' : 'Add participant'} placement='top'>
             <StyledButton
