@@ -1,8 +1,12 @@
 import styled from 'styled-components'
 
 export const Wrapper = styled.div`
-  height: 100%;
-  width: 100%;
+  display: flex;
+  flex-direction: column;
+`
+
+export const InnerWrapper = styled.div`
   display: flex;
   position: relative;
+  height: calc(100vh - 55px - 60px); /* 100vh - Navbar - TopBar */
 `

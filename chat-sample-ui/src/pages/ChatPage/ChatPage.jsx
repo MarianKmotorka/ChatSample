@@ -4,11 +4,12 @@ import { useParams, useHistory } from 'react-router-dom'
 import Chat from '../../components/Chat/Chat'
 import ChatDetail from '../../components/Chat/Detail/ChatDetail'
 
+import TopBar from './TopBar'
 import { ChatContext } from '../../contextProviders/ChatContextProvider'
 import LoadingSpinner from '../../components/LoadingSpinner'
 import api from '../../services/httpService'
 
-import { Wrapper } from './styled/ChatPage.styled'
+import { Wrapper, InnerWrapper } from './styled/ChatPage.styled'
 
 const ChatPage = () => {
   const {
@@ -24,8 +25,9 @@ const ChatPage = () => {
 
   const { chatId } = useParams()
   const history = useHistory()
-
   const [scrollToMessageId, setScrollToMessageId] = useState()
+  const [showChatDetail, setShowChatDetail] = useState(false)
+
   const lastMessageId = get(last(messages), 'id')
   const firstMessageId = get(first(messages), 'id')
 
@@ -85,24 +87,31 @@ const ChatPage = () => {
 
   return (
     <Wrapper>
-      <Chat
-        messages={messages}
-        onLoadMore={handleLoadMore}
-        onMessageSent={handleMessageSent}
-        scrollToMessageId={scrollToMessageId}
-        onDeleteMessage={handleMessageDeleted}
-        onRecoverMessage={handleMessageRecovered}
-        canLoadMore={totalMessagesCount > messages.length}
-        moreMessagesFetching={moreMessagesFetching}
-      />
-      <ChatDetail
-        participants={participants}
-        chatId={chatId}
-        onAddParticipant={handleAddParticipant}
-        onDeleteParticipant={handleParticipantDeleted}
-        onSetParticipantAsAdmin={handleSetParticipantAsAdmin}
+      <TopBar
         onDeleteChat={handleChatDeleted}
+        onToggleChatDetail={() => setShowChatDetail(prev => !prev)}
       />
+      <InnerWrapper>
+        <Chat
+          messages={messages}
+          onLoadMore={handleLoadMore}
+          onMessageSent={handleMessageSent}
+          scrollToMessageId={scrollToMessageId}
+          onDeleteMessage={handleMessageDeleted}
+          onRecoverMessage={handleMessageRecovered}
+          canLoadMore={totalMessagesCount > messages.length}
+          moreMessagesFetching={moreMessagesFetching}
+        />
+        {showChatDetail && (
+          <ChatDetail
+            participants={participants}
+            chatId={chatId}
+            onAddParticipant={handleAddParticipant}
+            onDeleteParticipant={handleParticipantDeleted}
+            onSetParticipantAsAdmin={handleSetParticipantAsAdmin}
+          />
+        )}
+      </InnerWrapper>
     </Wrapper>
   )
 }

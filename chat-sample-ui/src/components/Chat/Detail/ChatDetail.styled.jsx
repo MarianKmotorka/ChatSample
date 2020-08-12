@@ -5,6 +5,7 @@ import ContextMenu from '../../ContextMenu'
 export const Wrapper = styled.div`
   display: flex;
   background-color: ${({ theme }) => theme.shadeWhite};
+  border-top: ${({ theme }) => theme.gray} 0.5px solid;
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
@@ -73,17 +74,10 @@ export const Content = styled.div`
 
 export const StyledButton = styled(Button)`
   margin: 5px 8px 15px 0px;
-  transition: all 0.3s ease;
-  border: none;
   position: sticky;
   top: 0px;
   z-index: 2;
   transform: scale(1.1);
-
-  &:hover {
-    transform: scale(1.2);
-    color: ${({ theme }) => theme.red};
-  }
 `
 export const DropdownItem = styled.div`
   display: flex;

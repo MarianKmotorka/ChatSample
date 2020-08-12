@@ -1,19 +1,21 @@
-import styled from 'styled-components'
-import { createGlobalStyle } from 'styled-components'
+import styled, { createGlobalStyle } from 'styled-components'
 
 export const AppWrapper = styled.div`
   height: 100%;
+  display: flex;
+  flex-direction: column;
 `
 
 export const MenuAndContentWrapper = styled.div`
   display: flex;
+  flex: 1;
 `
 
 export const ContentWrapper = styled.div`
   flex: 1;
-  width: 100%;
   height: calc(100vh - 55px);
 `
+
 export const GlobalStyle = createGlobalStyle`
   * {
   margin: 0;
@@ -36,16 +38,11 @@ export const GlobalStyle = createGlobalStyle`
  html,
  body,
  body > div {
-   height: 100%;
+   height: 100vh;
    overflow: hidden;
  }
 
- code {
-   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-     monospace;
-  }
-
-  p {
+  p, h1, h2, h3, h4, h5, h6 {
     margin:0;
   }
 `

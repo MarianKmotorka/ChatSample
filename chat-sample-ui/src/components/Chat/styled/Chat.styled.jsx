@@ -2,7 +2,6 @@ import styled from 'styled-components'
 import { Button } from 'antd'
 
 export const Wrapper = styled.div`
-  height: 100%;
   flex: 1;
   display: flex;
   background: #eef2f3;
@@ -11,6 +10,7 @@ export const Wrapper = styled.div`
 
 export const InputWrapper = styled.div`
   display: flex;
+  height: 56px;
   background: ${({ theme }) => theme.lightGray};
   align-items: center;
   padding: 10px;
