@@ -58,6 +58,12 @@ namespace ChatSampleApi.Persistence.Entities
             return user;
         }
 
+        public void SetName(string name)
+        {
+            if (!string.IsNullOrWhiteSpace(name))
+                Name = name;
+        }
+
         public void RemoveParticipant(ChatUser chatUser) => _participants.Remove(chatUser);
     }
 }

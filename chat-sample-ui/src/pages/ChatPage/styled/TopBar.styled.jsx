@@ -16,8 +16,9 @@ export const ButtonsWrapper = styled.div`
   display: flex;
   flex: 1;
   justify-content: flex-end;
-  > * {
-    margin-right: 10px;
+
+  * + * {
+    margin-left: 10px;
   }
 `
 
@@ -25,7 +26,19 @@ export const StyledButton = styled(Button)`
   transform: scale(1.1);
 `
 
+export const ChatNameWrapper = styled.div`
+  display: flex;
+  align-items: center;
+
+  * + * {
+    margin-left: 10px;
+  }
+`
+
 export const ChatName = styled.h2`
   color: ${({ theme }) => theme.blackCoffee};
-  flex: 1;
+`
+
+export const ChatNameInput = styled.input`
+  color: ${({ theme }) => theme.blackCoffee};
 `

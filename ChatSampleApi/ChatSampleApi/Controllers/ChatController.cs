@@ -122,5 +122,14 @@ namespace ChatSampleApi.Controllers
             await Mediator.Send(request);
             return NoContent();
         }
+
+        [HttpPatch("{chatId}")]
+        public async Task<ActionResult> RecoverMessage(string chatId, [FromBody] EditChat.Command request)
+        {
+            request.UserId = CurrentUserService.UserId;
+            request.ChatId = chatId;
+            await Mediator.Send(request);
+            return NoContent();
+        }
     }
 }

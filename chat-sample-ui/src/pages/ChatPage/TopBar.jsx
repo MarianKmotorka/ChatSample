@@ -1,17 +1,26 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useState, useEffect } from 'react'
 import { find } from 'lodash'
 import { Button, Modal } from 'antd'
-import { DeleteOutlined, UserSwitchOutlined } from '@ant-design/icons'
+import { DeleteFilled, UserSwitchOutlined, EditOutlined } from '@ant-design/icons'
 
 import { ChatContext } from '../../contextProviders/ChatContextProvider'
 import { ProfileContext } from '../../contextProviders/ProfileContextProvider'
 import { ChatRoleType } from '../../utils/types'
 import Tooltip from '../../components/Tooltip'
 
-import { Wrapper, ChatName, ButtonsWrapper } from './styled/TopBar.styled'
+import {
+  Wrapper,
+  ChatName,
+  ButtonsWrapper,
+  ChatNameWrapper,
+  ChatNameInput
+} from './styled/TopBar.styled'
 
-const TopBar = ({ onDeleteChat, onToggleChatDetail }) => {
+const TopBar = ({ onDeleteChat, onToggleChatDetail, onRenameChat }) => {
   const [showDeleteChatModal, setShowDeleteChatModal] = useState(false)
+  const [isRenaming, setIsRenaming] = useState(false)
+  const [chatName, setChatName] = useState('')
+
   const { currentChatId, chats, participants } = useContext(ChatContext)
   const { profile } = useContext(ProfileContext)
 
@@ -19,19 +28,45 @@ const TopBar = ({ onDeleteChat, onToggleChatDetail }) => {
   const currentUserRole = find(participants, ['id', profile?.id])?.chatRole
   const canDeleteChat = currentUserRole === ChatRoleType.Admin
 
+  useEffect(() => setChatName(currentChat?.name), [currentChat])
+
+  const handleKeyPressed = e => e.key === 'Enter' && onRenameChat(chatName)
+
   return (
     <Wrapper>
-      <ChatName>{currentChat?.name}</ChatName>
+      <ChatNameWrapper>
+        {isRenaming ? (
+          <ChatNameInput
+            value={chatName}
+            onChange={e => setChatName(e.target.value)}
+            onKeyPress={handleKeyPressed}
+          />
+        ) : (
+          <>
+            <ChatName>{currentChat?.name}</ChatName>
+            <Tooltip text='Rename'>
+              <Button
+                onClick={() => setIsRenaming(true)}
+                shape='circle'
+                type='ghost'
+                icon={<EditOutlined />}
+              />
+            </Tooltip>
+          </>
+        )}
+      </ChatNameWrapper>
+
       <ButtonsWrapper>
         {canDeleteChat && (
-          <Tooltip text='Delete chat' placement='top'>
+          <Tooltip text='Delete chat'>
             <Button
               onClick={() => setShowDeleteChatModal(true)}
               shape='circle'
-              icon={<DeleteOutlined />}
+              icon={<DeleteFilled />}
             />
           </Tooltip>
         )}
+
         <Tooltip text='Participants' placement='topRight'>
           <Button
             onClick={onToggleChatDetail}

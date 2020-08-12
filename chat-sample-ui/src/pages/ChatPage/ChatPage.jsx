@@ -1,12 +1,12 @@
 import React, { useContext, useEffect, useState, useCallback } from 'react'
 import { get, last, first } from 'lodash'
 import { useParams, useHistory } from 'react-router-dom'
-import Chat from '../../components/Chat/Chat'
-import ChatDetail from '../../components/Chat/Detail/ChatDetail'
 
 import TopBar from './TopBar'
-import { ChatContext } from '../../contextProviders/ChatContextProvider'
+import Chat from '../../components/Chat/Chat'
 import LoadingSpinner from '../../components/LoadingSpinner'
+import ChatDetail from '../../components/Chat/Detail/ChatDetail'
+import { ChatContext } from '../../contextProviders/ChatContextProvider'
 import api from '../../services/httpService'
 
 import { Wrapper, InnerWrapper } from './styled/ChatPage.styled'
@@ -83,12 +83,15 @@ const ChatPage = () => {
     await api.put(`/chats/${chatId}/participants/${id}/set-admin-role`)
   }
 
+  const handleChatRenamed = async name => await api.patch(`/chats/${chatId}`, { name })
+
   if (currentChatFetching) return <LoadingSpinner />
 
   return (
     <Wrapper>
       <TopBar
         onDeleteChat={handleChatDeleted}
+        onRenameChat={handleChatRenamed}
         onToggleChatDetail={() => setShowChatDetail(prev => !prev)}
       />
       <InnerWrapper>
