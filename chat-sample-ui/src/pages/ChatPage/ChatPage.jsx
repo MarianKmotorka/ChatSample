@@ -64,24 +64,21 @@ const ChatPage = () => {
     [chatId]
   )
 
-  const handleAddParticipant = async user => {
+  const handleAddParticipant = async user =>
     await api.post(`/chats/${chatId}/participants`, {
       participantId: get(user, 'id')
     })
-  }
 
   const handleChatDeleted = async () => {
     await api.delete(`/chats/${chatId}`)
     history.goBack()
   }
 
-  const handleParticipantDeleted = async id => {
+  const handleParticipantDeleted = async id =>
     await api.delete(`/chats/${chatId}/participants/${id}`)
-  }
 
-  const handleSetParticipantAsAdmin = async id => {
+  const handleSetParticipantAsAdmin = async id =>
     await api.put(`/chats/${chatId}/participants/${id}/set-admin-role`)
-  }
 
   const handleChatRenamed = async name => await api.patch(`/chats/${chatId}`, { name })
 

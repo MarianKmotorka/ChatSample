@@ -28,10 +28,10 @@ export const StyledButton = styled(Button)`
 
 export const ChatNameWrapper = styled.div`
   display: flex;
-  align-items: center;
+  align-items: flex-end;
 
   * + * {
-    margin-left: 10px;
+    margin-left: 5px;
   }
 `
 
@@ -41,4 +41,10 @@ export const ChatName = styled.h2`
 
 export const ChatNameInput = styled.input`
   color: ${({ theme }) => theme.blackCoffee};
+  font-size: 21px;
+  background: transparent;
+  font-weight: 500;
+  font-style: italic;
+  border: none;
+  outline: none;
 `

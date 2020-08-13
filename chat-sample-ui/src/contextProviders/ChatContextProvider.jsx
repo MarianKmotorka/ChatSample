@@ -33,10 +33,9 @@ const ChatContextProvider = ({ children }) => {
     (chatId, message) => {
       if (chatId !== currentChatId) {
         setChats(prev =>
-          map(prev, x => {
-            if (x.id === chatId) return { ...x, unreadMessages: x.unreadMessages + 1 }
-            return x
-          })
+          map(prev, x =>
+            x.id === chatId ? { ...x, unreadMessages: x.unreadMessages + 1 } : x
+          )
         )
 
         return beep()
@@ -75,12 +74,7 @@ const ChatContextProvider = ({ children }) => {
 
   const deleteMessage = useCallback(messageId => {
     setMessages(prev =>
-      map(prev, m => {
-        if (m.id === messageId) {
-          return { ...m, isDeleted: true, text: '' }
-        }
-        return m
-      })
+      map(prev, m => (m.id === messageId ? { ...m, isDeleted: true, text: '' } : m))
     )
   }, [])
 
@@ -117,12 +111,7 @@ const ChatContextProvider = ({ children }) => {
     )
     setMessages(get(response, 'data.data'))
 
-    setChats(prev =>
-      map(prev, x => {
-        if (x.id === chatId) return { ...x, unreadMessages: 0 }
-        return x
-      })
-    )
+    setChats(prev => map(prev, x => (x.id === chatId ? { ...x, unreadMessages: 0 } : x)))
 
     setTotalMessagesCount(get(response, 'data.totalCount'))
     setMessagesFetching(false)
@@ -144,12 +133,7 @@ const ChatContextProvider = ({ children }) => {
   )
 
   const userConnectedStatusChanged = useCallback((userId, isOnline) => {
-    setParticipants(prev =>
-      map(prev, x => {
-        if (x.id === userId) return { ...x, isOnline }
-        return x
-      })
-    )
+    setParticipants(prev => map(prev, x => (x.id === userId ? { ...x, isOnline } : x)))
   }, [])
 
   const onParticipantRoleChanged = useCallback(
@@ -157,31 +141,22 @@ const ChatContextProvider = ({ children }) => {
       if (chatId !== currentChatId) return
 
       setParticipants(prev =>
-        map(prev, x => {
-          if (x.id === participantId) return { ...x, chatRole }
-          return x
-        })
+        map(prev, x => (x.id === participantId ? { ...x, chatRole } : x))
       )
 
-      setChats(prev =>
-        map(prev, x => {
-          if (x.id === chatId) return { ...x, chatRole }
-          return x
-        })
-      )
+      setChats(prev => map(prev, x => (x.id === chatId ? { ...x, chatRole } : x)))
     },
     [currentChatId]
   )
 
   const recoverMessage = useCallback((messageId, text) => {
     setMessages(prev =>
-      map(prev, m => {
-        if (m.id === messageId) {
-          return { ...m, isDeleted: false, text }
-        }
-        return m
-      })
+      map(prev, m => (m.id === messageId ? { ...m, isDeleted: false, text } : m))
     )
+  }, [])
+
+  const renameChat = useCallback((chatId, name) => {
+    setChats(prev => map(prev, x => (x.id === chatId ? { ...x, name } : x)))
   }, [])
 
   useEffect(() => {
@@ -209,6 +184,7 @@ const ChatContextProvider = ({ children }) => {
     hubConnection.on('UserConnectedStatusChanged', userConnectedStatusChanged)
     hubConnection.on('ParticipantRoleChanged', onParticipantRoleChanged)
     hubConnection.on('RecoverMessage', recoverMessage)
+    hubConnection.on('RenameChat', renameChat)
 
     return () => {
       hubConnection.off('RecieveChat')
@@ -220,6 +196,7 @@ const ChatContextProvider = ({ children }) => {
       hubConnection.off('UserConnectedStatusChanged')
       hubConnection.off('ParticipantRoleChanged')
       hubConnection.off('RecoverMessage')
+      hubConnection.off('RenameChat')
     }
   }, [
     hubConnection,
@@ -231,7 +208,8 @@ const ChatContextProvider = ({ children }) => {
     deleteParticipant,
     userConnectedStatusChanged,
     onParticipantRoleChanged,
-    recoverMessage
+    recoverMessage,
+    renameChat
   ])
 
   return (

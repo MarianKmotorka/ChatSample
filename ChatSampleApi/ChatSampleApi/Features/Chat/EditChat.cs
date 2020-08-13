@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using ChatSampleApi.Exceptions;
 using ChatSampleApi.Persistence;
 using MediatR;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Internal;
 using Newtonsoft.Json;
@@ -26,10 +27,12 @@ namespace ChatSampleApi.Features.Chat
         public class Handler : IRequestHandler<Command>
         {
             private readonly DatabaseContext _db;
+            private readonly IHubContext<ChatHub> _hubContext;
 
-            public Handler(DatabaseContext db)
+            public Handler(DatabaseContext db, IHubContext<ChatHub> hubContext)
             {
                 _db = db;
+                _hubContext = hubContext;
             }
 
             public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
@@ -42,7 +45,7 @@ namespace ChatSampleApi.Features.Chat
                 chat.SetName(request.Name);
                 await _db.SaveChangesAsync(cancellationToken);
 
-                // TODO: Use ChatHub to notify users 
+                await _hubContext.Clients.Group(chat.Id).SendAsync(ChatHub.RenameChat, chat.Id, chat.Name);
 
                 return Unit.Value;
             }

@@ -24,6 +24,7 @@ namespace ChatSampleApi.Features.Chat
         public const string UserConnectedStatusChanged = "UserConnectedStatusChanged";
         public const string ParticipantRoleChanged = "ParticipantRoleChanged";
         public const string RecoverMessage = "RecoverMessage";
+        public const string RenameChat = "RenameChat";
 
         private readonly ICurrentUserService _currentUserService;
         private readonly DatabaseContext _db;

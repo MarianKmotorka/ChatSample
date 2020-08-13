@@ -17,6 +17,7 @@ export const ChatButtonLink = styled(NavLink)`
   min-height: 55px;
   background: ${({ theme }) => theme.lightGray};
   color: ${({ theme }) => theme.black};
+  padding: 5px;
 
   text-decoration: none;
   font-size: 18px;
@@ -34,6 +35,10 @@ export const ChatButtonLink = styled(NavLink)`
   &.active {
     color: ${({ theme }) => theme.white};
     background: ${({ theme }) => theme.blue};
+  }
+
+  > p {
+    word-break: break-word;
   }
 `
 

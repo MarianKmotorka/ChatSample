@@ -30,25 +30,34 @@ const TopBar = ({ onDeleteChat, onToggleChatDetail, onRenameChat }) => {
 
   useEffect(() => setChatName(currentChat?.name), [currentChat])
 
-  const handleKeyPressed = e => e.key === 'Enter' && onRenameChat(chatName)
+  const handleKeyPressed = e => {
+    if (e.key !== 'Enter') return
+
+    setIsRenaming(false)
+    if (!chatName) return setChatName(currentChat.name)
+    if (chatName !== currentChat.name) onRenameChat(chatName)
+  }
 
   return (
     <Wrapper>
       <ChatNameWrapper>
-        {isRenaming ? (
+        {isRenaming && (
           <ChatNameInput
+            ref={ref => ref && ref.focus()}
             value={chatName}
             onChange={e => setChatName(e.target.value)}
             onKeyPress={handleKeyPressed}
           />
-        ) : (
+        )}
+
+        {!isRenaming && (
           <>
             <ChatName>{currentChat?.name}</ChatName>
             <Tooltip text='Rename'>
               <Button
                 onClick={() => setIsRenaming(true)}
                 shape='circle'
-                type='ghost'
+                type='text'
                 icon={<EditOutlined />}
               />
             </Tooltip>
