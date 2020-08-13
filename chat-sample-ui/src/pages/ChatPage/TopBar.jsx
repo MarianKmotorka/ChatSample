@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from 'react'
+import React, { useContext, useState, useEffect, useRef } from 'react'
 import { find } from 'lodash'
 import { Button, Modal } from 'antd'
 import { DeleteFilled, UserSwitchOutlined, EditOutlined } from '@ant-design/icons'
@@ -6,6 +6,7 @@ import { DeleteFilled, UserSwitchOutlined, EditOutlined } from '@ant-design/icon
 import { ChatContext } from '../../contextProviders/ChatContextProvider'
 import { ProfileContext } from '../../contextProviders/ProfileContextProvider'
 import { ChatRoleType } from '../../utils/types'
+import useOnClickOutside from '../../utils/useOnClickOutside'
 import Tooltip from '../../components/Tooltip'
 
 import {
@@ -23,12 +24,14 @@ const TopBar = ({ onDeleteChat, onToggleChatDetail, onRenameChat }) => {
 
   const { currentChatId, chats, participants } = useContext(ChatContext)
   const { profile } = useContext(ProfileContext)
+  const chatNameWrapperRef = useRef()
 
   const currentChat = find(chats, ['id', currentChatId])
   const currentUserRole = find(participants, ['id', profile?.id])?.chatRole
   const canDeleteChat = currentUserRole === ChatRoleType.Admin
 
   useEffect(() => setChatName(currentChat?.name), [currentChat])
+  useOnClickOutside(chatNameWrapperRef, () => setIsRenaming(false))
 
   const handleKeyPressed = e => {
     if (e.key !== 'Enter') return
@@ -40,7 +43,7 @@ const TopBar = ({ onDeleteChat, onToggleChatDetail, onRenameChat }) => {
 
   return (
     <Wrapper>
-      <ChatNameWrapper>
+      <ChatNameWrapper ref={chatNameWrapperRef}>
         {isRenaming && (
           <ChatNameInput
             ref={ref => ref && ref.focus()}
