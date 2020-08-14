@@ -9,7 +9,7 @@ import { getContextMenuItems } from './utils'
 import { ChatRoleType } from '../../../utils/types'
 import useWindowSize, { SM } from '../../../utils/useWindowSize'
 import SearchableDropdown from '../../SearchableDropdown/SearchableDropdown'
-import { ProfileContext } from '../../../contextProviders/ProfileContextProvider'
+import { ProfileContext } from '../../../contextProviders'
 
 import {
   Wrapper,
@@ -20,7 +20,8 @@ import {
   Photo,
   StyledBadge,
   DropdownItem,
-  StyledMenu
+  StyledMenu,
+  Text
 } from './ChatDetail.styled'
 
 const ChatDetail = ({
@@ -70,7 +71,7 @@ const ChatDetail = ({
         </p>
       }
     >
-      <p>{name}</p>
+      <Text>{name}</Text>
     </Popover>
   )
 

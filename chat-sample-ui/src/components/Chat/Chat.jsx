@@ -92,7 +92,7 @@ const Chat = ({
           <StyledButton
             type='text'
             shape='round'
-            color='marigold'
+            color='blue'
             icon={<i className='fas fa-paper-plane fa-5x' />}
             onClick={onMessageSentInternal}
           />

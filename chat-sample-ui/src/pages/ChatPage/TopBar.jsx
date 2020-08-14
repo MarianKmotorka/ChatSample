@@ -3,8 +3,7 @@ import { find } from 'lodash'
 import { Button, Modal } from 'antd'
 import { DeleteFilled, UserSwitchOutlined, EditOutlined } from '@ant-design/icons'
 
-import { ChatContext } from '../../contextProviders/ChatContextProvider'
-import { ProfileContext } from '../../contextProviders/ProfileContextProvider'
+import { ProfileContext, ChatContext } from '../../contextProviders'
 import { ChatRoleType } from '../../utils/types'
 import useOnClickOutside from '../../utils/useOnClickOutside'
 import Tooltip from '../../components/Tooltip'
@@ -14,7 +13,8 @@ import {
   ChatName,
   ButtonsWrapper,
   ChatNameWrapper,
-  ChatNameInput
+  ChatNameInput,
+  StyledButton
 } from './styled/TopBar.styled'
 
 const TopBar = ({ onDeleteChat, onToggleChatDetail, onRenameChat }) => {
@@ -57,7 +57,7 @@ const TopBar = ({ onDeleteChat, onToggleChatDetail, onRenameChat }) => {
           <>
             <ChatName>{currentChat?.name}</ChatName>
             <Tooltip text='Rename'>
-              <Button
+              <StyledButton
                 onClick={() => setIsRenaming(true)}
                 shape='circle'
                 type='text'

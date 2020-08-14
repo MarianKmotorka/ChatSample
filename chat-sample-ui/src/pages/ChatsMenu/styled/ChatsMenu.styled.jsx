@@ -17,7 +17,6 @@ export const ChatButtonLink = styled(NavLink)`
   min-height: 55px;
   background: ${({ theme }) => theme.lightGray};
   color: ${({ theme }) => theme.black};
-  padding: 5px;
 
   text-decoration: none;
   font-size: 18px;
@@ -26,10 +25,10 @@ export const ChatButtonLink = styled(NavLink)`
   display: flex;
   justify-content: center;
   align-items: center;
-  transition: none;
 
   :hover {
     color: ${({ theme }) => theme.black};
+    background: ${({ theme }) => theme.dimGray};
   }
 
   &.active {
@@ -43,18 +42,11 @@ export const ChatButtonLink = styled(NavLink)`
 `
 
 export const StyledBadge = styled(Badge)`
-  width: 100%;
+  min-width: 92%;
   transition: all 0.3s ease;
-
-  margin: ${({ expanded }) => (expanded ? '12px 7px' : '8px 0 0 0')};
-  box-shadow: ${({ expanded }) =>
-    expanded ? '7px 7px 5px 0px rgba(170, 170, 170, 1)' : 'none'};
 
   :hover {
     color: ${({ theme }) => theme.white};
-    transform: ${({ expanded }) => (expanded ? 'translateY(-8px)' : 'none')};
-    box-shadow: ${({ expanded }) =>
-      expanded ? '9px 13px 5px 0px rgba(170, 170, 170, 1)' : 'none'};
   }
 `
 
@@ -64,10 +56,6 @@ export const StyledButton = styled(Button)`
   transition: all 0.3s ease;
   border: none;
   top: 0px;
-
-  :hover {
-    transform: scale(1.3);
-    color: ${({ theme }) => theme.red};
   }
 `
 
@@ -80,31 +68,38 @@ export const ButtonsWrapper = styled.div`
 `
 
 export const ItemsWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   height: 100%;
+  width: 100%;
   overflow-y: auto;
   overflow-x: hidden;
-  padding: ${({ expanded }) => (expanded ? '0 25px 0 15px' : '0 8px')};
-  width: 100%;
+  margin-top: 15px;
+  padding: 0 10px;
+  > * {
+    margin-top: 10px;
+  }
 `
 
 export const AnimationClassesWrapper = styled.div`
   .wrapper--appear {
-    width: ${({ expanded }) => (expanded ? '200px' : '80px')};
+    width: ${({ expanded }) => (expanded ? '300px' : '90px')};
   }
   .wrapper--enter {
-    width: 80px;
+    width: 90px;
   }
   .wrapper--enter-active,
   .wrapper--enter-done {
-    width: 200px;
+    width: 300px;
     transition: width 400ms;
   }
   .wrapper--exit {
-    width: 200px;
+    width: 300px;
   }
   .wrapper--exit-active,
   .wrapper--exit-done {
-    width: 80px;
+    width: 90px;
     transition: width 400ms;
   }
 

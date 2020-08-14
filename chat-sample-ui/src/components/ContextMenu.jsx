@@ -9,6 +9,13 @@ const Text = styled.p`
   font-size: 15px;
   line-height: 20px;
 `
+const StyledButton = styled(Button)`
+  color: ${({ theme }) => theme.black};
+  :hover,
+  :focus {
+    color: ${({ theme }) => theme.black};
+  }
+`
 
 const ContextMenu = ({ items, className }) => {
   const containerRef = useRef()
@@ -40,7 +47,7 @@ const ContextMenu = ({ items, className }) => {
         getPopupContainer={() => containerRef.current}
         arrrow
       >
-        <Button icon={<BarsOutlined />} type='text' shape='circle-outline' />
+        <StyledButton icon={<BarsOutlined />} type='text' shape='circle-outline' />
       </Dropdown>
     </div>
   )

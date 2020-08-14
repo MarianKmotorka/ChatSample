@@ -53,7 +53,7 @@ export const Content = styled.div`
     justify-content: flex-start;
     cursor: pointer;
     font-size: 20px;
-    background: ${({ theme }) => theme.gold};
+    background: ${({ theme }) => theme.marigold};
 
     p {
       margin: 0;
@@ -65,7 +65,7 @@ export const Content = styled.div`
     :hover {
       background: ${({ theme }) => theme.blackCoffee};
       p {
-        color: ${({ theme }) => theme.gold};
+        color: ${({ theme }) => theme.marigold};
       }
     }
 

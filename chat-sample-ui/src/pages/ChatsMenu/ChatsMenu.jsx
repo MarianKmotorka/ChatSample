@@ -8,7 +8,7 @@ import CreateChatForm from './CreateChatForm'
 import Backdrop from '../../components/Backdrop'
 import LoadingSpinner from '../../components/LoadingSpinner'
 import { useOnClickOutside } from '../../utils/useOnClickOutside'
-import { ChatContext } from '../../contextProviders/ChatContextProvider'
+import { ChatContext } from '../../contextProviders'
 
 import {
   Wrapper,
@@ -55,7 +55,7 @@ const ChatsMenu = () => {
     const id = get(x, 'id')
 
     return (
-      <StyledBadge expanded={expanded} key={id} count={unreadMessages} offset={[-5, 5]}>
+      <StyledBadge key={id} count={unreadMessages} offset={[-5, 5]}>
         <ChatButtonLink to={`/chats/${id}`}>
           <p>{expanded ? name : head(name)}</p>
         </ChatButtonLink>
@@ -94,7 +94,7 @@ const ChatsMenu = () => {
             />
           </ButtonsWrapper>
 
-          <ItemsWrapper expanded={expanded}>{items}</ItemsWrapper>
+          <ItemsWrapper>{items}</ItemsWrapper>
         </Wrapper>
       </CSSTransition>
     </AnimationClassesWrapper>

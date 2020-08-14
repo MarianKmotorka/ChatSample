@@ -6,7 +6,7 @@ import TopBar from './TopBar'
 import Chat from '../../components/Chat/Chat'
 import LoadingSpinner from '../../components/LoadingSpinner'
 import ChatDetail from '../../components/Chat/Detail/ChatDetail'
-import { ChatContext } from '../../contextProviders/ChatContextProvider'
+import { ChatContext } from '../../contextProviders'
 import api from '../../services/httpService'
 
 import { Wrapper, InnerWrapper } from './styled/ChatPage.styled'

@@ -57,6 +57,10 @@ export const MessageDate = styled.p`
 
 export const StyledButton = styled(Button)`
   opacity: ${({ opacity = 1 }) => opacity};
+  color: ${({ theme }) => theme.black};
+  :hover {
+    color: ${({ theme }) => theme.black};
+  }
 `
 
 export const DeletedText = styled.i`

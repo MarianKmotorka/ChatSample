@@ -24,6 +24,11 @@ export const ButtonsWrapper = styled.div`
 
 export const StyledButton = styled(Button)`
   transform: scale(1.1);
+  color: ${({ theme }) => theme.black};
+  :hover,
+  :focus {
+    color: ${({ theme }) => theme.black};
+  }
 `
 
 export const ChatNameWrapper = styled.div`

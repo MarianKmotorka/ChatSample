@@ -7,7 +7,7 @@ import useHub from '../utils/useHub'
 import api from '../services/httpService'
 import { API_URL } from '../utils/config.json'
 import { isLoggedIn } from '../services/authService'
-import { ProfileContext } from './ProfileContextProvider'
+import { ProfileContext } from './'
 import newMessageBeep from '../sounds/newMessageBeep.mp3'
 
 const FETCH_MESSAGES_PAGE_SIZE = 50

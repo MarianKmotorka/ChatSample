@@ -23,7 +23,7 @@ export const InputWrapper = styled.div`
     border: none;
     border-radius: 22px;
     background: ${({ theme }) => theme.dimGray};
-    color: ${({ theme }) => theme.white};
+    color: white;
   }
 `
 

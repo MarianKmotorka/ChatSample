@@ -46,10 +46,14 @@ export const Photo = styled.img`
   width: 35px;
 `
 
+export const Text = styled.p`
+  color: ${({ theme }) => theme.black};
+`
+
 export const Header = styled.div`
   color: ${({ theme }) => theme.black};
   font-size: 25px;
-  border-bottom: solid 1.5px ${({ theme }) => theme.darkGold};
+  border-bottom: solid 1.5px ${({ theme }) => theme.black};
   margin: 15px 0;
   width: 85%;
   display: flex;
