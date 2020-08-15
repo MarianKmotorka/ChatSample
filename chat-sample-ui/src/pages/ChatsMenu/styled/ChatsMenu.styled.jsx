@@ -11,6 +11,7 @@ export const Wrapper = styled.div`
   min-width: 80px;
   align-items: center;
   border-right: ${({ theme }) => theme.bg400} 0.5px solid;
+  width: ${({ expanded }) => (expanded ? '300px' : '90px')};
 `
 
 export const ChatButtonLink = styled(NavLink)`
@@ -86,9 +87,6 @@ export const ItemsWrapper = styled.div`
 `
 
 export const AnimationClassesWrapper = styled.div`
-  .wrapper--appear {
-    width: ${({ expanded }) => (expanded ? '300px' : '90px')};
-  }
   .wrapper--enter {
     width: 90px;
   }

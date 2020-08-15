@@ -74,6 +74,7 @@ export const ProfileWrapper = styled.div`
   justify-content: space-between;
   align-items: center;
   border-radius: 30px;
+  height: 30px;
   background: ${({ theme }) => theme.gray};
 `
 

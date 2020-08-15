@@ -8,7 +8,7 @@ export const InnerWrapper = styled.div`
   display: flex;
   align-items: center;
   margin: 3px;
-  max-width: 55%;
+  max-width: 75%;
   justify-content: ${({ isMyMessage }) => (isMyMessage ? 'flex-end' : 'flex-start')};
 
   margin-left: ${({ isMyMessage }) => (isMyMessage ? 'auto' : '5px')};
@@ -18,7 +18,7 @@ export const InnerWrapper = styled.div`
       : 0};
 
   @media only screen and (max-width: ${`${MD}px`}) {
-    max-width: 80%;
+    max-width: 90%;
   }
 `
 

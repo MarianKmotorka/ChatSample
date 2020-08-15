@@ -64,7 +64,7 @@ const ChatsMenu = () => {
   })
 
   return (
-    <AnimationClassesWrapper expanded={expanded}>
+    <AnimationClassesWrapper>
       <CSSTransition
         in={showCreateChatDialog}
         unmountOnExit
@@ -77,7 +77,7 @@ const ChatsMenu = () => {
       </CSSTransition>
 
       <CSSTransition in={expanded} appear timeout={400} classNames='wrapper-'>
-        <Wrapper>
+        <Wrapper expanded={expanded}>
           <ButtonsWrapper>
             {isWiderThanMedium && (
               <StyledButton

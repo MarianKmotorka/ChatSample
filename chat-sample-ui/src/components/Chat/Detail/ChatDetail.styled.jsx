@@ -53,7 +53,7 @@ export const Text = styled.p`
 export const Header = styled.div`
   color: ${({ theme }) => theme.textPrimary};
   font-size: 25px;
-  border-bottom: solid 1.5px ${({ theme }) => theme.textPrimary};
+  border-bottom: solid 1.5px ${({ theme }) => theme.primary};
   margin: 15px 0;
   width: 85%;
   display: flex;
