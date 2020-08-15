@@ -9,7 +9,7 @@ export const Wrapper = styled.div`
   padding-left: 15px;
   padding-right: 15px;
   align-items: center;
-  border-left: ${({ theme }) => theme.bg400} 0.5px solid;
+  border-bottom: ${({ theme }) => theme.bg400} 0.5px solid;
 `
 
 export const ButtonsWrapper = styled.div`

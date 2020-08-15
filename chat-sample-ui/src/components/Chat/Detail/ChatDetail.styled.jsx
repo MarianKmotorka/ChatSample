@@ -5,7 +5,7 @@ import ContextMenu from '../../ContextMenu'
 export const Wrapper = styled.div`
   display: flex;
   background-color: ${({ theme }) => theme.bg200};
-  border-top: ${({ theme }) => theme.bg400} 0.5px solid;
+  border-left: ${({ theme }) => theme.bg400} 0.5px solid;
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;

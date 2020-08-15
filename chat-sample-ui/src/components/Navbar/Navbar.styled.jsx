@@ -14,10 +14,10 @@ export const Wrapper = styled.div`
 export const Logo = styled(Link)`
   font-size: 25px;
   padding: 10px 0 10px 30px;
-  color: ${({ theme }) => theme.blackCoffee};
+  color: ${({ theme }) => theme.black};
 
   :hover {
-    color: ${({ theme }) => theme.blackCoffee};
+    color: ${({ theme }) => theme.black};
   }
 `
 
@@ -32,12 +32,12 @@ export const NavbarLink = styled(Link)`
   text-decoration: none;
   margin: 0 12px 0 20px;
   font-size: 20px;
-  color: ${({ theme }) => theme.blackCoffee};
+  color: ${({ theme }) => theme.black};
   transition: transform 0.2s;
 
   :hover {
     transform: translateY(5px);
-    color: ${({ theme }) => theme.blackCoffee};
+    color: ${({ theme }) => theme.black};
   }
 `
 
@@ -48,14 +48,13 @@ export const ExpandedMenuLink = styled(Link)`
 
   padding: 8px 20px;
   color: ${({ theme }) => theme.bg100};
-  background: ${({ theme }) => theme.textPrimary};
+  background: ${({ theme }) => theme.bg500};
   font-size: 20px;
   text-decoration: none;
   transition: all 0.2s ease;
 
   :hover {
     color: ${({ theme }) => theme.bg100};
-    background: ${({ theme }) => theme.blackCoffee};
     transform: translateX(-5px);
   }
 `
@@ -67,7 +66,7 @@ export const ExpandedLinksWrapper = styled.div`
   flex-direction: column;
   position: absolute;
   z-index: 10;
-  background: ${({ theme }) => theme.blackCoffee};
+  background: ${({ theme }) => theme.bg500};
 `
 
 export const ProfileWrapper = styled.div`

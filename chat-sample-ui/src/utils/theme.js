@@ -3,6 +3,7 @@ export const lightTheme = {
   bg200: '#efefef',
   bg300: '#e4e3e5',
   bg400: '#BFBDC1',
+  bg500: '#7d7d7d',
   textPrimary: '#000000',
   primary: '#DE9E36',
 
@@ -19,7 +20,8 @@ export const darkTheme = {
   bg100: '#18191a',
   bg200: '#242526',
   bg300: '#3a3c3d',
-  bg400: '#303031',
+  bg400: '#404041',
+  bg500: '#acacb7',
   textPrimary: '#efefef',
   primary: '#298cfb',
 

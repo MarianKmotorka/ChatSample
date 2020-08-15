@@ -10,6 +10,7 @@ export const Wrapper = styled.div`
   height: calc(100vh - 55px);
   min-width: 80px;
   align-items: center;
+  border-right: ${({ theme }) => theme.bg400} 0.5px solid;
 `
 
 export const ChatButtonLink = styled(NavLink)`

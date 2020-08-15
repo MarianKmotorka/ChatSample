@@ -7,7 +7,8 @@ import { CSSTransition } from 'react-transition-group'
 import CreateChatForm from './CreateChatForm'
 import Backdrop from '../../components/Backdrop'
 import LoadingSpinner from '../../components/LoadingSpinner'
-import { useOnClickOutside } from '../../utils/useOnClickOutside'
+import useOnClickOutside from '../../utils/useOnClickOutside'
+import useWindowSize, { MD } from '../../utils/useWindowSize'
 import { ChatContext } from '../../contextProviders'
 
 import {
@@ -19,7 +20,6 @@ import {
   ItemsWrapper,
   AnimationClassesWrapper
 } from './styled/ChatsMenu.styled'
-import useWindowSize, { MD } from '../../utils/useWindowSize'
 
 const ChatsMenu = () => {
   const [showCreateChatDialog, setShowCreateChatDialog] = useState(false)
