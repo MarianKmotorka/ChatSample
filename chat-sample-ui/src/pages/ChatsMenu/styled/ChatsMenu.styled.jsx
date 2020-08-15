@@ -34,7 +34,7 @@ export const ChatButtonLink = styled(NavLink)`
 
   &.active {
     color: ${({ theme }) => theme.bg100};
-    background: ${({ theme }) => theme.blue};
+    background: ${({ theme }) => theme.primary};
     p {
       font-weight: 500;
     }
@@ -48,10 +48,6 @@ export const ChatButtonLink = styled(NavLink)`
 export const StyledBadge = styled(Badge)`
   min-width: 92%;
   transition: all 0.3s ease;
-
-  :hover {
-    color: ${({ theme }) => theme.bg100};
-  }
 `
 
 export const StyledButton = styled(Button)`

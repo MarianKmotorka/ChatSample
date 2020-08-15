@@ -58,7 +58,7 @@ export const StyledButton = styled(Button)`
   opacity: ${({ opacity = 1 }) => opacity};
   color: ${({ theme }) => theme.textPrimary};
   :hover {
-    color: ${({ theme }) => theme.textPrimary};
+    color: ${({ theme, hover_color }) => theme[hover_color] || theme.primaryText};
   }
 `
 

@@ -15,7 +15,7 @@ export const Header = styled.div`
 export const ArrowWrapper = styled.div`
   min-height: 100%;
   width: 40px;
-  color: ${({ theme }) => theme.blue};
+  color: ${({ theme }) => theme.primary};
   background: ${({ theme }) => theme.bg100};
   border-top-right-radius: 3px;
   display: flex;

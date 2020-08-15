@@ -51,7 +51,7 @@ const EmojiList = memo(({ onSelect }) => {
 
   return (
     <Popover placement='topLeft' content={tabs} trigger='click' color={theme.bg200}>
-      <StyledButton type='text' icon={<SmileTwoTone />} />
+      <StyledButton type='text' icon={<SmileTwoTone twoToneColor={theme.primary} />} />
     </Popover>
   )
 })

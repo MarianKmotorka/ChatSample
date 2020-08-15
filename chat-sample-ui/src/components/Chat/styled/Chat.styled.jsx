@@ -36,7 +36,7 @@ export const StyledButton = styled(Button)`
   }
   :hover,
   :focus {
-    color: ${({ theme }) => theme.blue};
+    color: ${({ theme, color }) => theme[color]};
   }
 `
 

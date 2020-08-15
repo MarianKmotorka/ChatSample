@@ -48,6 +48,7 @@ const Message = memo(
               shape='circle-outline'
               onClick={() => onDelete(id)}
               opacity={hovered ? 1 : 0}
+              hover_color='red'
             />
           )}
 
@@ -58,6 +59,7 @@ const Message = memo(
               shape='circle-outline'
               onClick={() => onRecover(id)}
               opacity={hovered ? 1 : 0}
+              hover_color='green'
             />
           )}
 

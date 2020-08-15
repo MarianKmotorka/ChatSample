@@ -22,7 +22,7 @@ export const darkTheme = {
   bg300: '#3a3c3d',
   bg400: '#404041',
   bg500: '#acacb7',
-  textPrimary: '#efefef',
+  textPrimary: '#ffffff',
   primary: '#298cfb',
 
   blue: '#298cfb',

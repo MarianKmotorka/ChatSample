@@ -9,7 +9,7 @@ namespace ChatSampleApi.Persistence.Entities
     {
         public Chat(string name)
         {
-            Name = name;
+            Name = name.Trim();
             _participants = new List<ChatUser>();
             _messages = new List<Message>();
         }
@@ -61,7 +61,7 @@ namespace ChatSampleApi.Persistence.Entities
         public void SetName(string name)
         {
             if (!string.IsNullOrWhiteSpace(name))
-                Name = name;
+                Name = name.Trim();
         }
 
         public void RemoveParticipant(ChatUser chatUser) => _participants.Remove(chatUser);

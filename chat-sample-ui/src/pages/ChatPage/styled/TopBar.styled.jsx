@@ -41,14 +41,13 @@ export const ChatNameWrapper = styled.div`
 `
 
 export const ChatName = styled.h2`
-  color: ${({ theme }) => theme.textPrimary};
+  color: ${({ theme }) => theme.primary};
 `
 
 export const ChatNameInput = styled.input`
   color: ${({ theme }) => theme.textPrimary};
-  font-size: 21px;
+  font-size: 20px;
   background: transparent;
-  font-style: italic;
   border: none;
   outline: none;
 `
