@@ -4,6 +4,7 @@ export const AppWrapper = styled.div`
   height: 100%;
   display: flex;
   flex-direction: column;
+  background: ${({ theme }) => theme.bg100};
 `
 
 export const MenuAndContentWrapper = styled.div`

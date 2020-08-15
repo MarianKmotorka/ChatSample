@@ -7,7 +7,7 @@ const Home = () => {
     <Wrapper>
       <CSSTransition appear in timeout={1000} classNames='banner-'>
         <Banner>
-          <HugeText color='marigold'>Welcome</HugeText>
+          <HugeText color='primary'>Welcome</HugeText>
           <HugeText>to the</HugeText>
           <HugeText color='red'>chat</HugeText>
         </Banner>

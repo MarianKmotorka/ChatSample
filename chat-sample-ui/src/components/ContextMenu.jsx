@@ -10,10 +10,10 @@ const Text = styled.p`
   line-height: 20px;
 `
 const StyledButton = styled(Button)`
-  color: ${({ theme }) => theme.black};
+  color: ${({ theme }) => theme.textPrimary};
   :hover,
   :focus {
-    color: ${({ theme }) => theme.black};
+    color: ${({ theme }) => theme.textPrimary};
   }
 `
 

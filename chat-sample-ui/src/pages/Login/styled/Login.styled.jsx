@@ -25,7 +25,7 @@ export const Header = styled.div`
   display: flex;
   justify-content: center;
   padding: 20px 7px 0px 7px;
-  color: ${({ theme }) => theme.white};
+  color: ${({ theme }) => theme.primary};
   background: ${({ theme }) => theme.blackCoffee};
 
   & p {
@@ -53,7 +53,7 @@ export const Content = styled.div`
     justify-content: flex-start;
     cursor: pointer;
     font-size: 20px;
-    background: ${({ theme }) => theme.marigold};
+    background: ${({ theme }) => theme.primary};
 
     p {
       margin: 0;
@@ -65,7 +65,7 @@ export const Content = styled.div`
     :hover {
       background: ${({ theme }) => theme.blackCoffee};
       p {
-        color: ${({ theme }) => theme.marigold};
+        color: ${({ theme }) => theme.primary};
       }
     }
 

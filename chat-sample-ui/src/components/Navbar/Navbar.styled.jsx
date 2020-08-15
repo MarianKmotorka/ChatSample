@@ -4,7 +4,7 @@ import { Button } from 'antd'
 
 export const Wrapper = styled.div`
   display: flex;
-  background: ${({ theme }) => theme.marigold};
+  background: ${({ theme }) => theme.primary};
   width: 100%;
   height: 55px;
   align-items: center;
@@ -47,14 +47,14 @@ export const ExpandedMenuLink = styled(Link)`
   justify-content: flex-end;
 
   padding: 8px 20px;
-  color: ${({ theme }) => theme.white};
-  background: ${({ theme }) => theme.black};
+  color: ${({ theme }) => theme.bg100};
+  background: ${({ theme }) => theme.textPrimary};
   font-size: 20px;
   text-decoration: none;
   transition: all 0.2s ease;
 
   :hover {
-    color: ${({ theme }) => theme.white};
+    color: ${({ theme }) => theme.bg100};
     background: ${({ theme }) => theme.blackCoffee};
     transform: translateX(-5px);
   }
@@ -75,7 +75,7 @@ export const ProfileWrapper = styled.div`
   justify-content: space-between;
   align-items: center;
   border-radius: 30px;
-  background: ${({ theme }) => theme.blackCoffee};
+  background: ${({ theme }) => theme.gray};
 `
 
 export const UserName = styled.p`

@@ -1,9 +1,17 @@
 import React, { useEffect } from 'react'
 import { useLocation } from 'react-router-dom'
 import queryString from 'query-string'
+import styled from 'styled-components'
+
 import config from '../../utils/config.json'
 import { login } from '../../services/authService'
 import api from '../../services/httpService'
+
+const Text = styled.p`
+  color: ${({ theme }) => theme.textPrimary};
+  padding: 20px;
+  font-size: 16px;
+`
 
 const GoogleLoginCallback = () => {
   const { search } = useLocation()
@@ -19,7 +27,7 @@ const GoogleLoginCallback = () => {
     sendCodeToServer()
   }, [code])
 
-  return <div>Authenticating...</div>
+  return <Text>Authenticating...</Text>
 }
 
 export default GoogleLoginCallback

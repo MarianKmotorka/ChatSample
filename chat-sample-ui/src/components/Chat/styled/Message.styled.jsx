@@ -7,9 +7,8 @@ import { Button } from 'antd'
 export const InnerWrapper = styled.div`
   display: flex;
   align-items: center;
-  margin: 1px;
+  margin: 3px;
   max-width: 55%;
-  color: ${({ theme }) => theme.black};
   justify-content: ${({ isMyMessage }) => (isMyMessage ? 'flex-end' : 'flex-start')};
 
   margin-left: ${({ isMyMessage }) => (isMyMessage ? 'auto' : '5px')};
@@ -32,13 +31,13 @@ export const MessageInfo = styled.div`
 `
 
 export const Text = styled.p`
-  font-size: 17px;
+  font-size: 15px;
   line-height: 20px;
-  padding: 4px 12px;
-  border: 1px grey solid;
+  padding: 6px 12px;
   word-break: break-word;
   border-radius: ${props => getMessageBorderRadius(props)};
-  background: ${({ isMyMessage, theme }) => (isMyMessage ? theme.gold : theme.white)};
+  color: ${({ theme }) => theme.textPrimary};
+  background: ${({ isMyMessage, theme }) => (isMyMessage ? theme.primary : theme.bg300)};
 `
 
 export const Avatar = styled.img`
@@ -57,14 +56,14 @@ export const MessageDate = styled.p`
 
 export const StyledButton = styled(Button)`
   opacity: ${({ opacity = 1 }) => opacity};
-  color: ${({ theme }) => theme.black};
+  color: ${({ theme }) => theme.textPrimary};
   :hover {
-    color: ${({ theme }) => theme.black};
+    color: ${({ theme }) => theme.textPrimary};
   }
 `
 
 export const DeletedText = styled.i`
-  color: ${({ theme }) => theme.dimGray};
+  color: ${({ theme }) => theme.textPrimary};
   margin: 0;
   padding: 0;
 `

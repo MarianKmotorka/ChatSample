@@ -34,7 +34,7 @@ const Login = () => {
         <Content>
           <button onClick={onGoogleLoginClick}>
             <img src={googleIcon} alt='' />
-            <p>Google Login</p>
+            <p>Login with Google</p>
           </button>
         </Content>
       </Card>

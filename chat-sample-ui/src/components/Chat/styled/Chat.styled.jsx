@@ -11,7 +11,7 @@ export const Wrapper = styled.div`
 export const InputWrapper = styled.div`
   display: flex;
   height: 56px;
-  background: ${({ theme }) => theme.lightGray};
+  background: ${({ theme }) => theme.bg100};
   align-items: center;
   padding: 10px;
 
@@ -22,7 +22,7 @@ export const InputWrapper = styled.div`
     outline: none;
     border: none;
     border-radius: 22px;
-    background: ${({ theme }) => theme.dimGray};
+    background: ${({ theme }) => theme.bg400};
     color: white;
   }
 `
@@ -43,7 +43,7 @@ export const StyledButton = styled(Button)`
 export const MessagesWrapper = styled.div`
   overflow: auto;
   flex: 1;
-  background: ${({ theme }) => theme.white};
+  background: ${({ theme }) => theme.bg100};
   padding-top: 10px;
   padding-bottom: 6px;
 `

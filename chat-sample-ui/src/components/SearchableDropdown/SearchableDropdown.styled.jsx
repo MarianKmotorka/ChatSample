@@ -9,15 +9,14 @@ export const Header = styled.div`
   display: flex;
   height: 40px;
   align-items: center;
-  border: 1.5px solid ${({ theme }) => theme.blackCoffee};
   border-radius: 3px;
 `
 
 export const ArrowWrapper = styled.div`
   min-height: 100%;
   width: 40px;
-  color: ${({ theme }) => theme.red};
-  background: ${({ theme }) => theme.white};
+  color: ${({ theme }) => theme.blue};
+  background: ${({ theme }) => theme.bg100};
   border-top-right-radius: 3px;
   display: flex;
   align-items: center;
@@ -39,9 +38,9 @@ export const Expander = styled.div`
 
   width: 100%;
   font-weight: 300;
-  color: ${({ theme }) => theme.black};
+  color: ${({ theme }) => theme.textPrimary};
 
-  background: ${({ theme }) => theme.white};
+  background: ${({ theme }) => theme.bg100};
 `
 
 export const Item = styled.div`
@@ -51,7 +50,7 @@ export const Item = styled.div`
   font-size: 18px;
 
   &:hover {
-    background: ${({ theme }) => theme.lightGray};
+    background: ${({ theme }) => theme.bg300};
   }
 `
 
@@ -77,7 +76,7 @@ export const Input = styled.input`
   outline: none;
   border: none;
   border-top-left-radius: 3px;
-  background: ${({ theme }) => theme.white};
+  background: ${({ theme }) => theme.bg100};
 
   &:focus {
     outline: none;

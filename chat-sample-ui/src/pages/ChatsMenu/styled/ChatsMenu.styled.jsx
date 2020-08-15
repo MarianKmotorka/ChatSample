@@ -5,7 +5,7 @@ import { Badge, Button } from 'antd'
 export const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
-  background: ${({ theme }) => theme.shadeWhite};
+  background: ${({ theme }) => theme.bg200};
   padding: 30px 0;
   height: calc(100vh - 55px);
   min-width: 80px;
@@ -15,25 +15,27 @@ export const Wrapper = styled.div`
 export const ChatButtonLink = styled(NavLink)`
   height: 100%;
   min-height: 55px;
-  background: ${({ theme }) => theme.lightGray};
-  color: ${({ theme }) => theme.black};
+  background: ${({ theme }) => theme.bg100};
+  color: ${({ theme }) => theme.textPrimary};
 
   text-decoration: none;
   font-size: 18px;
-  font-weight: 300;
 
   display: flex;
   justify-content: center;
   align-items: center;
 
   :hover {
-    color: ${({ theme }) => theme.black};
-    background: ${({ theme }) => theme.dimGray};
+    color: ${({ theme }) => theme.textPrimary};
+    background: ${({ theme }) => theme.bg300};
   }
 
   &.active {
-    color: ${({ theme }) => theme.white};
+    color: ${({ theme }) => theme.bg100};
     background: ${({ theme }) => theme.blue};
+    p {
+      font-weight: 500;
+    }
   }
 
   > p {
@@ -46,7 +48,7 @@ export const StyledBadge = styled(Badge)`
   transition: all 0.3s ease;
 
   :hover {
-    color: ${({ theme }) => theme.white};
+    color: ${({ theme }) => theme.bg100};
   }
 `
 

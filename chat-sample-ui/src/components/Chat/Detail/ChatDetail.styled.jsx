@@ -4,8 +4,8 @@ import ContextMenu from '../../ContextMenu'
 
 export const Wrapper = styled.div`
   display: flex;
-  background-color: ${({ theme }) => theme.shadeWhite};
-  border-top: ${({ theme }) => theme.gray} 0.5px solid;
+  background-color: ${({ theme }) => theme.bg200};
+  border-top: ${({ theme }) => theme.bg400} 0.5px solid;
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
@@ -47,13 +47,13 @@ export const Photo = styled.img`
 `
 
 export const Text = styled.p`
-  color: ${({ theme }) => theme.black};
+  color: ${({ theme }) => theme.textPrimary};
 `
 
 export const Header = styled.div`
-  color: ${({ theme }) => theme.black};
+  color: ${({ theme }) => theme.textPrimary};
   font-size: 25px;
-  border-bottom: solid 1.5px ${({ theme }) => theme.black};
+  border-bottom: solid 1.5px ${({ theme }) => theme.textPrimary};
   margin: 15px 0;
   width: 85%;
   display: flex;
