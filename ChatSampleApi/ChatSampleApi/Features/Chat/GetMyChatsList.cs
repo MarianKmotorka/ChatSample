@@ -29,6 +29,7 @@ namespace ChatSampleApi.Features.Chat
             {
                 var chats = await _db.Chats
                     .Where(x => x.Participants.Any(p => p.UserId == request.UserId))
+                    .OrderByDescending(x => x.Messages.Select(m => m.SentDate))
                     .Select(x => new ChatDto
                     {
                         Id = x.Id,

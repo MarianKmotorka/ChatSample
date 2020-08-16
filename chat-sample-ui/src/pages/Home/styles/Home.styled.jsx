@@ -1,4 +1,5 @@
 import styled from 'styled-components'
+import { XS, SM } from '../../../utils/useWindowSize'
 import office from '../../../assets/img/office.jpg'
 
 export const Wrapper = styled.div`
@@ -22,12 +23,19 @@ export const Banner = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-
   background-color: ${({ theme }) => theme.blackCoffee};
+
+  @media only screen and (max-width: ${`${SM}px`}) {
+    width: 90%;
+  }
 `
 
 export const HugeText = styled.p`
   font-size: 4rem;
   color: ${({ theme, color }) => theme[color || 'white']};
   margin: 0;
+
+  @media only screen and (max-width: ${`${XS}px`}) {
+    font-size: 2.5em;
+  }
 `

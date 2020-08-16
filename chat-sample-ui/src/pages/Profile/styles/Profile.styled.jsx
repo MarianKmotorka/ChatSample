@@ -1,26 +1,29 @@
 import styled from 'styled-components'
+import { Button } from 'antd'
+import { SM } from '../../../utils/useWindowSize'
 
 export const Wrapper = styled.div`
-  width: 80%;
+  width: 60%;
   height: 80%;
-  padding: 30px;
+  padding: 15px;
   background: ${({ theme }) => (theme.isDarkTheme ? theme.lightGray : theme.bg200)};
   border-radius: 40px;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
-  position: relative;
+
+  @media only screen and (max-width: ${`${SM}px`}) {
+    width: 90%;
+  }
 `
 
 export const Photo = styled.img`
-  width: 40%;
+  height: 100%;
   border-radius: 50%;
   border: 2px solid ${({ theme }) => theme.white};
-  min-width: 150px;
-  max-width: 250px;
   position: absolute;
-  top: 15%;
+  top: 50%;
 `
 
 export const Hero = styled.div`
@@ -28,6 +31,11 @@ export const Hero = styled.div`
   width: 100%;
   border-radius: 40px 40px 0 0;
   background: ${({ theme }) => theme.primary};
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  position: relative;
 `
 
 export const BottomHero = styled.div`
@@ -41,4 +49,11 @@ export const BottomHero = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+`
+
+export const StyledButton = styled(Button)`
+  transform: scale(1.5);
+  position: absolute;
+  right: 30px;
+  top: 30px;
 `
