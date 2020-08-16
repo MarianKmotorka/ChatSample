@@ -13,7 +13,10 @@ export const lightTheme = {
   black: '#010101',
   white: '#ffffff',
   blackCoffee: '#37323E',
-  gray: '#424242'
+  gray: '#424242',
+  lightGray: '#ceced9',
+
+  isDarkTheme: false
 }
 
 export const darkTheme = {
@@ -31,5 +34,8 @@ export const darkTheme = {
   black: '#010101',
   white: '#ffffff',
   blackCoffee: '#37323E',
-  gray: '#424242'
+  gray: '#424242',
+  lightGray: '#ceced9',
+
+  isDarkTheme: true
 }

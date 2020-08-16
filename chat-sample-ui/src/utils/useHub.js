@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
-import { getJwt, isLoggedIn } from '../services/authService'
 import * as signalR from '@microsoft/signalr'
+import { getJwt, isLoggedIn } from '../services/authService'
 
 const useHub = url => {
   const [hubConnection, setConnection] = useState()
@@ -21,10 +21,7 @@ const useHub = url => {
         } else {
           setDisconnected('temporary')
 
-          timeoutId = setTimeout(
-            () => tryToConnect(connection, timeout * 2),
-            timeout
-          )
+          timeoutId = setTimeout(() => tryToConnect(connection, timeout * 2), timeout)
         }
       }
     }

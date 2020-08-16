@@ -1,5 +1,6 @@
 import styled from 'styled-components'
 import background from '../../../assets/img/background.jpg'
+import { MD } from '../../../utils/useWindowSize'
 
 export const Wrapper = styled.div`
   height: 100%;
@@ -10,6 +11,10 @@ export const Wrapper = styled.div`
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
+
+  @media only screen and (max-width: ${`${MD}px`}) {
+    justify-content: center;
+  }
 `
 
 export const Card = styled.div`
@@ -18,6 +23,12 @@ export const Card = styled.div`
   display: flex;
   flex-direction: column;
   background: rgba(0, 0, 0, 0.6);
+
+  @media only screen and (max-width: ${`${MD}px`}) {
+    width: 90%;
+    height: 40%;
+    border-radius: 10px;
+  }
 `
 
 export const Header = styled.div`
@@ -31,6 +42,10 @@ export const Header = styled.div`
   & p {
     font-weight: 500;
     margin-bottom: 13px;
+  }
+
+  @media only screen and (max-width: ${`${MD}px`}) {
+    border-radius: 10px;
   }
 `
 

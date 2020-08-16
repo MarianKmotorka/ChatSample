@@ -50,5 +50,6 @@ export const GlobalStyle = createGlobalStyle`
   #portal{
     width:0;
     height:0;
+    z-index:1000;
   }
 `

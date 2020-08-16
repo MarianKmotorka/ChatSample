@@ -76,6 +76,7 @@ export const ProfileWrapper = styled.div`
   border-radius: 30px;
   height: 30px;
   background: ${({ theme }) => theme.gray};
+  cursor: pointer;
 `
 
 export const UserName = styled.p`

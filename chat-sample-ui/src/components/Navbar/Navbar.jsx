@@ -1,5 +1,6 @@
 import React, { useContext, useState } from 'react'
-import { get } from 'lodash'
+import { get, trimEnd } from 'lodash'
+import { useHistory } from 'react-router-dom'
 import { BgColorsOutlined } from '@ant-design/icons'
 
 import { isLoggedIn } from '../../services/authService'
@@ -23,11 +24,14 @@ const Navbar = () => {
   const { profile } = useContext(ProfileContext)
   const { toggleTheme } = useContext(ThemeContext)
   const { width } = useWindowSize()
+  const history = useHistory()
   const [linksExpanded, setLinksExpanded] = useState(false)
+
+  const getProfilePath = () => trimEnd(history.location.pathname, '/') + '/profile'
 
   const links = (
     <Links>
-      <ProfileWrapper>
+      <ProfileWrapper onClick={() => history.push(getProfilePath())}>
         <Avatar referrerPolicy='no-referrer' src={get(profile, 'picture')} />
         <UserName>{get(profile, 'name')}</UserName>
       </ProfileWrapper>
@@ -46,6 +50,7 @@ const Navbar = () => {
       {linksExpanded && (
         <ExpandedLinksWrapper>
           <ExpandedMenuLink to='/logout'>Logout</ExpandedMenuLink>
+          <ExpandedMenuLink to={getProfilePath()}>Profile</ExpandedMenuLink>
         </ExpandedLinksWrapper>
       )}
     </>

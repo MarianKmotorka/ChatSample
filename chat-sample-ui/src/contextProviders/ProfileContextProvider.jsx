@@ -16,11 +16,7 @@ const ProfileContextProvider = ({ children }) => {
     isLoggedIn && fetch()
   }, [])
 
-  return (
-    <ProfileContext.Provider value={{ profile }}>
-      {children}
-    </ProfileContext.Provider>
-  )
+  return <ProfileContext.Provider value={{ profile }}>{children}</ProfileContext.Provider>
 }
 
 export default ProfileContextProvider
