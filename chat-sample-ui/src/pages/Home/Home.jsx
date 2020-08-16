@@ -1,6 +1,8 @@
 import React from 'react'
 import { CSSTransition } from 'react-transition-group'
+
 import { Wrapper, Banner, HugeText } from './styled/Home.styled'
+import './styled/Home.animations.css'
 
 const Home = () => {
   return (

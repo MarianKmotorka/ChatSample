@@ -17,9 +17,9 @@ import {
   StyledButton,
   StyledBadge,
   ButtonsWrapper,
-  ItemsWrapper,
-  AnimationClassesWrapper
+  ItemsWrapper
 } from './styled/ChatsMenu.styled'
+import './styled/ChatsMenu.animations.css'
 
 const ChatsMenu = () => {
   const [showCreateChatDialog, setShowCreateChatDialog] = useState(false)
@@ -64,7 +64,7 @@ const ChatsMenu = () => {
   })
 
   return (
-    <AnimationClassesWrapper>
+    <>
       <CSSTransition
         in={showCreateChatDialog}
         unmountOnExit
@@ -97,7 +97,7 @@ const ChatsMenu = () => {
           <ItemsWrapper>{items}</ItemsWrapper>
         </Wrapper>
       </CSSTransition>
-    </AnimationClassesWrapper>
+    </>
   )
 }
 
