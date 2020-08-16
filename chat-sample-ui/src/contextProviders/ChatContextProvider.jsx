@@ -1,5 +1,5 @@
 import React, { useState, useEffect, createContext, useCallback, useContext } from 'react'
-import { get, filter, map } from 'lodash'
+import { get, filter, map, find } from 'lodash'
 import useSound from 'use-sound'
 import { useHistory } from 'react-router-dom'
 
@@ -31,6 +31,12 @@ const ChatContextProvider = ({ children }) => {
 
   const recieveMessage = useCallback(
     (chatId, message) => {
+      setChats(prev => {
+        var chat = find(prev, ['id', chatId])
+        var otherChats = filter(prev, x => x.id !== chatId)
+        return [chat, ...otherChats]
+      })
+
       if (chatId !== currentChatId) {
         setChats(prev =>
           map(prev, x =>
