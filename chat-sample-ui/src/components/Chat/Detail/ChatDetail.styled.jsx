@@ -39,6 +39,9 @@ export const StyledMenu = styled(ContextMenu)`
 export const StyledBadge = styled(Badge)`
   display: block;
   margin: 8px 13px 8px 0;
+  .ant-badge-dot {
+    box-shadow: none;
+  }
 `
 
 export const Photo = styled.img`

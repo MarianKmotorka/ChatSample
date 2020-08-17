@@ -48,6 +48,10 @@ export const ChatButtonLink = styled(NavLink)`
 export const StyledBadge = styled(Badge)`
   min-width: 92%;
   transition: all 0.3s ease;
+  .ant-badge-count {
+    background-color: ${({ theme }) => theme.primary};
+    box-shadow: none;
+  }
 `
 
 export const StyledButton = styled(Button)`
