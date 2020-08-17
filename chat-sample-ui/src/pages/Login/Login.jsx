@@ -1,13 +1,10 @@
 import React from 'react'
-import { isLoggedIn } from '../../services/authService'
-import { Wrapper, Card, Header, Content } from './styled/Login.styled'
 import config from '../../utils/config.json'
 import googleIcon from '../../assets/img/google.png'
-import { useHistory } from 'react-router-dom'
+import { isLoggedIn } from '../../services/authService'
+import { Wrapper, Card, Header, Content } from './styled/Login.styled'
 
-const Login = () => {
-  const history = useHistory()
-
+const Login = ({ location, history }) => {
   if (isLoggedIn) history.replace('/')
 
   const onGoogleLoginClick = () => {
@@ -17,7 +14,7 @@ const Login = () => {
       'response_type=code',
       'scope=openid profile email',
       'access_type=offline',
-      'state=myCustomState'
+      `state=${location?.state?.from || ''}`
     ].join('&')
 
     const url = 'https://accounts.google.com/o/oauth2/v2/auth?' + queryParams

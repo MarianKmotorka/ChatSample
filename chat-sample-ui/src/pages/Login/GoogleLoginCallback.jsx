@@ -15,17 +15,17 @@ const Text = styled.p`
 
 const GoogleLoginCallback = () => {
   const { search } = useLocation()
-  const { code } = queryString.parse(search)
+  const { code, state: returnUrl } = queryString.parse(search)
 
   useEffect(() => {
     const sendCodeToServer = async () => {
       const response = await api.get(`${config.SERVER_AUTH_CALLBACK_URL}?code=${code}`)
       login(response.data)
-      window.location = '/'
+      window.location = returnUrl || '/'
     }
 
     sendCodeToServer()
-  }, [code])
+  }, [code, returnUrl])
 
   return <Text>Authenticating...</Text>
 }

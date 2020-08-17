@@ -49,6 +49,7 @@ namespace ChatSampleApi.Features.Chat
                     IsOnline = p.User.IsOnline,
                     ChatRole = p.Role
                 })
+                .OrderBy(x => x.Name)
                 .ToList();
             }
         }
