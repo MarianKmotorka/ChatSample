@@ -57,7 +57,7 @@ export const Item = styled.div`
 export const LoadingItem = styled(Item)`
   height: 80px;
   justify-content: center;
-  color: blue;
+  color: ${({ theme }) => theme.primary};
 
   &:hover {
     background-color: transparent;
@@ -69,13 +69,14 @@ export const Error = styled.p`
 `
 
 export const Input = styled.input`
-  padding: 5px;
+  padding: 5px 10px;
   font-size: 18px;
   width: 100%;
   height: 100%;
   outline: none;
   border: none;
   border-top-left-radius: 3px;
+  color: ${({ theme }) => theme.textPrimary};
   background: ${({ theme }) => theme.bg100};
 
   &:focus {

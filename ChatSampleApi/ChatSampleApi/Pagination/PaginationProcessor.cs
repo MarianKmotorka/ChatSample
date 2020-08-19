@@ -19,8 +19,7 @@ namespace ChatSampleApi.Pagination
             CancellationToken cancellationToken
         )
         {
-            var resultQuery = data
-                .Select(mapper);
+            var resultQuery = data.Select(mapper);
 
             if (ascending) resultQuery = resultQuery.OrderBy(orderBy);
             else resultQuery = resultQuery.OrderByDescending(orderBy);
