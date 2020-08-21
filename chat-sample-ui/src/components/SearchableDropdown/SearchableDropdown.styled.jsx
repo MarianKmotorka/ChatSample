@@ -28,6 +28,8 @@ export const Expander = styled.div`
   flex-direction: column;
   justify-content: space-between;
   z-index: 10;
+  max-height: 350px;
+  overflow-y: auto;
 
   position: absolute;
   top: 100%;
@@ -37,7 +39,6 @@ export const Expander = styled.div`
   border-bottom-left-radius: 3px;
 
   width: 100%;
-  font-weight: 300;
   color: ${({ theme }) => theme.textPrimary};
 
   background: ${({ theme }) => theme.bg100};

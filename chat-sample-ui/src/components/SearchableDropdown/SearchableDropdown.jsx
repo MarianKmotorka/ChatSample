@@ -1,7 +1,8 @@
 import React, { useEffect, useState, useRef } from 'react'
 import PropTypes from 'prop-types'
 import { map, filter, includes, toLower, identity } from 'lodash'
-import { useOnClickOutside } from '../../utils/useOnClickOutside'
+import useOnClickOutside from '../../utils/useOnClickOutside'
+import useDebounce from '../../utils/useDebounce'
 import api from '../../services/httpService'
 import {
   Expander,
@@ -30,6 +31,7 @@ const SearchableDropdown = ({
   const wrapperRef = useRef()
   const inputRef = useRef()
 
+  const debouncedText = useDebounce(text, initialOptions ? 0 : 500)
   useOnClickOutside(wrapperRef, () => setExpanded(false))
 
   useEffect(() => {
@@ -37,7 +39,7 @@ const SearchableDropdown = ({
 
     const setOptionsFromProps = () => {
       const filtered = filter(initialOptions, x =>
-        includes(toLower(x.value), toLower(text))
+        includes(toLower(x[displayProperty]), toLower(debouncedText))
       )
       setOptions(filtered)
     }
@@ -47,7 +49,7 @@ const SearchableDropdown = ({
       const { url, params, formatter = identity } = fetchOptions
 
       setLoading(true)
-      const { data } = await api.get(`${url}?text=${text}`, { params })
+      const { data } = await api.get(`${url}?text=${debouncedText}`, { params })
       setLoading(false)
 
       const formatted = map(data, formatter)
@@ -56,7 +58,7 @@ const SearchableDropdown = ({
 
     if (initialOptions) setOptionsFromProps()
     else setOptionsFromApi()
-  }, [text, initialOptions, expanded, fetchOptions])
+  }, [debouncedText, initialOptions, expanded, fetchOptions, displayProperty])
 
   const toogle = () => {
     !expanded && inputRef && inputRef.current && inputRef.current.focus()
