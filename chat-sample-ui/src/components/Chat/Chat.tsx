@@ -1,8 +1,7 @@
-import React, { useState, useRef, useCallback } from 'react'
-import PropTypes from 'prop-types'
+import React, { useState, useRef, useCallback, FormEvent } from 'react'
 import { map, first } from 'lodash'
 
-import Message from './Message'
+import Message, { Message as MessageType } from './Message'
 import EmojiListButton from './EmojiListButton'
 import MessagesLoadingSpinner from './MessagesLoadingSpinner'
 import { getMessageShape } from './utils'
@@ -15,23 +14,34 @@ import {
 } from './styled/Chat.styled'
 import { useFocusWhenMounted, useScrollTo } from './hooks'
 
-const Chat = ({
+interface Props {
+  messages: MessageType[]
+  scrollToMessageId: string
+  canLoadMore: boolean
+  moreMessagesFetching: boolean
+  onLoadMore: () => void
+  onMessageSent: (text: string) => void
+  onDeleteMessage: (id: string) => void
+  onRecoverMessage: (id: string) => void
+}
+
+const Chat: React.FC<Props> = ({
   messages,
-  onMessageSent,
-  onLoadMore,
-  scrollToMessageId,
-  onDeleteMessage,
-  onRecoverMessage,
   canLoadMore,
-  moreMessagesFetching
+  scrollToMessageId,
+  moreMessagesFetching,
+  onLoadMore,
+  onMessageSent,
+  onDeleteMessage,
+  onRecoverMessage
 }) => {
   const [text, setText] = useState('')
-  const scrollToMessageRef = useRef()
-  const inputRef = useRef()
+  const scrollToMessageRef = useRef<HTMLDivElement>(null)
+  const inputRef = useRef<HTMLInputElement>(null)
   useFocusWhenMounted(inputRef)
   useScrollTo(scrollToMessageRef, [messages])
 
-  const observer = useRef()
+  const observer = useRef<IntersectionObserver>()
   const topMessageRef = useCallback(
     node => {
       if (observer.current) observer.current.disconnect()
@@ -45,13 +55,13 @@ const Chat = ({
     [onLoadMore, canLoadMore]
   )
 
-  const onMessageSentInternal = e => {
-    e.preventDefault()
+  const onMessageSentInternal = (e: FormEvent<HTMLFormElement> | null) => {
+    e?.preventDefault()
     setText('')
     text && onMessageSent(text)
   }
 
-  const renderMessage = message => {
+  const renderMessage = (message: MessageType) => {
     const ref =
       scrollToMessageId === message.id
         ? scrollToMessageRef
@@ -77,6 +87,7 @@ const Chat = ({
         {moreMessagesFetching && <MessagesLoadingSpinner />}
         {map(messages, renderMessage)}
       </MessagesWrapper>
+
       <form onSubmit={onMessageSentInternal}>
         <InputWrapper>
           <EmojiListButton
@@ -94,31 +105,12 @@ const Chat = ({
             shape='round'
             color='primary'
             icon={<i className='fas fa-paper-plane fa-5x' />}
-            onClick={onMessageSentInternal}
+            onClick={_ => onMessageSentInternal(null)}
           />
         </InputWrapper>
       </form>
     </Wrapper>
   )
-}
-
-Chat.propTypes = {
-  messages: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.string.isRequired,
-      text: PropTypes.string.isRequired,
-      senderName: PropTypes.string.isRequired,
-      isMyMessage: PropTypes.bool.isRequired,
-      senderPicture: PropTypes.string.isRequired
-    })
-  ).isRequired,
-  onMessageSent: PropTypes.func.isRequired,
-  onLoadMore: PropTypes.func.isRequired,
-  onDeleteMessage: PropTypes.func.isRequired,
-  onRecoverMessage: PropTypes.func.isRequired,
-  canLoadMore: PropTypes.bool.isRequired,
-  moreMessagesFetching: PropTypes.bool.isRequired,
-  scrollToMessageId: PropTypes.string
 }
 
 export default Chat

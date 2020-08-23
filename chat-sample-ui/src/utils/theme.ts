@@ -20,6 +20,7 @@ declare module 'styled-components' {
     lightGray: string
 
     isDarkTheme: boolean
+    [key: string]: any
   }
 }
 

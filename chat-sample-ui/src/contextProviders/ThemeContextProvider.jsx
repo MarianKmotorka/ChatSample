@@ -1,7 +1,7 @@
 import React, { createContext, useState, useEffect } from 'react'
 import { ThemeProvider as StyledComponentsThemeProvider } from 'styled-components'
 import { invert } from 'lodash'
-import { lightTheme, darkTheme } from '../utils/theme.ts'
+import { lightTheme, darkTheme } from '../utils/theme'
 
 export const ThemeContext = createContext()
 export const ThemeEnum = {

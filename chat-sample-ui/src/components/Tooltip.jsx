@@ -1,7 +1,13 @@
 import React, { useRef } from 'react'
 import { Tooltip as TooltipAntd } from 'antd'
 
-const Tooltip = ({ children, text, placement, getPopupContainer, ...rest }) => {
+const Tooltip = ({
+  children,
+  text,
+  placement,
+  getPopupContainer = undefined,
+  ...rest
+}) => {
   const containerRef = useRef()
 
   return (

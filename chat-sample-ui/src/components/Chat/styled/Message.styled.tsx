@@ -1,10 +1,15 @@
 import styled from 'styled-components'
-import { getMessageBorderRadius } from '../utils'
-import { MessageShape } from '../Message'
-import { MD } from '../../../utils/useWindowSize'
 import { Button } from 'antd'
+import { getMessageBorderRadius } from '../utils'
+import { MD } from '../../../utils/useWindowSize'
+import { MessageShape } from '../Message'
 
-export const InnerWrapper = styled.div`
+interface Props {
+  isMyMessage: boolean
+  shape: MessageShape
+}
+
+export const InnerWrapper = styled.div<Props>`
   display: flex;
   align-items: center;
   margin: 3px;
@@ -13,9 +18,7 @@ export const InnerWrapper = styled.div`
 
   margin-left: ${({ isMyMessage }) => (isMyMessage ? 'auto' : '5px')};
   margin-top: ${({ shape, isMyMessage }) =>
-    (shape === MessageShape.TOP || shape === MessageShape.STANDALONE) && !isMyMessage
-      ? '40px'
-      : 0};
+    (shape === 'top' || shape === 'standalone') && !isMyMessage ? '40px' : 0};
 
   @media only screen and (max-width: ${`${MD}px`}) {
     max-width: 90%;
@@ -30,17 +33,17 @@ export const MessageInfo = styled.div`
   font-size: 17px;
 `
 
-export const Text = styled.p`
+export const Text = styled.p<Props>`
   font-size: 15px;
   line-height: 20px;
-  padding: 6px 12px;
+  padding: 6px 17px;
   word-break: break-word;
-  border-radius: ${props => getMessageBorderRadius(props)};
+  border-radius: ${props => getMessageBorderRadius(props.isMyMessage, props.shape)};
   color: ${({ theme }) => theme.textPrimary};
   background: ${({ isMyMessage, theme }) => (isMyMessage ? theme.primary : theme.bg300)};
 `
 
-export const Avatar = styled.img`
+export const Avatar = styled.img<{ isHidden: boolean }>`
   margin: 0 5px;
   width: 30px;
   height: 30px;
@@ -54,11 +57,11 @@ export const MessageDate = styled.p`
   margin-left: auto;
 `
 
-export const StyledButton = styled(Button)`
+export const StyledButton = styled(Button)<{ hover_color: string; opacity: number }>`
   opacity: ${({ opacity = 1 }) => opacity};
   color: ${({ theme }) => theme.textPrimary};
   :hover {
-    color: ${({ theme, hover_color }) => theme[hover_color] || theme.primaryText};
+    color: ${({ theme, hover_color }) => theme[hover_color] || theme.textPrimary};
   }
 `
 

@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 import { Button, Badge } from 'antd'
-import ContextMenu from '../../ContextMenu'
+import ContextMenu from '../../ContextMenu/ContextMenu'
 
 export const Wrapper = styled.div`
   display: flex;

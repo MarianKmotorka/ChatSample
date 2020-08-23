@@ -10,7 +10,7 @@ import { isLoggedIn } from '../services/authService'
 import { ProfileContext } from './'
 import newMessageBeep from '../sounds/newMessageBeep.mp3'
 
-const FETCH_MESSAGES_PAGE_SIZE = 50
+const FETCH_MESSAGES_PAGE_SIZE = 25
 export const ChatContext = createContext()
 
 const ChatContextProvider = ({ children }) => {
