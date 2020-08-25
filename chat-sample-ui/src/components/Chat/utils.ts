@@ -1,5 +1,6 @@
-import { MessageShape, Message } from './Message'
+import { MessageShape } from './Message'
 import { indexOf } from 'lodash'
+import { IMessageDto } from '../../apiContracts/chatContracts'
 
 const BORDER_RADIUS = 25
 const NO_RADIUS = 5
@@ -33,7 +34,7 @@ export const getMessageBorderRadius = (isMyMessage: boolean, shape: MessageShape
   return `${topLeft}px ${topRight}px ${bottomRight}px ${bottomLeft}px`
 }
 
-export const getMessageShape = (allMessages: Message[], message: Message) => {
+export const getMessageShape = (allMessages: IMessageDto[], message: IMessageDto) => {
   var lastIndex = allMessages.length - 1
 
   var messageIndex = indexOf(allMessages, message)

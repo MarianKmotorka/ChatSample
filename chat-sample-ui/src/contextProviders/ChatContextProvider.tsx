@@ -7,21 +7,38 @@ import useHub from '../utils/useHub'
 import api from '../services/httpService'
 import { API_URL } from '../utils/config.json'
 import { isLoggedIn } from '../services/authService'
+import { IChatDto, IMessageDto, IParticipantDto } from '../apiContracts/chatContracts'
 import { ProfileContext } from './'
-import newMessageBeep from '../sounds/newMessageBeep.mp3'
+
+const newMessageBeep = require('../assets/sounds/newMessageBeep.mp3')
+
+interface IValue {
+  chats: IChatDto[]
+  chatsFetching: boolean
+  currentChatId: string
+  currentChatFetching: boolean
+  moreMessagesFetching: boolean
+  messages: IMessageDto[]
+  participants: IParticipantDto[]
+  FETCH_MESSAGES_PAGE_SIZE: number
+  totalMessagesCount: number
+  getMessages: (chatId: string) => Promise<void>
+  getParticipants: (chatId: string) => Promise<void>
+  getMoreMessages: (chatId: string) => Promise<void>
+}
 
 const FETCH_MESSAGES_PAGE_SIZE = 25
-export const ChatContext = createContext()
+export const ChatContext = createContext<IValue>(null!)
 
-const ChatContextProvider = ({ children }) => {
-  const [chats, setChats] = useState(null)
+const ChatContextProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const [chats, setChats] = useState<IChatDto[]>([])
   const [chatsFetching, setChatsFetching] = useState(false)
-  const [currentChatId, setCurrentChatId] = useState(null)
+  const [currentChatId, setCurrentChatId] = useState('')
   const [messagesFetching, setMessagesFetching] = useState(false)
   const [moreMessagesFetching, setMoreMessagesFetching] = useState(false)
   const [participantsFetching, setParticipantsFetching] = useState(false)
-  const [messages, setMessages] = useState([])
-  const [participants, setParticipants] = useState([])
+  const [messages, setMessages] = useState<IMessageDto[]>([])
+  const [participants, setParticipants] = useState<IParticipantDto[]>([])
   const [totalMessagesCount, setTotalMessagesCount] = useState(0)
 
   const { hubConnection } = useHub(`${API_URL}/chat-hub`)
@@ -34,7 +51,7 @@ const ChatContextProvider = ({ children }) => {
       setChats(prev => {
         var chat = find(prev, ['id', chatId])
         var otherChats = filter(prev, x => x.id !== chatId)
-        return [chat, ...otherChats]
+        return [chat!, ...otherChats]
       })
 
       if (chatId !== currentChatId) {
@@ -49,7 +66,7 @@ const ChatContextProvider = ({ children }) => {
 
       const updatedMessage = {
         ...message,
-        isMyMessage: get(message, 'senderId') === get(profile, 'id')
+        isMyMessage: get(message, 'senderId') === profile.id
       }
 
       setMessages(prev => [...prev, updatedMessage])
@@ -86,7 +103,7 @@ const ChatContextProvider = ({ children }) => {
 
   const deleteParticipant = useCallback(
     (chatId, participantId) => {
-      if (get(profile, 'id') === participantId) {
+      if (profile.id === participantId) {
         history.replace('/')
         return setChats(prev => filter(prev, x => x.id !== chatId))
       }
@@ -103,7 +120,7 @@ const ChatContextProvider = ({ children }) => {
     setCurrentChatId(chatId)
 
     const response = await api.get(`chats/${chatId}/participants`)
-    setParticipants(get(response, 'data'))
+    setParticipants(response?.data)
 
     setParticipantsFetching(false)
   }, [])

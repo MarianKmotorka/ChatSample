@@ -1,11 +1,14 @@
 import React, { useState, useEffect, createContext } from 'react'
 import api from '../services/httpService'
 import { isLoggedIn } from '../services/authService'
+import { IUserProfileDto } from '../apiContracts/userContracts'
 
-export const ProfileContext = createContext()
+export const ProfileContext = createContext<{ profile: IUserProfileDto }>(null!)
 
-const ProfileContextProvider = ({ children }) => {
-  const [profile, setProfile] = useState(null)
+const ProfileContextProvider: React.FC<{ children: React.ReactNode }> = ({
+  children
+}) => {
+  const [profile, setProfile] = useState<IUserProfileDto>(null!)
 
   useEffect(() => {
     const fetch = async () => {

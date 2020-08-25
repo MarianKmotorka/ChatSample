@@ -4,7 +4,7 @@ import { Tooltip as TooltipAntd } from 'antd'
 const Tooltip = ({
   children,
   text,
-  placement,
+  placement = undefined,
   getPopupContainer = undefined,
   ...rest
 }) => {

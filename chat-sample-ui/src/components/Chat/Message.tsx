@@ -1,7 +1,9 @@
 import React, { memo, useState } from 'react'
 import moment from 'moment'
 import { DeleteFilled, SyncOutlined } from '@ant-design/icons'
+
 import Tooltip from '../../components/Tooltip'
+import { IMessageDto } from '../../apiContracts/chatContracts'
 import {
   InnerWrapper,
   Text,
@@ -10,17 +12,6 @@ import {
   DeletedText
 } from './styled/Message.styled'
 
-export interface Message {
-  id: string
-  text: string
-  date: Date
-  senderName: string
-  senderId: string
-  isMyMessage: boolean
-  isDeleted: boolean
-  senderPicture: string
-}
-
 export enum MessageShape {
   TOP = 'top',
   MIDDLE = 'middle',
@@ -28,15 +19,15 @@ export enum MessageShape {
   STANDALONE = 'standalone'
 }
 
-interface Props {
-  message: Message
+interface IProps {
+  message: IMessageDto
   forwardRef?: React.Ref<HTMLDivElement>
   onDelete: (id: string) => void
   onRecover: (id: string) => void
   shape: MessageShape
 }
 
-const Message: React.FC<Props> = memo(
+const Message: React.FC<IProps> = memo(
   ({ message, forwardRef, onDelete, onRecover, shape = MessageShape.STANDALONE }) => {
     const [hovered, setHovered] = useState(false)
 

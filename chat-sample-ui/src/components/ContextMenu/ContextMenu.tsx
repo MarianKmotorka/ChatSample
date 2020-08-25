@@ -11,12 +11,12 @@ interface ContextMenuItem {
   onClick: (e: any) => void
 }
 
-interface Props {
+interface IProps {
   items: ContextMenuItem[]
   className?: string
 }
 
-const ContextMenu: React.FC<Props> = ({ items, className }) => {
+const ContextMenu: React.FC<IProps> = ({ items, className }) => {
   const containerRef = useRef<HTMLDivElement>(null!)
 
   if (isEmpty(items)) return null

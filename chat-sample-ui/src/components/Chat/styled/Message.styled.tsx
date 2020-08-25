@@ -4,12 +4,12 @@ import { getMessageBorderRadius } from '../utils'
 import { MD } from '../../../utils/useWindowSize'
 import { MessageShape } from '../Message'
 
-interface Props {
+interface IProps {
   isMyMessage: boolean
   shape: MessageShape
 }
 
-export const InnerWrapper = styled.div<Props>`
+export const InnerWrapper = styled.div<IProps>`
   display: flex;
   align-items: center;
   margin: 3px;
@@ -33,7 +33,7 @@ export const MessageInfo = styled.div`
   font-size: 17px;
 `
 
-export const Text = styled.p<Props>`
+export const Text = styled.p<IProps>`
   font-size: 15px;
   line-height: 20px;
   padding: 6px 17px;

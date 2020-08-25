@@ -1,12 +1,12 @@
 import React, { useState, useContext } from 'react'
 import PropTypes from 'prop-types'
-import { map, get, find, invert } from 'lodash'
+import { map, get, find } from 'lodash'
 import { SwapLeftOutlined, SwapRightOutlined, PlusOutlined } from '@ant-design/icons'
 
 import Tooltip from '../../Tooltip'
 import Popover from '../../Popover'
 import { getContextMenuItems } from './utils'
-import { ChatRoleType } from '../../../utils/types'
+import { ChatRole } from '../../../apiContracts/chatContracts'
 import useWindowSize, { SM } from '../../../utils/useWindowSize'
 import SearchableDropdown from '../../SearchableDropdown/SearchableDropdown'
 import { ProfileContext } from '../../../contextProviders'
@@ -67,7 +67,7 @@ const ChatDetail = ({
       content={
         <p>
           <strong>Chat role: </strong>
-          {invert(ChatRoleType)[role]}
+          {ChatRole[role]}
         </p>
       }
     >
@@ -124,14 +124,14 @@ const ChatDetail = ({
           const participantName = get(participant, 'name')
           const participantRole = get(participant, 'chatRole')
 
-          const menuItems = getContextMenuItems({
+          const menuItems = getContextMenuItems(
             particiapantId,
             currentUserId,
             participantRole,
             currentUserRole,
             onDeleteParticipant,
             onSetParticipantAsAdmin
-          })
+          )
 
           return expanded ? (
             <ParticipantWrapper key={particiapantId}>

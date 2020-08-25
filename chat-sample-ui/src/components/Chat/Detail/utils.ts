@@ -1,20 +1,20 @@
 import { compact } from 'lodash'
-import { ChatRoleType } from '../../../utils/types'
+import { ChatRole } from '../../../apiContracts/chatContracts'
 
-export const getContextMenuItems = ({
-  particiapantId,
-  currentUserId,
-  participantRole,
-  currentUserRole,
-  onDeleteParticipant,
-  onSetParticipantAsAdmin
-}) => {
+export const getContextMenuItems = (
+  particiapantId: string,
+  currentUserId: string,
+  participantRole: ChatRole,
+  currentUserRole: ChatRole,
+  onDeleteParticipant: (id: string) => void,
+  onSetParticipantAsAdmin: (id: string) => void
+) => {
   const canRemove =
     particiapantId === currentUserId ||
-    (currentUserRole === ChatRoleType.Admin && participantRole !== ChatRoleType.Admin)
+    (currentUserRole === ChatRole.ADMIN && participantRole !== ChatRole.ADMIN)
 
   const canSetAsAdmin =
-    currentUserRole === ChatRoleType.Admin && participantRole !== ChatRoleType.Admin
+    currentUserRole === ChatRole.ADMIN && participantRole !== ChatRole.ADMIN
 
   return compact([
     canRemove && {

@@ -1,9 +1,10 @@
 import React, { useState, useRef, useCallback, FormEvent } from 'react'
 import { map, first } from 'lodash'
 
-import Message, { Message as MessageType } from './Message'
+import Message from './Message'
 import EmojiListButton from './EmojiListButton'
 import MessagesLoadingSpinner from './MessagesLoadingSpinner'
+import { IMessageDto } from '../../apiContracts/chatContracts'
 import { getMessageShape } from './utils'
 
 import {
@@ -14,9 +15,9 @@ import {
 } from './styled/Chat.styled'
 import { useFocusWhenMounted, useScrollTo } from './hooks'
 
-interface Props {
-  messages: MessageType[]
-  scrollToMessageId: string
+interface IProps {
+  messages: IMessageDto[]
+  scrollToMessageId?: string
   canLoadMore: boolean
   moreMessagesFetching: boolean
   onLoadMore: () => void
@@ -25,7 +26,7 @@ interface Props {
   onRecoverMessage: (id: string) => void
 }
 
-const Chat: React.FC<Props> = ({
+const Chat: React.FC<IProps> = ({
   messages,
   canLoadMore,
   scrollToMessageId,
@@ -36,10 +37,8 @@ const Chat: React.FC<Props> = ({
   onRecoverMessage
 }) => {
   const [text, setText] = useState('')
-  const scrollToMessageRef = useRef<HTMLDivElement>(null)
-  const inputRef = useRef<HTMLInputElement>(null)
-  useFocusWhenMounted(inputRef)
-  useScrollTo(scrollToMessageRef, [messages])
+  const inputRef = useFocusWhenMounted<HTMLInputElement>()
+  const scrollToMessageRef = useScrollTo<HTMLDivElement>(scrollToMessageId, messages)
 
   const observer = useRef<IntersectionObserver>()
   const topMessageRef = useCallback(
@@ -61,7 +60,7 @@ const Chat: React.FC<Props> = ({
     text && onMessageSent(text)
   }
 
-  const renderMessage = (message: MessageType) => {
+  const renderMessage = (message: IMessageDto) => {
     const ref =
       scrollToMessageId === message.id
         ? scrollToMessageRef

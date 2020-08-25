@@ -7,6 +7,7 @@ import Chat from '../../components/Chat/Chat'
 import LoadingSpinner from '../../components/LoadingSpinner'
 import ChatDetail from '../../components/Chat/Detail/ChatDetail'
 import { ChatContext } from '../../contextProviders'
+import { IParticipantDto } from '../../apiContracts/chatContracts'
 import api from '../../services/httpService'
 
 import { Wrapper, InnerWrapper } from './styled/ChatPage.styled'
@@ -25,11 +26,11 @@ const ChatPage = () => {
 
   const { chatId } = useParams()
   const history = useHistory()
-  const [scrollToMessageId, setScrollToMessageId] = useState()
+  const [scrollToMessageId, setScrollToMessageId] = useState<string>()
   const [showChatDetail, setShowChatDetail] = useState(false)
 
-  const lastMessageId = get(last(messages), 'id')
-  const firstMessageId = get(first(messages), 'id')
+  const lastMessageId = last(messages)?.id
+  const firstMessageId = first(messages)?.id
 
   useEffect(() => setScrollToMessageId(lastMessageId), [lastMessageId])
 
@@ -38,7 +39,7 @@ const ChatPage = () => {
     getMessages(chatId)
   }, [chatId, getMessages, getParticipants])
 
-  const handleMessageSent = async text => {
+  const handleMessageSent = async (text: string) => {
     setScrollToMessageId(lastMessageId)
     await api.post(`/chats/${chatId}/messages`, { text })
   }
@@ -50,7 +51,7 @@ const ChatPage = () => {
 
   const handleMessageDeleted = useCallback(
     async id => {
-      setScrollToMessageId(null)
+      setScrollToMessageId(undefined)
       await api.delete(`/chats/${chatId}/messages/${id}`)
     },
     [chatId]
@@ -58,13 +59,13 @@ const ChatPage = () => {
 
   const handleMessageRecovered = useCallback(
     async id => {
-      setScrollToMessageId(null)
+      setScrollToMessageId(undefined)
       await api.put(`/chats/${chatId}/messages/${id}/recover`)
     },
     [chatId]
   )
 
-  const handleAddParticipant = async user =>
+  const handleAddParticipant = async (user: IParticipantDto) =>
     await api.post(`/chats/${chatId}/participants`, {
       participantId: get(user, 'id')
     })
@@ -74,13 +75,14 @@ const ChatPage = () => {
     history.goBack()
   }
 
-  const handleParticipantDeleted = async id =>
+  const handleParticipantDeleted = async (id: string) =>
     await api.delete(`/chats/${chatId}/participants/${id}`)
 
-  const handleSetParticipantAsAdmin = async id =>
+  const handleSetParticipantAsAdmin = async (id: string) =>
     await api.put(`/chats/${chatId}/participants/${id}/set-admin-role`)
 
-  const handleChatRenamed = async name => await api.patch(`/chats/${chatId}`, { name })
+  const handleChatRenamed = async (name: string) =>
+    await api.patch(`/chats/${chatId}`, { name })
 
   if (currentChatFetching) return <LoadingSpinner />
 

@@ -12,11 +12,11 @@ const StyledTabPane = styled(Tabs.TabPane)`
   overflow: auto;
   max-height: 50vh;
 `
-interface Props {
+interface IProps {
   onSelect: (emoji: string) => void
 }
 
-const EmojiList: React.FC<Props> = memo(({ onSelect }) => {
+const EmojiList: React.FC<IProps> = memo(({ onSelect }) => {
   const theme = useTheme()
 
   const getEmojiButtons = (emojiList: string[]) => {
