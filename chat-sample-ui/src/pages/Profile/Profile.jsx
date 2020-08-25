@@ -1,4 +1,4 @@
-import React, { useRef, useContext } from 'react'
+import React, { useContext } from 'react'
 import { CSSTransition } from 'react-transition-group'
 import { CloseOutlined } from '@ant-design/icons'
 
@@ -11,8 +11,7 @@ import { Wrapper, Photo, Hero, BottomHero, StyledButton } from './styles/Profile
 import './styles/Profile.animations.css'
 
 const Profile = ({ history }) => {
-  const wrapperRef = useRef()
-  useOnClickOutside(wrapperRef, history.goBack)
+  const wrapperRef = useOnClickOutside(history.goBack)
   const { profile } = useContext(ProfileContext)
 
   return (

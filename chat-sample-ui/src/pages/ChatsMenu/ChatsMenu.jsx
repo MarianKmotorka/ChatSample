@@ -1,4 +1,4 @@
-import React, { useState, useRef, useContext, useEffect } from 'react'
+import React, { useState, useContext, useEffect } from 'react'
 import { useHistory } from 'react-router-dom'
 import { map, get, head } from 'lodash'
 import { PlusOutlined, SwapLeftOutlined, SwapRightOutlined } from '@ant-design/icons'
@@ -25,12 +25,11 @@ const ChatsMenu = () => {
   const [showCreateChatDialog, setShowCreateChatDialog] = useState(false)
   const [expanded, setExpanded] = useState(true)
   const { chats, chatsFetching } = useContext(ChatContext)
-  const formRef = useRef()
   const history = useHistory()
   const { width } = useWindowSize()
   const isWiderThanMedium = width > MD
 
-  useOnClickOutside(formRef, () => setShowCreateChatDialog(false))
+  const formRef = useOnClickOutside(() => setShowCreateChatDialog(false))
 
   useEffect(() => {
     if (isWiderThanMedium) setExpanded(true)

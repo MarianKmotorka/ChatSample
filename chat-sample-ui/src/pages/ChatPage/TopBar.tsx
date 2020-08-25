@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect, useRef } from 'react'
+import React, { useContext, useState, useEffect } from 'react'
 import { find } from 'lodash'
 import { Button, Modal } from 'antd'
 import { DeleteFilled, UserSwitchOutlined, EditOutlined } from '@ant-design/icons'
@@ -30,14 +30,13 @@ const TopBar: React.FC<IProps> = ({ onDeleteChat, onToggleChatDetail, onRenameCh
 
   const { currentChatId, chats, participants } = useContext(ChatContext)
   const { profile } = useContext(ProfileContext)
-  const chatNameWrapperRef = useRef<HTMLDivElement>(null!)
 
   const currentChat = find(chats, ['id', currentChatId])
   const currentUserRole = find(participants, ['id', profile?.id])?.chatRole
   const canDeleteChat = currentUserRole === ChatRole.ADMIN
 
   useEffect(() => setChatName(currentChat?.name || ''), [currentChat])
-  useOnClickOutside(chatNameWrapperRef, () => setIsRenaming(false))
+  const chatNameWrapperRef = useOnClickOutside<HTMLDivElement>(() => setIsRenaming(false))
 
   const handleKeyPressed = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key !== 'Enter') return

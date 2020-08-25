@@ -1,9 +1,13 @@
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 
-export const useOnClickOutside = (ref, handler) => {
+export const useOnClickOutside = <TRef extends HTMLElement>(
+  handler: (e: Event) => any
+) => {
+  const ref = useRef<TRef>(null)
+
   useEffect(() => {
-    const listener = event => {
-      if (!ref.current || ref.current.contains(event.target)) {
+    const listener = (event: Event) => {
+      if (!ref.current || ref.current.contains(event.target as HTMLElement)) {
         return
       }
 
@@ -18,6 +22,8 @@ export const useOnClickOutside = (ref, handler) => {
       document.removeEventListener('touchstart', listener)
     }
   }, [ref, handler])
+
+  return ref
 }
 
 export default useOnClickOutside
