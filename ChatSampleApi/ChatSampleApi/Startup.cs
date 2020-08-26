@@ -1,10 +1,12 @@
 using System.Reflection;
 using ChatSampleApi.Features.Chat;
 using ChatSampleApi.Middleware;
+using ChatSampleApi.Middleware.Authorization;
 using ChatSampleApi.Middleware.ErrorHandling;
 using ChatSampleApi.Persistence;
 using ChatSampleApi.Services;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -26,6 +28,12 @@ namespace ChatSampleApi
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddJwtAuthentication(Configuration);
+            services.AddAuthorization(cfg =>
+            {
+                cfg.AddPolicy("ChatParticipantPolicy", x => x.Requirements.Add(new ChatParticipantRequirement()));
+            });
+            services.AddScoped<IAuthorizationHandler, ChatParticipantHandler>();
+
             services.AddHttpClient();
             services.AddHttpContextAccessor();
 

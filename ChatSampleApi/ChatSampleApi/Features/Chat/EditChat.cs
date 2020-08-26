@@ -1,12 +1,8 @@
-﻿using System.Linq;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
-using ChatSampleApi.Exceptions;
 using ChatSampleApi.Persistence;
 using MediatR;
 using Microsoft.AspNetCore.SignalR;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Internal;
 using Newtonsoft.Json;
 
 namespace ChatSampleApi.Features.Chat
@@ -37,10 +33,7 @@ namespace ChatSampleApi.Features.Chat
 
             public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
             {
-                var chat = await _db.Chats.Include(x => x.Participants).SingleOrNotFoundAsync(x => x.Id == request.ChatId, cancellationToken);
-
-                if (!chat.Participants.Any(x => x.UserId == request.UserId))
-                    throw new Forbidden403Exception("You are not chat participant.");
+                var chat = await _db.Chats.SingleOrNotFoundAsync(x => x.Id == request.ChatId, cancellationToken);
 
                 chat.SetName(request.Name);
                 await _db.SaveChangesAsync(cancellationToken);

@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ChatSampleApi.Controllers
 {
-    [Authorize]
+    [Authorize(Policy = "ChatParticipantPolicy")]
     [Route("api/chats")]
     public class ChatController : BaseController
     {
