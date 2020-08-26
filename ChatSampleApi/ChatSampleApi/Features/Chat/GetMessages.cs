@@ -4,7 +4,6 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
-using ChatSampleApi.Exceptions;
 using ChatSampleApi.Pagination;
 using ChatSampleApi.Persistence;
 using ChatSampleApi.Persistence.Entities;
@@ -35,11 +34,6 @@ namespace ChatSampleApi.Features.Chat
 
             public async Task<PagedResponse<MessageDto>> Handle(Query request, CancellationToken cancellationToken)
             {
-                var participants = (await _db.Chats.Include(x => x.Participants).SingleOrNotFoundAsync(x => x.Id == request.ChatId)).Participants;
-
-                if (!participants.Any(x => x.UserId == request.UserId))
-                    throw new Forbidden403Exception("You are not chat participant.");
-
                 var user = await _db.Users.Include(x => x.UnreadMessages).ThenInclude(x => x.Message).SingleOrNotFoundAsync(x => x.Id == request.UserId, cancellationToken);
                 user.SetUnreadMessagesAsRead(request.ChatId);
                 await _db.SaveChangesAsync(cancellationToken);

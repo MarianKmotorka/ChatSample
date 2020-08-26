@@ -36,9 +36,6 @@ namespace ChatSampleApi.Features.Chat
                 var chat = await _db.Chats.Include(x => x.Participants).SingleOrNotFoundAsync(x => x.Id == request.ChatId);
                 var participantIds = chat.Participants.Select(x => x.UserId);
 
-                if (participantIds.All(x => x != request.UserId))
-                    throw new Forbidden403Exception("You are not part of a chat");
-
                 var query = _db.Users.Where(x => !participantIds.Contains(x.Id))
                     .Select(x => new UserDto
                     {

@@ -49,7 +49,6 @@ namespace ChatSampleApi.Features.Chat.RemoveParticipant
             if (requester.UserId == participantToBeRemoved.UserId)
                 return;
 
-            _ = requester ?? throw new BadRequestException("You are not chat participant.");
             _ = participantToBeRemoved ?? throw new BadRequestException($"Participant does not exist.");
 
             if (requester.Role != ChatRole.Admin)

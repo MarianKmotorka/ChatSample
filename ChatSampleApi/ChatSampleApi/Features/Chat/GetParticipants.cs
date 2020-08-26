@@ -38,9 +38,6 @@ namespace ChatSampleApi.Features.Chat
                             ).Participants;
 
 
-                if (!participants.Any(x => x.UserId == request.UserId))
-                    throw new Forbidden403Exception("You are not chat participant.");
-
                 return participants.Select(p => new ParticipantDto
                 {
                     Id = p.UserId,
