@@ -1,12 +1,11 @@
 import React, { useState, useContext } from 'react'
-import PropTypes from 'prop-types'
-import { map, get, find, invert } from 'lodash'
+import { map, find } from 'lodash'
 import { SwapLeftOutlined, SwapRightOutlined, PlusOutlined } from '@ant-design/icons'
 
 import Tooltip from '../../Tooltip'
 import Popover from '../../Popover'
 import { getContextMenuItems } from './utils'
-import { ChatRoleType } from '../../../utils/types'
+import { ChatRole, IParticipantDto } from '../../../apiContracts/chatContracts'
 import useWindowSize, { SM } from '../../../utils/useWindowSize'
 import SearchableDropdown from '../../SearchableDropdown/SearchableDropdown'
 import { ProfileContext } from '../../../contextProviders'
@@ -24,7 +23,15 @@ import {
   Text
 } from './ChatDetail.styled'
 
-const ChatDetail = ({
+interface IProps {
+  participants: IParticipantDto[]
+  chatId: string
+  onAddParticipant: (participant: IParticipantDto) => void
+  onDeleteParticipant: (id: string) => void
+  onSetParticipantAsAdmin: (id: string) => void
+}
+
+const ChatDetail: React.FC<IProps> = ({
   participants,
   chatId,
   onAddParticipant,
@@ -44,7 +51,7 @@ const ChatDetail = ({
     setShowDropdown(false)
   }
 
-  const renderPhoto = ({ id, isOnline, picture }) => (
+  const renderPhoto = ({ id, isOnline, picture }: IParticipantDto) => (
     <StyledBadge
       key={id}
       color={isOnline ? 'green' : 'red'}
@@ -54,20 +61,20 @@ const ChatDetail = ({
     </StyledBadge>
   )
 
-  const renderDropdownItem = ({ picture, name }) => (
+  const renderDropdownItem = ({ picture, name }: IParticipantDto) => (
     <DropdownItem>
       <img src={picture} referrerPolicy='no-referrer' alt='' />
       <p>{name}</p>
     </DropdownItem>
   )
 
-  const renderName = (name, role) => (
+  const renderName = (name: string, role: ChatRole) => (
     <Popover
       title={name}
       content={
         <p>
           <strong>Chat role: </strong>
-          {invert(ChatRoleType)[role]}
+          {ChatRole[role]}
         </p>
       }
     >
@@ -75,8 +82,8 @@ const ChatDetail = ({
     </Popover>
   )
 
-  const currentUserRole = get(find(participants, ['id', currentUserId]), 'chatRole')
-  const handleParticipantAddedInternal = participant => {
+  const currentUserRole = find(participants, ['id', currentUserId])!.chatRole
+  const handleParticipantAddedInternal = (participant: IParticipantDto) => {
     onAddParticipant(participant)
     setShowDropdown(false)
   }
@@ -120,23 +127,19 @@ const ChatDetail = ({
         )}
 
         {map(participants, participant => {
-          const particiapantId = get(participant, 'id')
-          const participantName = get(participant, 'name')
-          const participantRole = get(participant, 'chatRole')
-
-          const menuItems = getContextMenuItems({
-            particiapantId,
+          const menuItems = getContextMenuItems(
+            participant.id,
             currentUserId,
-            participantRole,
+            participant.chatRole,
             currentUserRole,
             onDeleteParticipant,
             onSetParticipantAsAdmin
-          })
+          )
 
           return expanded ? (
-            <ParticipantWrapper key={particiapantId}>
+            <ParticipantWrapper key={participant.id}>
               {renderPhoto(participant)}
-              {renderName(participantName, participantRole)}
+              {renderName(participant.name, participant.chatRole)}
               <StyledMenu items={menuItems} />
             </ParticipantWrapper>
           ) : (
@@ -146,20 +149,6 @@ const ChatDetail = ({
       </Content>
     </Wrapper>
   )
-}
-
-ChatDetail.propTypes = {
-  chatId: PropTypes.string.isRequired,
-  participants: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.string.isRequired,
-      name: PropTypes.string.isRequired,
-      picture: PropTypes.string.isRequired
-    })
-  ).isRequired,
-  onAddParticipant: PropTypes.func.isRequired,
-  onSetParticipantAsAdmin: PropTypes.func.isRequired,
-  onDeleteParticipant: PropTypes.func.isRequired
 }
 
 export default ChatDetail

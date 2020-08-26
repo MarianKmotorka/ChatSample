@@ -10,8 +10,8 @@ export const useWindowSize = () => {
 
   const getSize = useCallback(
     () => ({
-      width: isClient ? window.innerWidth : undefined,
-      height: isClient ? window.innerHeight : undefined
+      width: isClient ? window.innerWidth : -1,
+      height: isClient ? window.innerHeight : -1
     }),
     [isClient]
   )
@@ -19,7 +19,7 @@ export const useWindowSize = () => {
   const [windowSize, setWindowSize] = useState(getSize)
 
   useEffect(() => {
-    if (!isClient) return false
+    if (!isClient) return
 
     const handleResize = () => {
       setWindowSize(getSize())

@@ -2,16 +2,19 @@ import { useState, useEffect } from 'react'
 import * as signalR from '@microsoft/signalr'
 import { getJwt, isLoggedIn } from '../services/authService'
 
-const useHub = url => {
-  const [hubConnection, setConnection] = useState()
-  const [disconnected, setDisconnected] = useState('connecting')
+type DisconnectType = 'connecting' | 'temporary' | 'permanent'
+const useHub = (url: string) => {
+  const [hubConnection, setConnection] = useState<signalR.HubConnection | undefined>()
+  const [disconnected, setDisconnected] = useState<DisconnectType | undefined>(
+    'connecting'
+  )
 
   useEffect(() => {
     if (!isLoggedIn) return
 
-    let timeoutId
+    let timeoutId: any
 
-    const tryToConnect = async (connection, timeout) => {
+    const tryToConnect = async (connection: signalR.HubConnection, timeout: number) => {
       try {
         await connection.start()
         setDisconnected(undefined)

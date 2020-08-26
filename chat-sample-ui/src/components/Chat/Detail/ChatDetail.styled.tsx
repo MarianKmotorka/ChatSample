@@ -1,8 +1,8 @@
 import styled from 'styled-components'
 import { Button, Badge } from 'antd'
-import ContextMenu from '../../ContextMenu'
+import ContextMenu from '../../ContextMenu/ContextMenu'
 
-export const Wrapper = styled.div`
+export const Wrapper = styled.div<{ width: string; renderOver: boolean }>`
   display: flex;
   background-color: ${({ theme }) => theme.bg200};
   border-left: ${({ theme }) => theme.bg400} 0.5px solid;

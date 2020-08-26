@@ -1,10 +1,10 @@
-import React, { useContext, useState, useEffect, useRef } from 'react'
+import React, { useContext, useState, useEffect } from 'react'
 import { find } from 'lodash'
 import { Button, Modal } from 'antd'
 import { DeleteFilled, UserSwitchOutlined, EditOutlined } from '@ant-design/icons'
 
 import { ProfileContext, ChatContext } from '../../contextProviders'
-import { ChatRoleType } from '../../utils/types'
+import { ChatRole } from '../../apiContracts/chatContracts'
 import useOnClickOutside from '../../utils/useOnClickOutside'
 import Tooltip from '../../components/Tooltip'
 
@@ -17,28 +17,33 @@ import {
   StyledButton
 } from './styled/TopBar.styled'
 
-const TopBar = ({ onDeleteChat, onToggleChatDetail, onRenameChat }) => {
+interface IProps {
+  onDeleteChat: () => void
+  onToggleChatDetail: () => void
+  onRenameChat: (name: string) => void
+}
+
+const TopBar: React.FC<IProps> = ({ onDeleteChat, onToggleChatDetail, onRenameChat }) => {
   const [showDeleteChatModal, setShowDeleteChatModal] = useState(false)
   const [isRenaming, setIsRenaming] = useState(false)
   const [chatName, setChatName] = useState('')
 
   const { currentChatId, chats, participants } = useContext(ChatContext)
   const { profile } = useContext(ProfileContext)
-  const chatNameWrapperRef = useRef()
 
   const currentChat = find(chats, ['id', currentChatId])
   const currentUserRole = find(participants, ['id', profile?.id])?.chatRole
-  const canDeleteChat = currentUserRole === ChatRoleType.Admin
+  const canDeleteChat = currentUserRole === ChatRole.ADMIN
 
-  useEffect(() => setChatName(currentChat?.name), [currentChat])
-  useOnClickOutside(chatNameWrapperRef, () => setIsRenaming(false))
+  useEffect(() => setChatName(currentChat?.name || ''), [currentChat])
+  const chatNameWrapperRef = useOnClickOutside<HTMLDivElement>(() => setIsRenaming(false))
 
-  const handleKeyPressed = e => {
+  const handleKeyPressed = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key !== 'Enter') return
 
     setIsRenaming(false)
-    if (!chatName) return setChatName(currentChat.name)
-    if (chatName !== currentChat.name) onRenameChat(chatName)
+    if (!chatName) return setChatName(currentChat?.name || '')
+    if (chatName !== currentChat?.name) onRenameChat(chatName)
   }
 
   return (

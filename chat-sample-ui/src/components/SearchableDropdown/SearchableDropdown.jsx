@@ -28,11 +28,10 @@ const SearchableDropdown = ({
   const [options, setOptions] = useState(null)
   const [expanded, setExpanded] = useState(false)
   const [loading, setLoading] = useState(false)
-  const wrapperRef = useRef()
   const inputRef = useRef()
 
   const debouncedText = useDebounce(text, initialOptions ? 0 : 500)
-  useOnClickOutside(wrapperRef, () => setExpanded(false))
+  const wrapperRef = useOnClickOutside(() => setExpanded(false))
 
   useEffect(() => {
     if (!expanded) return

@@ -1,4 +1,30 @@
-export const lightTheme = {
+import { DefaultTheme } from 'styled-components'
+
+declare module 'styled-components' {
+  export interface DefaultTheme {
+    bg100: string
+    bg200: string
+    bg300: string
+    bg400: string
+    bg500: string
+    textPrimary: string
+    primary: string
+
+    blue: string
+    red: string
+    green: string
+    black: string
+    white: string
+    blackCoffee: string
+    gray: string
+    lightGray: string
+
+    isDarkTheme: boolean
+    [key: string]: any
+  }
+}
+
+export const lightTheme: DefaultTheme = {
   bg100: '#fafafa',
   bg200: '#efefef',
   bg300: '#e4e3e5',
@@ -19,7 +45,7 @@ export const lightTheme = {
   isDarkTheme: false
 }
 
-export const darkTheme = {
+export const darkTheme: DefaultTheme = {
   bg100: '#18191a',
   bg200: '#242526',
   bg300: '#3a3c3d',
