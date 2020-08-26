@@ -2,7 +2,6 @@
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using ChatSampleApi.Exceptions;
 using ChatSampleApi.Persistence;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
