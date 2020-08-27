@@ -1,4 +1,4 @@
-import React, { useState, useRef, useCallback, FormEvent } from 'react'
+import React, { useState, useCallback, FormEvent } from 'react'
 import { map, first } from 'lodash'
 
 import Message from './Message'
@@ -6,6 +6,7 @@ import EmojiListButton from './EmojiListButton'
 import MessagesLoadingSpinner from './MessagesLoadingSpinner'
 import { IMessageDto } from '../../apiContracts/chatContracts'
 import { getMessageShape } from './utils'
+import { useObserver } from '../../utils/useObserver'
 
 import {
   Wrapper,
@@ -39,20 +40,7 @@ const Chat: React.FC<IProps> = ({
   const [text, setText] = useState('')
   const inputRef = useFocusWhenMounted<HTMLInputElement>()
   const scrollToMessageRef = useScrollTo<HTMLDivElement>(scrollToMessageId, messages)
-
-  const observer = useRef<IntersectionObserver>()
-  const topMessageRef = useCallback(
-    node => {
-      if (observer.current) observer.current.disconnect()
-      observer.current = new IntersectionObserver(entries => {
-        if (entries[0].isIntersecting && canLoadMore) {
-          onLoadMore()
-        }
-      })
-      if (node) observer.current.observe(node)
-    },
-    [onLoadMore, canLoadMore]
-  )
+  const observeMessage = useObserver<HTMLDivElement>(canLoadMore, onLoadMore)
 
   const onMessageSentInternal = (e: FormEvent<HTMLFormElement> | null) => {
     e?.preventDefault()
@@ -65,7 +53,7 @@ const Chat: React.FC<IProps> = ({
       scrollToMessageId === message.id
         ? scrollToMessageRef
         : first(messages) === message
-        ? topMessageRef
+        ? observeMessage
         : null
 
     return (
