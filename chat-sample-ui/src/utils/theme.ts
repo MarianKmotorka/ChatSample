@@ -18,6 +18,7 @@ declare module 'styled-components' {
     blackCoffee: string
     gray: string
     lightGray: string
+    darkGray: string
 
     isDarkTheme: boolean
     [key: string]: any
@@ -41,6 +42,7 @@ export const lightTheme: DefaultTheme = {
   blackCoffee: '#37323E',
   gray: '#424242',
   lightGray: '#ceced9',
+  darkGray: '#242526',
 
   isDarkTheme: false
 }
@@ -62,6 +64,7 @@ export const darkTheme: DefaultTheme = {
   blackCoffee: '#37323E',
   gray: '#424242',
   lightGray: '#ceced9',
+  darkGray: '#242526',
 
   isDarkTheme: true
 }

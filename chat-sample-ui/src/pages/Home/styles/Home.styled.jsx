@@ -23,7 +23,7 @@ export const Banner = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background-color: ${({ theme }) => theme.blackCoffee};
+  background-color: ${({ theme }) => theme.darkGray};
 
   @media only screen and (max-width: ${`${SM}px`}) {
     width: 90%;
