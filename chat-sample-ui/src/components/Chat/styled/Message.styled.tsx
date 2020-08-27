@@ -13,15 +13,14 @@ export const InnerWrapper = styled.div<IProps>`
   display: flex;
   align-items: center;
   margin: 3px;
-  max-width: 75%;
+  max-width: 70%;
   justify-content: ${({ isMyMessage }) => (isMyMessage ? 'flex-end' : 'flex-start')};
 
   margin-left: ${({ isMyMessage }) => (isMyMessage ? 'auto' : '5px')};
-  margin-top: ${({ shape, isMyMessage }) =>
-    (shape === 'top' || shape === 'standalone') && !isMyMessage ? '40px' : 0};
+  margin-top: ${({ shape }) => (shape === 'top' || shape === 'standalone' ? '20px' : 0)};
 
   @media only screen and (max-width: ${`${MD}px`}) {
-    max-width: 90%;
+    max-width: 85%;
   }
 `
 

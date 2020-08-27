@@ -1,4 +1,4 @@
-import React, { useState, useCallback, FormEvent } from 'react'
+import React, { useState, useCallback, useMemo, FormEvent } from 'react'
 import { map, first } from 'lodash'
 
 import Message from './Message'
@@ -48,31 +48,41 @@ const Chat: React.FC<IProps> = ({
     text && onMessageSent(text)
   }
 
-  const renderMessage = (message: IMessageDto) => {
-    const ref =
-      scrollToMessageId === message.id
-        ? scrollToMessageRef
-        : first(messages) === message
-        ? observeMessage
-        : null
+  const renderMessage = useCallback(
+    (message: IMessageDto) => {
+      const ref =
+        scrollToMessageId === message.id
+          ? scrollToMessageRef
+          : first(messages) === message
+          ? observeMessage
+          : null
 
-    return (
-      <Message
-        key={message.id}
-        message={message}
-        forwardRef={ref}
-        shape={getMessageShape(messages, message)}
-        onDelete={onDeleteMessage}
-        onRecover={onRecoverMessage}
-      />
-    )
-  }
+      return (
+        <Message
+          key={message.id}
+          message={message}
+          forwardRef={ref}
+          shape={getMessageShape(messages, message)}
+          onDelete={onDeleteMessage}
+          onRecover={onRecoverMessage}
+        />
+      )
+    },
+    [
+      observeMessage,
+      messages,
+      onDeleteMessage,
+      onRecoverMessage,
+      scrollToMessageId,
+      scrollToMessageRef
+    ]
+  )
 
   return (
     <Wrapper>
       <MessagesWrapper>
         {moreMessagesFetching && <MessagesLoadingSpinner />}
-        {map(messages, renderMessage)}
+        {useMemo(() => map(messages, renderMessage), [messages, renderMessage])}
       </MessagesWrapper>
 
       <form onSubmit={onMessageSentInternal}>
