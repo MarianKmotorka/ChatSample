@@ -1,4 +1,4 @@
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 import { NavLink } from 'react-router-dom'
 import { Badge, Button } from 'antd'
 
@@ -19,17 +19,25 @@ export const ChatButtonLink = styled(NavLink)`
   min-height: 55px;
   background: ${({ theme }) => theme.bg100};
   color: ${({ theme }) => theme.textPrimary};
-
+  box-shadow: 0 5px 5px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s, box-shadow 0.2s;
+  border-radius: 5px;
   text-decoration: none;
   font-size: 18px;
-
   display: flex;
   justify-content: center;
   align-items: center;
 
   :hover {
     color: ${({ theme }) => theme.textPrimary};
-    background: ${({ theme }) => theme.bg300};
+    box-shadow: 0 8px 5px rgba(0, 0, 0, 0.1);
+    transform: translateY(-4px) scale(1.03);
+
+    ${({ theme }) =>
+      theme.isDarkTheme &&
+      css`
+        background: ${({ theme }) => theme.bg300};
+      `}
   }
 
   &.active {
@@ -60,7 +68,7 @@ export const StyledButton = styled(Button)`
   transition: all 0.3s ease;
   border: none;
   top: 0px;
-  }
+  box-shadow: 0 5px 5px rgba(0, 0, 0, 0.2);
 `
 
 export const ButtonsWrapper = styled.div`

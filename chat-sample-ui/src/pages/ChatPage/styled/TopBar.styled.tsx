@@ -22,13 +22,19 @@ export const ButtonsWrapper = styled.div`
   }
 `
 
-export const StyledButton = styled(Button)`
+export const StyledRenameButton = styled(Button)`
   transform: scale(1.1);
   color: ${({ theme }) => theme.textPrimary};
   :hover,
   :focus {
     color: ${({ theme }) => theme.textPrimary};
   }
+`
+
+export const StyledButton = styled(Button)`
+  box-shadow: 0 5px 5px rgba(0, 0, 0, 0.2);
+  background: ${({ theme }) => theme.white};
+  border: none;
 `
 
 export const ChatNameWrapper = styled.div`

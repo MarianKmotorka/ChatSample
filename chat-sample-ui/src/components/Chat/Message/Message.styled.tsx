@@ -57,7 +57,7 @@ export const Avatar = styled.img<{ isHidden: boolean }>`
   height: 30px;
   border-radius: 50%;
   visibility: ${({ isHidden }) => (isHidden ? 'hidden' : 'visible')};
-  box-shadow: 0 5px 5px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 5px 5px rgba(0, 0, 0, 0.2);
 `
 
 export const MessageDate = styled.p`

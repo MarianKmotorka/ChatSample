@@ -7,6 +7,7 @@ export const WrapperForm = styled.form`
   display: flex;
   flex-direction: column;
   border-radius: 20px;
+  box-shadow: 0 20px 25px rgba(0, 0, 0, 0.3);
 `
 
 export const Header = styled.div`

@@ -22,14 +22,16 @@ export const InputWrapper = styled.div`
     outline: none;
     border: none;
     border-radius: 22px;
-    background: ${({ theme }) => theme.bg400};
+    background: ${({ theme }) => theme.bg200};
     color: ${({ theme }) => theme.textPrimary};
+    box-shadow: 0 5px 5px rgba(0, 0, 0, 0.2);
   }
 `
 
-export const StyledButton = styled(Button)<{ color?: string }>`
+export const StyledButton = styled(Button)<{ color?: string; margin?: string }>`
   color: ${({ theme, color }) => color && theme[color]};
-  margin-right: 5px;
+  ${({ margin }) => margin && `margin: ${margin}`};
+  box-shadow: 0 5px 5px rgba(0, 0, 0, 0.2);
   svg,
   i {
     font-size: 25px;

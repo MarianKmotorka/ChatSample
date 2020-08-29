@@ -85,7 +85,14 @@ export const StyledButton = styled(Button)`
   top: 0px;
   z-index: 2;
   transform: scale(1.1);
+  box-shadow: 0 5px 5px rgba(0, 0, 0, 0.2);
+  background: ${({ theme }) => theme.white};
+  :hover,
+  :focus {
+    background: ${({ theme }) => theme.white};
+  }
 `
+
 export const DropdownItem = styled.div`
   display: flex;
   justify-content: space-between;

@@ -99,6 +99,7 @@ const ChatDetail: React.FC<IProps> = ({
             <StyledButton
               onClick={toogleExpanded}
               shape='circle'
+              type='text'
               icon={expanded ? <SwapRightOutlined /> : <SwapLeftOutlined />}
             />
           </Tooltip>
@@ -108,6 +109,7 @@ const ChatDetail: React.FC<IProps> = ({
             <StyledButton
               onClick={() => setShowDropdown(x => !x)}
               shape='circle'
+              type='text'
               icon={<PlusOutlined />}
             />
           </Tooltip>
