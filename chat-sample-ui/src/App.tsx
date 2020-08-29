@@ -15,21 +15,21 @@ import {
 
 const App = () => {
   return (
-    <>
+    <GlobalContextProvider>
       <GlobalStyle />
 
-      <GlobalContextProvider>
-        <AppWrapper>
-          <Navbar />
-          <MenuAndContentWrapper>
-            {isLoggedIn && <ChatsMenu />}
-            <ContentWrapper>
-              <Routes />
-            </ContentWrapper>
-          </MenuAndContentWrapper>
-        </AppWrapper>
-      </GlobalContextProvider>
-    </>
+      <AppWrapper>
+        <Navbar />
+
+        <MenuAndContentWrapper>
+          {isLoggedIn && <ChatsMenu />}
+
+          <ContentWrapper>
+            <Routes />
+          </ContentWrapper>
+        </MenuAndContentWrapper>
+      </AppWrapper>
+    </GlobalContextProvider>
   )
 }
 

@@ -57,6 +57,7 @@ const EmojiList: React.FC<IProps> = memo(({ onSelect }) => {
       <StyledButton
         shape='circle'
         margin='0 10px 0 0'
+        bg='transparent'
         icon={<SmileTwoTone twoToneColor={theme.primary} />}
       />
     </Popover>

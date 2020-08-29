@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import { Button } from 'antd'
+import Button from '../../../components/Button'
 
 export const WrapperForm = styled.form`
   height: 350px;
@@ -8,6 +8,8 @@ export const WrapperForm = styled.form`
   flex-direction: column;
   border-radius: 20px;
   box-shadow: 0 20px 25px rgba(0, 0, 0, 0.3);
+  background: ${({ theme }) => (theme.isDarkTheme ? theme.bg400 : theme.bg200)};
+  padding: 9px;
 `
 
 export const Header = styled.div`
@@ -44,11 +46,13 @@ export const Content = styled.div`
 
   input {
     width: 100%;
+    height: 38px;
+    border-radius: 38px;
     margin-bottom: 10px;
-    border-radius: 10px;
     font-size: 18px;
     padding: 5px 10px;
     border: none;
+    box-shadow: 0 5px 5px rgba(0, 0, 0, 0.3);
     color: ${({ theme }) => theme.black};
 
     &:focus {
@@ -59,6 +63,8 @@ export const Content = styled.div`
 
 export const StyledButton = styled(Button)`
   width: 100%;
-  background: ${({ theme }) => theme.primary};
-  border: none;
+`
+
+export const Text = styled.p`
+  filter: drop-shadow(0 5px 2px rgba(0, 0, 0, 0.3));
 `

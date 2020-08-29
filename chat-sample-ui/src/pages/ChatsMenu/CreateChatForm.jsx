@@ -5,7 +5,8 @@ import {
   WrapperForm,
   Header,
   Content,
-  StyledButton
+  StyledButton,
+  Text
 } from './styled/CreateChatForm.styled'
 
 const CreateChatForm = ({ formRef, callback }) => {
@@ -31,14 +32,14 @@ const CreateChatForm = ({ formRef, callback }) => {
       <Header>Create chat</Header>
       <Content>
         <div>
-          <p>Name:</p>
+          <Text>Name:</Text>
           <input
             ref={inputRef}
             value={name}
             onChange={({ target }) => setName(target.value)}
           />
         </div>
-        <StyledButton type='primary' onClick={createChat}>
+        <StyledButton shape='round' bg='primary' color='white' onClick={createChat}>
           Create
         </StyledButton>
       </Content>

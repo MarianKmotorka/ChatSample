@@ -1,6 +1,7 @@
 import styled, { css } from 'styled-components'
 import { NavLink } from 'react-router-dom'
-import { Badge, Button } from 'antd'
+import { Badge } from 'antd'
+import Button from '../../../components/Button'
 
 export const Wrapper = styled.div`
   display: flex;
@@ -65,10 +66,6 @@ export const StyledBadge = styled(Badge)`
 export const StyledButton = styled(Button)`
   margin-bottom: 20px;
   transform: scale(1.2);
-  transition: all 0.3s ease;
-  border: none;
-  top: 0px;
-  box-shadow: 0 5px 5px rgba(0, 0, 0, 0.2);
 `
 
 export const ButtonsWrapper = styled.div`

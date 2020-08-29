@@ -114,6 +114,7 @@ const Chat: React.FC<IProps> = ({
             shape='circle'
             margin='0 15px'
             color='primary'
+            bg='transparent'
             icon={<i className='fas fa-paper-plane' />}
             onClick={_ => onMessageSentInternal(null)}
           />

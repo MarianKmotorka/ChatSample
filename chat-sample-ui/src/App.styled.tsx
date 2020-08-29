@@ -52,4 +52,9 @@ export const GlobalStyle = createGlobalStyle`
     height:0;
     z-index:1000;
   }
+
+  .ant-btn-primary{
+    background:${({ theme }) => theme.primary};
+    border:${({ theme }) => theme.primary};
+  }
 `
