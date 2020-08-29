@@ -44,6 +44,19 @@ export const MessagesWrapper = styled.div`
   overflow: auto;
   flex: 1;
   background: ${({ theme }) => theme.bg100};
-  padding-top: 10px;
-  padding-bottom: 6px;
+  padding: 10px 0;
+`
+
+export const TimeStamp = styled.p`
+  margin: 40px;
+  text-align: center;
+  color: ${({ theme }) => theme.textPrimary};
+  border-bottom: 1px solid ${({ theme }) => theme.bg300};
+  line-height: 0.1em;
+  opacity: 0.6;
+
+  span {
+    padding: 0 30px;
+    background: ${({ theme }) => theme.bg100};
+  }
 `

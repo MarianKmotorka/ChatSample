@@ -9,6 +9,14 @@ interface IProps {
   shape: MessageShape
 }
 
+const needsSpaceAbove = (shape: MessageShape) =>
+  [
+    MessageShape.TOP,
+    MessageShape.TOP_DELAYED,
+    MessageShape.STANDALONE,
+    MessageShape.STANDALONE_DELAYED
+  ].includes(shape)
+
 export const InnerWrapper = styled.div<IProps>`
   display: flex;
   align-items: center;
@@ -17,7 +25,7 @@ export const InnerWrapper = styled.div<IProps>`
   justify-content: ${({ isMyMessage }) => (isMyMessage ? 'flex-end' : 'flex-start')};
 
   margin-left: ${({ isMyMessage }) => (isMyMessage ? 'auto' : '5px')};
-  margin-top: ${({ shape }) => (shape === 'top' || shape === 'standalone' ? '20px' : 0)};
+  margin-top: ${({ shape }) => (needsSpaceAbove(shape) ? '30px' : 0)};
 
   @media only screen and (max-width: ${`${MD}px`}) {
     max-width: 85%;
@@ -40,6 +48,7 @@ export const Text = styled.p<IProps>`
   border-radius: ${props => getMessageBorderRadius(props.isMyMessage, props.shape)};
   color: ${({ theme }) => theme.textPrimary};
   background: ${({ isMyMessage, theme }) => (isMyMessage ? theme.primary : theme.bg300)};
+  box-shadow: 0 5px 5px rgba(0, 0, 0, 0.3);
 `
 
 export const Avatar = styled.img<{ isHidden: boolean }>`
@@ -48,6 +57,7 @@ export const Avatar = styled.img<{ isHidden: boolean }>`
   height: 30px;
   border-radius: 50%;
   visibility: ${({ isHidden }) => (isHidden ? 'hidden' : 'visible')};
+  box-shadow: 0 5px 5px rgba(0, 0, 0, 0.3);
 `
 
 export const MessageDate = styled.p`
