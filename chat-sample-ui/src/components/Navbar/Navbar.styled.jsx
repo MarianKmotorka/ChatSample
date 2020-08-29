@@ -73,23 +73,25 @@ export const ProfileWrapper = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-radius: 30px;
-  height: 30px;
+  border-radius: 33px;
+  height: 33px;
   background: ${({ theme }) => theme.gray};
   cursor: pointer;
+  box-shadow: 0 5px 5px rgba(0, 0, 0, 0.4);
 `
 
 export const UserName = styled.p`
   color: ${({ theme }) => theme.white};
-  padding-right: 13px;
+  padding-right: 16px;
   margin: 0;
 `
 
 export const Avatar = styled.img`
   border-radius: 50%;
-  margin-right: ${({ marginRight }) => marginRight || '5px'};
+  margin-right: ${({ marginRight }) => marginRight || '10px'};
   margin-left: auto;
-  height: 30px;
+  height: 33px;
+  cursor: pointer;
 `
 
 export const ThemeButton = styled(Button)`
