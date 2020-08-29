@@ -27,8 +27,8 @@ export const InputWrapper = styled.div`
   }
 `
 
-export const StyledButton = styled(Button)`
-  color: ${({ theme, color }) => theme[color]};
+export const StyledButton = styled(Button)<{ color?: string }>`
+  color: ${({ theme, color }) => color && theme[color]};
   margin-right: 5px;
   svg,
   i {
@@ -36,7 +36,7 @@ export const StyledButton = styled(Button)`
   }
   :hover,
   :focus {
-    color: ${({ theme, color }) => theme[color]};
+    color: ${({ theme, color }) => color && theme[color]};
   }
 `
 

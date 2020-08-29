@@ -2,7 +2,7 @@ import React, { useState, useCallback, useMemo, FormEvent } from 'react'
 import { map, first } from 'lodash'
 import moment from 'moment'
 
-import Message, { MessageShape } from './Message'
+import Message, { MessageShape } from './Message/Message'
 import EmojiListButton from './EmojiListButton'
 import MessagesLoadingSpinner from './MessagesLoadingSpinner'
 import { IMessageDto } from '../../apiContracts/chatContracts'
@@ -15,7 +15,7 @@ import {
   InputWrapper,
   StyledButton,
   TimeStamp
-} from './styled/Chat.styled'
+} from './Chat.styled'
 import { useFocusWhenMounted, useScrollTo } from './hooks'
 
 interface IProps {

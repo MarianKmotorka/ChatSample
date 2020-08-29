@@ -1,4 +1,4 @@
-import { MessageShape } from './Message'
+import { MessageShape } from './Message/Message'
 import { indexOf } from 'lodash'
 import { IMessageDto } from '../../apiContracts/chatContracts'
 
@@ -56,8 +56,6 @@ export const getMessageShape = (allMessages: IMessageDto[], message: IMessageDto
 
   const isDelayedFromAbove = isDelayedMessage(message, messageAbove)
   const isDelayedFromBellow = isDelayedMessage(message, messageBellow)
-  if (message.text === 'hej')
-    console.log('above:', isDelayedFromAbove, 'bellow:', isDelayedFromBellow)
 
   if (
     isDelayedFromAbove &&

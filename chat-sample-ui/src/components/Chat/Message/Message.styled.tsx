@@ -2,7 +2,7 @@ import styled from 'styled-components'
 import { Button } from 'antd'
 import { getMessageBorderRadius } from '../utils'
 import { MD } from '../../../utils/useWindowSize'
-import { MessageShape } from '../Message'
+import { MessageShape } from './Message'
 
 interface IProps {
   isMyMessage: boolean
@@ -47,8 +47,8 @@ export const Text = styled.p<IProps>`
   word-break: break-word;
   border-radius: ${props => getMessageBorderRadius(props.isMyMessage, props.shape)};
   color: ${({ theme }) => theme.textPrimary};
-  background: ${({ isMyMessage, theme }) => (isMyMessage ? theme.primary : theme.bg300)};
-  box-shadow: 0 5px 5px rgba(0, 0, 0, 0.3);
+  background: ${({ isMyMessage, theme }) => (isMyMessage ? theme.primary : theme.bg200)};
+  box-shadow: 0 5px 5px rgba(0, 0, 0, 0.2);
 `
 
 export const Avatar = styled.img<{ isHidden: boolean }>`

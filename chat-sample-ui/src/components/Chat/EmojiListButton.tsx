@@ -6,7 +6,7 @@ import { SmileTwoTone } from '@ant-design/icons'
 
 import Popover from '../Popover'
 import { smileys, gestures, food, symbols } from '../../assets/emoji'
-import { StyledButton } from './styled/Chat.styled'
+import { StyledButton } from './Chat.styled'
 
 const StyledTabPane = styled(Tabs.TabPane)`
   overflow: auto;

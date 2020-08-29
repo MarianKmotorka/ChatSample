@@ -2,15 +2,9 @@ import React, { memo, useState } from 'react'
 import moment from 'moment'
 import { DeleteFilled, SyncOutlined } from '@ant-design/icons'
 
-import Tooltip from '../../components/Tooltip'
-import { IMessageDto } from '../../apiContracts/chatContracts'
-import {
-  InnerWrapper,
-  Text,
-  Avatar,
-  StyledButton,
-  DeletedText
-} from './styled/Message.styled'
+import Tooltip from '../../Tooltip'
+import { IMessageDto } from '../../../apiContracts/chatContracts'
+import { InnerWrapper, Text, Avatar, StyledButton, DeletedText } from './Message.styled'
 
 export enum MessageShape {
   TOP = 'top',
