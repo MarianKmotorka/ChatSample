@@ -61,7 +61,7 @@ const Navbar = () => {
       <Logo to='/'>SampleChat</Logo>
       <ThemeButton
         icon={<BgColorsOutlined />}
-        type='text'
+        bg='transparent'
         shape='circle'
         onClick={toggleTheme}
       />

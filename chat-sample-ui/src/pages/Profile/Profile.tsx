@@ -10,8 +10,12 @@ import { NameValueRow, NameValueRowsContainer } from '../../components/NameValue
 import { Wrapper, Photo, Hero, BottomHero, StyledButton } from './styles/Profile.styled'
 import './styles/Profile.animations.css'
 
-const Profile = ({ history }) => {
-  const wrapperRef = useOnClickOutside(history.goBack)
+interface FixMeLater {
+  history: any
+}
+
+const Profile: React.FC<FixMeLater> = ({ history }) => {
+  const wrapperRef = useOnClickOutside<HTMLDivElement>(history.goBack)
   const { profile } = useContext(ProfileContext)
 
   return (

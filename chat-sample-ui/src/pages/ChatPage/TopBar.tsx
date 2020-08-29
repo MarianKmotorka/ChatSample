@@ -7,6 +7,7 @@ import { ProfileContext, ChatContext } from '../../contextProviders'
 import { ChatRole } from '../../apiContracts/chatContracts'
 import useOnClickOutside from '../../utils/useOnClickOutside'
 import Tooltip from '../../components/Tooltip'
+import Button from '../../components/Button'
 
 import {
   Wrapper,
@@ -14,7 +15,6 @@ import {
   ButtonsWrapper,
   ChatNameWrapper,
   ChatNameInput,
-  StyledRenameButton,
   StyledButton
 } from './styled/TopBar.styled'
 
@@ -63,10 +63,10 @@ const TopBar: React.FC<IProps> = ({ onDeleteChat, onToggleChatDetail, onRenameCh
           <>
             <ChatName>{currentChat?.name}</ChatName>
             <Tooltip text='Rename'>
-              <StyledRenameButton
+              <Button
                 onClick={() => setIsRenaming(true)}
                 shape='circle'
-                type='text'
+                text
                 icon={<EditOutlined />}
               />
             </Tooltip>

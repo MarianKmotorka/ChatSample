@@ -59,4 +59,6 @@ export const Content = styled.div`
 
 export const StyledButton = styled(Button)`
   width: 100%;
+  background: ${({ theme }) => theme.primary};
+  border: none;
 `

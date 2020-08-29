@@ -111,11 +111,10 @@ const Chat: React.FC<IProps> = ({
           />
 
           <StyledButton
-            type='text'
             shape='circle'
-            color='primary'
             margin='0 15px'
-            icon={<i className='fas fa-paper-plane fa-5x' />}
+            color='primary'
+            icon={<i className='fas fa-paper-plane' />}
             onClick={_ => onMessageSentInternal(null)}
           />
         </InputWrapper>

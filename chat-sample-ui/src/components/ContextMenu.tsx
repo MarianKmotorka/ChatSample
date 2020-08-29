@@ -2,8 +2,8 @@ import React, { useRef } from 'react'
 import { map, isEmpty } from 'lodash'
 import { Menu, Dropdown } from 'antd'
 import { BarsOutlined } from '@ant-design/icons'
-
-import { Text, StyledButton } from './ContextMenu.styled'
+import styled from 'styled-components'
+import Button from './Button'
 
 interface ContextMenuItem {
   id: string
@@ -15,6 +15,11 @@ interface IProps {
   items: ContextMenuItem[]
   className?: string
 }
+
+const Text = styled.p`
+  font-size: 15px;
+  line-height: 20px;
+`
 
 const ContextMenu: React.FC<IProps> = ({ items, className }) => {
   const containerRef = useRef<HTMLDivElement>(null!)
@@ -40,7 +45,7 @@ const ContextMenu: React.FC<IProps> = ({ items, className }) => {
         arrow
         // trigger='click' // ask TONCO for help
       >
-        <StyledButton icon={<BarsOutlined />} type='text' shape='circle-outline' />
+        <Button icon={<BarsOutlined />} shape='circle-outline' />
       </Dropdown>
     </div>
   )

@@ -55,7 +55,6 @@ const EmojiList: React.FC<IProps> = memo(({ onSelect }) => {
   return (
     <Popover placement='topLeft' content={tabs} trigger='click' color={theme.bg200}>
       <StyledButton
-        type='text'
         shape='circle'
         margin='0 10px 0 0'
         icon={<SmileTwoTone twoToneColor={theme.primary} />}

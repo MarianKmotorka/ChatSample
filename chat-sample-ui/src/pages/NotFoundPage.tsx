@@ -7,7 +7,11 @@ const Wrapper = styled.div`
   padding: 10px 20px;
 `
 
-const NotFoundPage = ({ location }) => {
+interface FixMeLater {
+  location: any
+}
+
+const NotFoundPage: React.FC<FixMeLater> = ({ location }) => {
   if (location.pathname.endsWith('profile')) return null
 
   return <Wrapper>Not Found 404</Wrapper>

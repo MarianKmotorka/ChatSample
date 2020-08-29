@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 import { Link } from 'react-router-dom'
-import { Button } from 'antd'
+import Button from '../Button'
 
 export const Wrapper = styled.div`
   display: flex;
@@ -95,10 +95,5 @@ export const Avatar = styled.img`
 `
 
 export const ThemeButton = styled(Button)`
-  color: ${({ theme }) => theme.blackCoffee};
-
-  :hover,
-  :focus {
-    color: ${({ theme }) => theme.blackCoffee};
-  }
+  margin-left: 10px;
 `

@@ -48,7 +48,6 @@ const Message: React.FC<IProps> = memo(
               shape='circle-outline'
               onClick={() => onDelete(message.id)}
               opacity={hovered ? 1 : 0}
-              hover_color='red'
             />
           )}
 
@@ -59,7 +58,6 @@ const Message: React.FC<IProps> = memo(
               shape='circle-outline'
               onClick={() => onRecover(message.id)}
               opacity={hovered ? 1 : 0}
-              hover_color='green'
             />
           )}
 

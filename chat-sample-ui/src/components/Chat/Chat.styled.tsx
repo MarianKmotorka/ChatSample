@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import { Button } from 'antd'
+import Button from '../Button'
 
 export const Wrapper = styled.div`
   flex: 1;
@@ -28,17 +28,11 @@ export const InputWrapper = styled.div`
   }
 `
 
-export const StyledButton = styled(Button)<{ color?: string; margin?: string }>`
-  color: ${({ theme, color }) => color && theme[color]};
+export const StyledButton = styled(Button)<{ margin?: string }>`
   ${({ margin }) => margin && `margin: ${margin}`};
-  box-shadow: 0 5px 5px rgba(0, 0, 0, 0.2);
   svg,
   i {
     font-size: 25px;
-  }
-  :hover,
-  :focus {
-    color: ${({ theme, color }) => color && theme[color]};
   }
 `
 

@@ -66,11 +66,11 @@ export const MessageDate = styled.p`
   margin-left: auto;
 `
 
-export const StyledButton = styled(Button)<{ hover_color: string; opacity: number }>`
+export const StyledButton = styled(Button)<{ opacity: number }>`
   opacity: ${({ opacity = 1 }) => opacity};
   color: ${({ theme }) => theme.textPrimary};
   :hover {
-    color: ${({ theme, hover_color }) => theme[hover_color] || theme.textPrimary};
+    color: ${({ theme }) => theme.primary};
   }
 `
 

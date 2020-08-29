@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import { Button } from 'antd'
+import Button from '../../../components/Button'
 
 export const Wrapper = styled.div`
   height: 60px;
@@ -19,15 +19,6 @@ export const ButtonsWrapper = styled.div`
 
   * + * {
     margin-left: 10px;
-  }
-`
-
-export const StyledRenameButton = styled(Button)`
-  transform: scale(1.1);
-  color: ${({ theme }) => theme.textPrimary};
-  :hover,
-  :focus {
-    color: ${({ theme }) => theme.textPrimary};
   }
 `
 

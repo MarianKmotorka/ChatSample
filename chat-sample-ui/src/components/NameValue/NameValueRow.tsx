@@ -7,7 +7,7 @@ const Wrapper = styled.div`
   height: 40px;
 `
 
-const Name = styled.p`
+const Name = styled.p<{ width: number }>`
   color: ${({ theme }) => theme.primary};
   width: ${({ width }) => `${width}px`};
   font-size: 18px;
@@ -22,7 +22,12 @@ const Value = styled.p`
   font-size: 18px;
 `
 
-const NameValueRow = ({ children, name, nameWidth }) => {
+interface IProps {
+  name: string
+  nameWidth?: number
+}
+
+const NameValueRow: React.FC<IProps> = ({ children, name, nameWidth = 0 }) => {
   return (
     <Wrapper>
       <Name width={nameWidth}>{name}</Name>

@@ -1,6 +1,8 @@
 import React from 'react'
 
-const NameValueRowsContainer = ({ children, nameWidth }) => {
+// TODO: use TypeScript
+
+const NameValueRowsContainer = ({ children, nameWidth = 0 }) => {
   return (
     <div>
       {React.Children.map(children, row => React.cloneElement(row, { nameWidth }))}
