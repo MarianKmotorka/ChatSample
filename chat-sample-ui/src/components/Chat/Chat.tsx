@@ -1,7 +1,8 @@
 import React, { useState, useCallback, useMemo, FormEvent } from 'react'
 import { map, first } from 'lodash'
+import moment from 'moment'
 
-import Message from './Message'
+import Message, { MessageShape } from './Message/Message'
 import EmojiListButton from './EmojiListButton'
 import MessagesLoadingSpinner from './MessagesLoadingSpinner'
 import { IMessageDto } from '../../apiContracts/chatContracts'
@@ -12,8 +13,9 @@ import {
   Wrapper,
   MessagesWrapper,
   InputWrapper,
-  StyledButton
-} from './styled/Chat.styled'
+  StyledButton,
+  TimeStamp
+} from './Chat.styled'
 import { useFocusWhenMounted, useScrollTo } from './hooks'
 
 interface IProps {
@@ -57,15 +59,26 @@ const Chat: React.FC<IProps> = ({
           ? observeMessage
           : null
 
+      const date = moment(message.date).format('MMMM Do YYYY, H:mm')
+      const shape = getMessageShape(messages, message)
+      const isDelayed =
+        shape === MessageShape.STANDALONE_DELAYED || shape === MessageShape.TOP_DELAYED
+
       return (
-        <Message
-          key={message.id}
-          message={message}
-          forwardRef={ref}
-          shape={getMessageShape(messages, message)}
-          onDelete={onDeleteMessage}
-          onRecover={onRecoverMessage}
-        />
+        <div key={message.id}>
+          {isDelayed && (
+            <TimeStamp>
+              <span>{date}</span>
+            </TimeStamp>
+          )}
+          <Message
+            message={message}
+            forwardRef={ref}
+            shape={shape}
+            onDelete={onDeleteMessage}
+            onRecover={onRecoverMessage}
+          />
+        </div>
       )
     },
     [
@@ -99,8 +112,9 @@ const Chat: React.FC<IProps> = ({
 
           <StyledButton
             type='text'
-            shape='round'
+            shape='circle'
             color='primary'
+            margin='0 15px'
             icon={<i className='fas fa-paper-plane fa-5x' />}
             onClick={_ => onMessageSentInternal(null)}
           />

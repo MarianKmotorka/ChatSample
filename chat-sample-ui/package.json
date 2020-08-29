@@ -52,6 +52,7 @@
   "devDependencies": {
     "@types/lodash": "^4.14.159",
     "@types/react-router-dom": "^5.1.5",
+    "@types/react-transition-group": "^4.4.0",
     "@types/styled-components": "^5.1.2"
   }
 }

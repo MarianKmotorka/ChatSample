@@ -1,6 +1,6 @@
 import React, { useContext, useState, useEffect } from 'react'
 import { find } from 'lodash'
-import { Button, Modal } from 'antd'
+import { Modal } from 'antd'
 import { DeleteFilled, UserSwitchOutlined, EditOutlined } from '@ant-design/icons'
 
 import { ProfileContext, ChatContext } from '../../contextProviders'
@@ -14,6 +14,7 @@ import {
   ButtonsWrapper,
   ChatNameWrapper,
   ChatNameInput,
+  StyledRenameButton,
   StyledButton
 } from './styled/TopBar.styled'
 
@@ -62,7 +63,7 @@ const TopBar: React.FC<IProps> = ({ onDeleteChat, onToggleChatDetail, onRenameCh
           <>
             <ChatName>{currentChat?.name}</ChatName>
             <Tooltip text='Rename'>
-              <StyledButton
+              <StyledRenameButton
                 onClick={() => setIsRenaming(true)}
                 shape='circle'
                 type='text'
@@ -76,7 +77,7 @@ const TopBar: React.FC<IProps> = ({ onDeleteChat, onToggleChatDetail, onRenameCh
       <ButtonsWrapper>
         {canDeleteChat && (
           <Tooltip text='Delete chat'>
-            <Button
+            <StyledButton
               onClick={() => setShowDeleteChatModal(true)}
               shape='circle'
               icon={<DeleteFilled />}
@@ -85,7 +86,7 @@ const TopBar: React.FC<IProps> = ({ onDeleteChat, onToggleChatDetail, onRenameCh
         )}
 
         <Tooltip text='Participants' placement='topRight'>
-          <Button
+          <StyledButton
             onClick={onToggleChatDetail}
             shape='circle'
             icon={<UserSwitchOutlined />}

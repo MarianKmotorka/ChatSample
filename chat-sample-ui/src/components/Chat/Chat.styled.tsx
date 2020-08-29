@@ -22,21 +22,23 @@ export const InputWrapper = styled.div`
     outline: none;
     border: none;
     border-radius: 22px;
-    background: ${({ theme }) => theme.bg400};
+    background: ${({ theme }) => theme.bg200};
     color: ${({ theme }) => theme.textPrimary};
+    box-shadow: 0 5px 5px rgba(0, 0, 0, 0.2);
   }
 `
 
-export const StyledButton = styled(Button)`
-  color: ${({ theme, color }) => theme[color]};
-  margin-right: 5px;
+export const StyledButton = styled(Button)<{ color?: string; margin?: string }>`
+  color: ${({ theme, color }) => color && theme[color]};
+  ${({ margin }) => margin && `margin: ${margin}`};
+  box-shadow: 0 5px 5px rgba(0, 0, 0, 0.2);
   svg,
   i {
     font-size: 25px;
   }
   :hover,
   :focus {
-    color: ${({ theme, color }) => theme[color]};
+    color: ${({ theme, color }) => color && theme[color]};
   }
 `
 
@@ -44,6 +46,19 @@ export const MessagesWrapper = styled.div`
   overflow: auto;
   flex: 1;
   background: ${({ theme }) => theme.bg100};
-  padding-top: 10px;
-  padding-bottom: 6px;
+  padding: 10px 0;
+`
+
+export const TimeStamp = styled.p`
+  margin: 40px;
+  text-align: center;
+  color: ${({ theme }) => theme.textPrimary};
+  border-bottom: 1px solid ${({ theme }) => theme.bg300};
+  line-height: 0.1em;
+  opacity: 0.6;
+
+  span {
+    padding: 0 30px;
+    background: ${({ theme }) => theme.bg100};
+  }
 `

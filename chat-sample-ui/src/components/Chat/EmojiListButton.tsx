@@ -6,7 +6,7 @@ import { SmileTwoTone } from '@ant-design/icons'
 
 import Popover from '../Popover'
 import { smileys, gestures, food, symbols } from '../../assets/emoji'
-import { StyledButton } from './styled/Chat.styled'
+import { StyledButton } from './Chat.styled'
 
 const StyledTabPane = styled(Tabs.TabPane)`
   overflow: auto;
@@ -54,7 +54,12 @@ const EmojiList: React.FC<IProps> = memo(({ onSelect }) => {
 
   return (
     <Popover placement='topLeft' content={tabs} trigger='click' color={theme.bg200}>
-      <StyledButton type='text' icon={<SmileTwoTone twoToneColor={theme.primary} />} />
+      <StyledButton
+        type='text'
+        shape='circle'
+        margin='0 10px 0 0'
+        icon={<SmileTwoTone twoToneColor={theme.primary} />}
+      />
     </Popover>
   )
 })

@@ -2,21 +2,17 @@ import React, { memo, useState } from 'react'
 import moment from 'moment'
 import { DeleteFilled, SyncOutlined } from '@ant-design/icons'
 
-import Tooltip from '../../components/Tooltip'
-import { IMessageDto } from '../../apiContracts/chatContracts'
-import {
-  InnerWrapper,
-  Text,
-  Avatar,
-  StyledButton,
-  DeletedText
-} from './styled/Message.styled'
+import Tooltip from '../../Tooltip'
+import { IMessageDto } from '../../../apiContracts/chatContracts'
+import { InnerWrapper, Text, Avatar, StyledButton, DeletedText } from './Message.styled'
 
 export enum MessageShape {
   TOP = 'top',
+  TOP_DELAYED = 'top-delayed',
   MIDDLE = 'middle',
   BOTTOM = 'bottom',
-  STANDALONE = 'standalone'
+  STANDALONE = 'standalone',
+  STANDALONE_DELAYED = 'standalone-delayed'
 }
 
 interface IProps {
@@ -31,9 +27,12 @@ const Message: React.FC<IProps> = memo(
   ({ message, forwardRef, onDelete, onRecover, shape = MessageShape.STANDALONE }) => {
     const [hovered, setHovered] = useState(false)
 
-    const date = moment(message.date).format('MMMM Do YYYY, H:mm')
-    const showAvatar = shape === MessageShape.STANDALONE || shape === MessageShape.BOTTOM
+    const date = moment(message.date).format('MMMM Do YYYY, H:mm:ss')
     const text = message.isDeleted ? <DeletedText>Deleted</DeletedText> : message.text
+    const showAvatar =
+      shape === MessageShape.STANDALONE ||
+      shape === MessageShape.BOTTOM ||
+      shape === MessageShape.STANDALONE_DELAYED
 
     return (
       <div

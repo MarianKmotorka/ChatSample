@@ -1,4 +1,4 @@
-import { MessageShape } from './Message'
+import { MessageShape } from './Message/Message'
 import { indexOf } from 'lodash'
 import { IMessageDto } from '../../apiContracts/chatContracts'
 
@@ -16,8 +16,11 @@ export const getMessageBorderRadius = (isMyMessage: boolean, shape: MessageShape
       shape === MessageShape.BOTTOM || shape === MessageShape.MIDDLE
         ? NO_RADIUS
         : BORDER_RADIUS
+
     bottomRight =
-      shape === MessageShape.TOP || shape === MessageShape.MIDDLE
+      shape === MessageShape.TOP ||
+      shape === MessageShape.TOP_DELAYED ||
+      shape === MessageShape.MIDDLE
         ? NO_RADIUS
         : BORDER_RADIUS
   } else {
@@ -25,8 +28,11 @@ export const getMessageBorderRadius = (isMyMessage: boolean, shape: MessageShape
       shape === MessageShape.BOTTOM || shape === MessageShape.MIDDLE
         ? NO_RADIUS
         : BORDER_RADIUS
+
     bottomLeft =
-      shape === MessageShape.TOP || shape === MessageShape.MIDDLE
+      shape === MessageShape.TOP ||
+      shape === MessageShape.TOP_DELAYED ||
+      shape === MessageShape.MIDDLE
         ? NO_RADIUS
         : BORDER_RADIUS
   }
@@ -34,20 +40,54 @@ export const getMessageBorderRadius = (isMyMessage: boolean, shape: MessageShape
   return `${topLeft}px ${topRight}px ${bottomRight}px ${bottomLeft}px`
 }
 
-export const getMessageShape = (allMessages: IMessageDto[], message: IMessageDto) => {
-  var lastIndex = allMessages.length - 1
+const isDelayedMessage = (message: IMessageDto, otherMessage?: IMessageDto) =>
+  Math.abs(
+    new Date(message.date).getTime() - new Date(otherMessage?.date || 0).getTime()
+  ) /
+    60000 >
+  10
 
-  var messageIndex = indexOf(allMessages, message)
-  var messageAbove = messageIndex > 0 ? allMessages[messageIndex - 1] : null
-  var messageBellow = messageIndex < lastIndex ? allMessages[messageIndex + 1] : null
+export const getMessageShape = (allMessages: IMessageDto[], message: IMessageDto) => {
+  const lastIndex = allMessages.length - 1
+  const messageIndex = indexOf(allMessages, message)
+  const messageAbove = messageIndex > 0 ? allMessages[messageIndex - 1] : undefined
+  const messageBellow =
+    messageIndex < lastIndex ? allMessages[messageIndex + 1] : undefined
+
+  const isDelayedFromAbove = isDelayedMessage(message, messageAbove)
+  const isDelayedFromBellow = isDelayedMessage(message, messageBellow)
+
+  if (
+    isDelayedFromAbove &&
+    (isDelayedFromBellow || message.senderId !== messageBellow?.senderId)
+  )
+    return MessageShape.STANDALONE_DELAYED
+
+  if (
+    (message.senderId !== messageAbove?.senderId &&
+      message.senderId !== messageBellow?.senderId) ||
+    (isDelayedFromBellow && message.senderId !== messageAbove?.senderId)
+  )
+    return MessageShape.STANDALONE
+
+  if (message.senderId === messageBellow?.senderId && isDelayedFromAbove)
+    return MessageShape.TOP_DELAYED
+
+  if (
+    message.senderId === messageBellow?.senderId &&
+    message.senderId !== messageAbove?.senderId &&
+    !isDelayedFromBellow &&
+    !isDelayedFromAbove
+  )
+    return MessageShape.TOP
 
   if (
     message.senderId === messageAbove?.senderId &&
-    message.senderId === messageBellow?.senderId
+    messageAbove?.senderId === messageBellow?.senderId &&
+    !isDelayedFromAbove &&
+    !isDelayedFromBellow
   )
     return MessageShape.MIDDLE
-  if (message.senderId === messageAbove?.senderId) return MessageShape.BOTTOM
-  if (message.senderId === messageBellow?.senderId) return MessageShape.TOP
 
-  return MessageShape.STANDALONE
+  return MessageShape.BOTTOM
 }

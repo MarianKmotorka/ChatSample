@@ -32,7 +32,7 @@ export const lightTheme: DefaultTheme = {
   bg400: '#BFBDC1',
   bg500: '#7d7d7d',
   textPrimary: '#000000',
-  primary: '#DE9E36',
+  primary: '#a0a734',
 
   blue: '#298cfb',
   red: '#ff4d4f',
@@ -54,7 +54,7 @@ export const darkTheme: DefaultTheme = {
   bg400: '#404041',
   bg500: '#acacb7',
   textPrimary: '#ffffff',
-  primary: '#298cfb',
+  primary: '#a0a734',
 
   blue: '#298cfb',
   red: '#ff4d4f',
