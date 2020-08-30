@@ -6,9 +6,14 @@ export const StyledButton = styled(Button)`
 `
 
 export const ContentWrapper = styled.div`
+  padding: 5px;
+
+  * + * {
+    margin-top: 10px;
+  }
+
   .ant-switch {
     background-color: ${({ theme }) => theme.lightGray};
-    }
   }
   .ant-switch-checked {
     background-color: ${({ theme }) => theme.gray};
@@ -40,5 +45,4 @@ export const Container = styled.div`
   align-items: center;
   justify-content: space-between;
   width: 100%;
-  margin-top: 15px;
 `
