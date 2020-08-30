@@ -1,6 +1,5 @@
 import styled from 'styled-components'
 import { Link } from 'react-router-dom'
-import Button from '../Button'
 
 export const Wrapper = styled.div`
   display: flex;
@@ -92,8 +91,4 @@ export const Avatar = styled.img`
   margin-left: auto;
   height: 33px;
   cursor: pointer;
-`
-
-export const ThemeButton = styled(Button)`
-  margin-left: 10px;
 `

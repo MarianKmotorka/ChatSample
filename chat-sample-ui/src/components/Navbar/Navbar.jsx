@@ -1,11 +1,11 @@
 import React, { useContext, useState } from 'react'
 import { get, trimEnd } from 'lodash'
 import { useHistory } from 'react-router-dom'
-import { BgColorsOutlined } from '@ant-design/icons'
 
 import { isLoggedIn } from '../../services/authService'
-import { ProfileContext, ThemeContext } from '../../contextProviders'
+import { ProfileContext } from '../../contextProviders'
 import useWindowSize, { SM } from '../../utils/useWindowSize'
+import ThemeButton from './ThemeButton'
 
 import {
   Wrapper,
@@ -16,13 +16,11 @@ import {
   UserName,
   NavbarLink,
   ExpandedLinksWrapper,
-  ExpandedMenuLink,
-  ThemeButton
+  ExpandedMenuLink
 } from './Navbar.styled'
 
 const Navbar = () => {
   const { profile } = useContext(ProfileContext)
-  const { toggleTheme } = useContext(ThemeContext)
   const { width } = useWindowSize()
   const history = useHistory()
   const [linksExpanded, setLinksExpanded] = useState(false)
@@ -59,12 +57,7 @@ const Navbar = () => {
   return (
     <Wrapper>
       <Logo to='/'>SampleChat</Logo>
-      <ThemeButton
-        icon={<BgColorsOutlined />}
-        bg='transparent'
-        shape='circle'
-        onClick={toggleTheme}
-      />
+      <ThemeButton />
       {isLoggedIn && (width < SM ? smallScreenLinks : links)}
     </Wrapper>
   )

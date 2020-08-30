@@ -37,7 +37,7 @@ export const lightTheme: DefaultTheme = {
 
   blue: '#298cfb',
   red: '#ff4d4f',
-  green: '#057a5e',
+  green: '#a0a734',
   black: '#010101',
   white: '#ffffff',
   blackCoffee: '#37323E',
@@ -60,7 +60,7 @@ export const darkTheme: DefaultTheme = {
 
   blue: '#298cfb',
   red: '#ff4d4f',
-  green: '#057a5e',
+  green: '#a0a734',
   black: '#010101',
   white: '#ffffff',
   blackCoffee: '#37323E',

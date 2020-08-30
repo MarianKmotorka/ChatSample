@@ -101,6 +101,7 @@ const TopBar: React.FC<IProps> = ({ onDeleteChat, onToggleChatDetail, onRenameCh
         okText='Yes, delete the chat.'
         cancelText='No, go back.'
         visible={showDeleteChatModal}
+        getContainer={document.getElementById('portal')}
       >
         <p>Be aware of that this action can not be reversed! </p>
       </Modal>
