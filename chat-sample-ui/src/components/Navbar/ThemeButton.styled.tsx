@@ -10,7 +10,6 @@ export const ContentWrapper = styled.div`
     background-color: ${({ theme }) => theme.lightGray};
     }
   }
-
   .ant-switch-checked {
     background-color: ${({ theme }) => theme.gray};
   }
@@ -26,6 +25,14 @@ export const ColorOption = styled.div<{ bg: string }>`
   background: ${({ bg }) => bg};
   border-radius: 50%;
   margin-left: 10px;
+  cursor: pointer;
+  box-shadow: 0 5px 5px rgba(0, 0, 0, 0.3);
+  transition: box-shadow 0.3s, transform 0.3s;
+
+  :hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 8px rgba(0, 0, 0, 0.3);
+  }
 `
 
 export const Container = styled.div`

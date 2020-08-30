@@ -23,6 +23,7 @@ const ThemeContextProvider: React.FC = ({ children }) => {
       localStorage.getItem('theme') === 'dark' ? ThemeEnum.Dark : ThemeEnum.Light // Note: Find better way to parse to enum
 
     setTheme(storedTheme)
+    setPrimaryColor(localStorage.getItem('color') || lightTheme.green)
   }, [])
 
   const toggleTheme = () => {
@@ -33,6 +34,7 @@ const ThemeContextProvider: React.FC = ({ children }) => {
 
   const pickColor = (color: string) => {
     setPrimaryColor(color)
+    localStorage.setItem('color', color)
   }
 
   return (

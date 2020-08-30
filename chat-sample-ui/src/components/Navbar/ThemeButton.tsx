@@ -26,9 +26,10 @@ const ThemeButton: React.FC = () => {
 
       <Container>
         <Label>Pick color</Label>
+        <ColorOption bg={theme.green} onClick={_ => pickColor(theme.green)} />
+        <ColorOption bg={theme.orange} onClick={_ => pickColor(theme.orange)} />
         <ColorOption bg={theme.blue} onClick={_ => pickColor(theme.blue)} />
         <ColorOption bg={theme.red} onClick={_ => pickColor(theme.red)} />
-        <ColorOption bg={theme.green} onClick={_ => pickColor(theme.green)} />
       </Container>
     </ContentWrapper>
   )
