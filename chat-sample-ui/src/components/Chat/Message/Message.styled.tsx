@@ -75,7 +75,7 @@ export const StyledButton = styled(Button)<{ opacity: number }>`
 `
 
 export const DeletedText = styled.i`
-  color: ${({ theme }) => theme.textPrimary};
+  color: ${({ theme }) => theme.black};
   margin: 0;
   padding: 0;
 `

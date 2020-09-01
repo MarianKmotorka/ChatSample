@@ -23,7 +23,6 @@ export const ChatButtonLink = styled(NavLink)`
   box-shadow: 0 5px 5px rgba(0, 0, 0, 0.1);
   transition: transform 0.2s, box-shadow 0.2s;
   border-radius: 5px;
-  text-decoration: none;
   font-size: 18px;
   display: flex;
   justify-content: center;
@@ -57,8 +56,10 @@ export const ChatButtonLink = styled(NavLink)`
 export const StyledBadge = styled(Badge)`
   min-width: 92%;
   transition: all 0.3s ease;
+
   .ant-badge-count {
     background-color: ${({ theme }) => theme.primary};
+    color: ${({ theme }) => theme.black};
     box-shadow: none;
   }
 `

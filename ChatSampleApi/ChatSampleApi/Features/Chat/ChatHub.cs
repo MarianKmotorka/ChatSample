@@ -14,17 +14,18 @@ namespace ChatSampleApi.Features.Chat
     public class ChatHub : Hub
     {
         public const string ApiPath = "/api/chat-hub";
-        public const string RecieveMessage = "RecieveMessage";
-        public const string RecieveParticipant = "RecieveParticipant";
-        public const string RecieveChat = "RecieveChat";
-        public const string DeleteChat = "DeleteChat";
-        public const string DeleteMessage = "DeleteMessage";
-        public const string DeleteParticipant = "DeleteParticipant";
-        public const string GetConnectionId = "GetConnectionId";
-        public const string UserConnectedStatusChanged = "ChangeUserStatus";
-        public const string ParticipantRoleChanged = "ChangeParticipantRole";
-        public const string RecoverMessage = "RecoverMessage";
-        public const string RenameChat = "RenameChat";
+        public const string RecieveMessage = nameof(RecieveMessage);
+        public const string RecieveParticipant = nameof(RecieveParticipant);
+        public const string RecieveChat = nameof(RecieveChat);
+        public const string DeleteChat = nameof(DeleteChat);
+        public const string DeleteMessage = nameof(DeleteMessage);
+        public const string DeleteParticipant = nameof(DeleteParticipant);
+        public const string GetConnectionId = nameof(GetConnectionId);
+        public const string ChangeUserStatus = nameof(ChangeUserStatus);
+        public const string ChangeParticipantRole = nameof(ChangeParticipantRole);
+        public const string RecoverMessage = nameof(RecoverMessage);
+        public const string RenameChat = nameof(RenameChat);
+        public const string SetIsTyping = nameof(SetIsTyping);
 
         private readonly ICurrentUserService _currentUserService;
         private readonly DatabaseContext _db;
@@ -39,6 +40,12 @@ namespace ChatSampleApi.Features.Chat
         {
             _currentUserService = currentUserService;
             _db = db;
+        }
+
+        [HubMethodName("SendIsTyping")]
+        public async Task SendIsTyping(bool isTyping, string chatId)
+        {
+            await Clients.Group(chatId).SendAsync(SetIsTyping, isTyping, _currentUserService.UserId);
         }
 
         #region OnConnected / OnDisconnected
@@ -78,7 +85,7 @@ namespace ChatSampleApi.Features.Chat
             foreach (var group in groups)
             {
                 await Groups.AddToGroupAsync(Context.ConnectionId, group.Id);
-                await Clients.Group(group.Id).SendAsync(UserConnectedStatusChanged, userId, true);
+                await Clients.Group(group.Id).SendAsync(ChangeUserStatus, userId, true);
             }
         }
 
@@ -95,7 +102,7 @@ namespace ChatSampleApi.Features.Chat
             foreach (var group in groups)
             {
                 if (userIsOffline)
-                    await Clients.Group(group.Id).SendAsync(UserConnectedStatusChanged, userId, false);
+                    await Clients.Group(group.Id).SendAsync(ChangeUserStatus, userId, false);
 
                 await Groups.RemoveFromGroupAsync(Context.ConnectionId, group.Id);
             }

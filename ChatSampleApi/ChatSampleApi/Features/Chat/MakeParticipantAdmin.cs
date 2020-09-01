@@ -45,7 +45,7 @@ namespace ChatSampleApi.Features.Chat
                 var participant = chat.Participants.Single(x => x.UserId == request.ParticipantId);
                 participant.MakeUserAdmin();
 
-                await _hubContext.Clients.Group(chat.Id).SendAsync(ChatHub.ParticipantRoleChanged, chat.Id, participant.UserId, ChatRole.Admin);
+                await _hubContext.Clients.Group(chat.Id).SendAsync(ChatHub.ChangeParticipantRole, chat.Id, participant.UserId, ChatRole.Admin);
                 await _db.SaveChangesAsync(cancellationToken);
 
                 return Unit.Value;

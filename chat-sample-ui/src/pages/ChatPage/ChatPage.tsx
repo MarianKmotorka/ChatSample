@@ -16,12 +16,11 @@ const ChatPage = () => {
   const {
     currentChatFetching,
     moreMessagesFetching,
-    getParticipants,
-    getMessages,
-    getMoreMessages,
     messages,
     participants,
-    totalMessagesCount
+    totalMessagesCount,
+    setCurrentChatId,
+    getMoreMessages
   } = useContext(ChatContext)
 
   const { chatId } = useParams()
@@ -32,12 +31,8 @@ const ChatPage = () => {
   const lastMessageId = last(messages)?.id
   const firstMessageId = first(messages)?.id
 
+  useEffect(() => setCurrentChatId(chatId), [chatId, setCurrentChatId])
   useEffect(() => setScrollToMessageId(lastMessageId), [lastMessageId])
-
-  useEffect(() => {
-    getParticipants(chatId)
-    getMessages(chatId)
-  }, [chatId, getMessages, getParticipants])
 
   const handleMessageSent = async (text: string) => {
     setScrollToMessageId(lastMessageId)

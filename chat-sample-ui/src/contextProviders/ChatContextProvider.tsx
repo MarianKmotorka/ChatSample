@@ -22,9 +22,8 @@ interface IValue {
   participants: IParticipantDto[]
   FETCH_MESSAGES_PAGE_SIZE: number
   totalMessagesCount: number
-  getMessages: (chatId: string) => Promise<void>
-  getParticipants: (chatId: string) => Promise<void>
   getMoreMessages: (chatId: string) => Promise<void>
+  setCurrentChatId: React.Dispatch<React.SetStateAction<string>>
 }
 
 const FETCH_MESSAGES_PAGE_SIZE = 25
@@ -32,11 +31,10 @@ export const ChatContext = createContext<IValue>(null!)
 
 const ChatContextProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [chats, setChats] = useState<IChatDto[]>([])
-  const [chatsFetching, setChatsFetching] = useState(false)
+  const [chatsFetching, setChatsFetching] = useState(true)
   const [currentChatId, setCurrentChatId] = useState('')
-  const [messagesFetching, setMessagesFetching] = useState(false)
+  const [currentChatFetching, setCurrentChatFetching] = useState(true)
   const [moreMessagesFetching, setMoreMessagesFetching] = useState(false)
-  const [participantsFetching, setParticipantsFetching] = useState(false)
   const [messages, setMessages] = useState<IMessageDto[]>([])
   const [participants, setParticipants] = useState<IParticipantDto[]>([])
   const [totalMessagesCount, setTotalMessagesCount] = useState(0)
@@ -45,6 +43,39 @@ const ChatContextProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const { profile } = useContext(ProfileContext)
   const [beep] = useSound(newMessageBeep)
   const history = useHistory()
+
+  // Fetch CURRENT CHAT
+  useEffect(() => {
+    const fetch = async () => {
+      setCurrentChatFetching(true)
+
+      var responses = await Promise.all([
+        api.get(`chats/${currentChatId}/participants`),
+        api.get(`chats/${currentChatId}/messages?count=${FETCH_MESSAGES_PAGE_SIZE}`)
+      ])
+
+      setParticipants(responses[0]?.data)
+      setMessages(responses[1]?.data.data)
+      setTotalMessagesCount(responses[1].data.totalCount)
+      setChats(prev =>
+        map(prev, x => (x.id === currentChatId ? { ...x, unreadMessages: 0 } : x))
+      )
+      setCurrentChatFetching(false)
+    }
+
+    currentChatId && fetch()
+  }, [currentChatId])
+
+  // FETCH ALL CHATS
+  useEffect(() => {
+    const fetch = async () => {
+      setChatsFetching(true)
+      setChats((await api.get('/chats/mine')).data)
+      setChatsFetching(false)
+    }
+
+    isLoggedIn && fetch()
+  }, [])
 
   const recieveMessage = useCallback(
     (chatId, message) => {
@@ -115,31 +146,6 @@ const ChatContextProvider: React.FC<{ children: React.ReactNode }> = ({ children
     [profile, currentChatId, history]
   )
 
-  const getParticipants = useCallback(async chatId => {
-    setParticipantsFetching(true)
-    setCurrentChatId(chatId)
-
-    const response = await api.get(`chats/${chatId}/participants`)
-    setParticipants(response?.data)
-
-    setParticipantsFetching(false)
-  }, [])
-
-  const getMessages = useCallback(async chatId => {
-    setMessagesFetching(true)
-    setCurrentChatId(chatId)
-
-    const response = await api.get(
-      `chats/${chatId}/messages?count=${FETCH_MESSAGES_PAGE_SIZE}`
-    )
-    setMessages(get(response, 'data.data'))
-
-    setChats(prev => map(prev, x => (x.id === chatId ? { ...x, unreadMessages: 0 } : x)))
-
-    setTotalMessagesCount(get(response, 'data.totalCount'))
-    setMessagesFetching(false)
-  }, [])
-
   const getMoreMessages = useCallback(
     async chatId => {
       setMoreMessagesFetching(true)
@@ -180,19 +186,6 @@ const ChatContextProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const renameChat = useCallback((chatId, name) => {
     setChats(prev => map(prev, x => (x.id === chatId ? { ...x, name } : x)))
-  }, [])
-
-  useEffect(() => {
-    const fetchChats = async () => {
-      setChatsFetching(true)
-      const response = await api.get('/chats/mine')
-      setChats(response.data)
-      setChatsFetching(false)
-    }
-
-    if (isLoggedIn) {
-      fetchChats()
-    }
   }, [])
 
   useEffect(() => {
@@ -240,16 +233,15 @@ const ChatContextProvider: React.FC<{ children: React.ReactNode }> = ({ children
       value={{
         chats,
         chatsFetching,
-        currentChatFetching: messagesFetching || participantsFetching,
+        currentChatFetching,
         moreMessagesFetching,
         currentChatId,
         messages,
         participants,
         totalMessagesCount,
         FETCH_MESSAGES_PAGE_SIZE,
-        getMessages,
         getMoreMessages,
-        getParticipants
+        setCurrentChatId
       }}
     >
       {children}

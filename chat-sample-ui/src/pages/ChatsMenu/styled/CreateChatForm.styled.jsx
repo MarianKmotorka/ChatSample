@@ -16,6 +16,7 @@ export const Header = styled.div`
   font-size: 30px;
   border-radius: 20px 20px 0 0;
   background: ${({ theme }) => theme.primary};
+  color: ${({ theme }) => theme.black};
   display: flex;
   justify-content: center;
   width: 100%;
@@ -63,6 +64,12 @@ export const Content = styled.div`
 
 export const StyledButton = styled(Button)`
   width: 100%;
+  border: 1px solid ${({ theme }) => theme.primary};
+  color: ${({ theme }) => theme.primary};
+
+  :hover {
+    border: 1px solid ${({ theme }) => theme.primary};
+  }
 `
 
 export const Text = styled.p`
