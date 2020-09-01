@@ -45,7 +45,8 @@ namespace ChatSampleApi.Features.Chat
         [HubMethodName("SendIsTyping")]
         public async Task SendIsTyping(bool isTyping, string chatId)
         {
-            await Clients.Group(chatId).SendAsync(SetIsTyping, isTyping, _currentUserService.UserId);
+            var userId = _currentUserService.UserId;
+            await Clients.GroupExcept(chatId, _userConnections[userId]).SendAsync(SetIsTyping, isTyping, userId, chatId);
         }
 
         #region OnConnected / OnDisconnected

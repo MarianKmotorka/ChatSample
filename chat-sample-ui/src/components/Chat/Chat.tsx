@@ -1,13 +1,14 @@
 import React, { useState, useCallback, useMemo, FormEvent } from 'react'
-import { map, first } from 'lodash'
+import { map, first, trim } from 'lodash'
 import moment from 'moment'
 
-import Message, { MessageShape } from './Message/Message'
+import { getMessageShape } from './utils'
 import EmojiListButton from './EmojiListButton'
+import useIsTyping from '../../utils/useIsTyping'
+import { useObserver } from '../../utils/useObserver'
+import Message, { MessageShape } from './Message/Message'
 import MessagesLoadingSpinner from './MessagesLoadingSpinner'
 import { IMessageDto } from '../../apiContracts/chatContracts'
-import { getMessageShape } from './utils'
-import { useObserver } from '../../utils/useObserver'
 
 import {
   Wrapper,
@@ -27,6 +28,7 @@ interface IProps {
   onMessageSent: (text: string) => void
   onDeleteMessage: (id: string) => void
   onRecoverMessage: (id: string) => void
+  onIsTypingChanged: (isTyping: boolean) => void
 }
 
 const Chat: React.FC<IProps> = ({
@@ -37,17 +39,19 @@ const Chat: React.FC<IProps> = ({
   onLoadMore,
   onMessageSent,
   onDeleteMessage,
-  onRecoverMessage
+  onRecoverMessage,
+  onIsTypingChanged
 }) => {
   const [text, setText] = useState('')
   const inputRef = useFocusWhenMounted<HTMLInputElement>()
   const scrollToMessageRef = useScrollTo<HTMLDivElement>(scrollToMessageId, messages)
   const observeMessage = useObserver<HTMLDivElement>(canLoadMore, onLoadMore)
+  useIsTyping(text, onIsTypingChanged)
 
   const onMessageSentInternal = (e: FormEvent<HTMLFormElement> | null) => {
     e?.preventDefault()
     setText('')
-    text && onMessageSent(text)
+    trim(text) && onMessageSent(text)
   }
 
   const renderMessage = useCallback(
@@ -103,11 +107,7 @@ const Chat: React.FC<IProps> = ({
             onSelect={useCallback(emoji => setText(prev => prev + emoji), [])}
           />
 
-          <input
-            ref={inputRef}
-            value={text}
-            onChange={({ target }) => setText(target.value)}
-          />
+          <input ref={inputRef} value={text} onChange={e => setText(e.target.value)} />
 
           <StyledButton
             shape='circle'

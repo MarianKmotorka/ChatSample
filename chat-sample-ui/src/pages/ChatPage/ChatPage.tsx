@@ -3,12 +3,13 @@ import { get, last, first } from 'lodash'
 import { useParams, useHistory } from 'react-router-dom'
 
 import TopBar from './TopBar'
+import api from '../../services/httpService'
 import Chat from '../../components/Chat/Chat'
+import useIsTyping from '../../utils/useIsTyping'
+import { ChatContext } from '../../contextProviders'
 import LoadingSpinner from '../../components/LoadingSpinner'
 import ChatDetail from '../../components/Chat/Detail/ChatDetail'
-import { ChatContext } from '../../contextProviders'
 import { IParticipantDto } from '../../apiContracts/chatContracts'
-import api from '../../services/httpService'
 
 import { Wrapper, InnerWrapper } from './styled/ChatPage.styled'
 
@@ -20,7 +21,8 @@ const ChatPage = () => {
     participants,
     hasMoreMessages,
     setCurrentChatId,
-    getMoreMessages
+    getMoreMessages,
+    hubConnection
   } = useContext(ChatContext)
 
   const { chatId } = useParams()
@@ -79,6 +81,9 @@ const ChatPage = () => {
   const handleChatRenamed = async (name: string) =>
     await api.patch(`/chats/${chatId}`, { name })
 
+  const handleIsTypingChanged = async (isTyping: boolean) =>
+    await hubConnection?.invoke('SendIsTyping', isTyping, chatId)
+
   if (currentChatFetching) return <LoadingSpinner />
 
   return (
@@ -91,13 +96,14 @@ const ChatPage = () => {
       <InnerWrapper>
         <Chat
           messages={messages}
+          canLoadMore={hasMoreMessages}
+          scrollToMessageId={scrollToMessageId}
+          moreMessagesFetching={moreMessagesFetching}
+          onIsTypingChanged={handleIsTypingChanged}
           onLoadMore={handleLoadMore}
           onMessageSent={handleMessageSent}
-          scrollToMessageId={scrollToMessageId}
           onDeleteMessage={handleMessageDeleted}
           onRecoverMessage={handleMessageRecovered}
-          canLoadMore={hasMoreMessages}
-          moreMessagesFetching={moreMessagesFetching}
         />
         {showChatDetail && (
           <ChatDetail
