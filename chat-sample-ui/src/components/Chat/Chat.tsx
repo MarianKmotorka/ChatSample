@@ -59,7 +59,6 @@ const Chat: React.FC<IProps> = ({
           ? observeMessage
           : null
 
-      const date = moment(message.date).format('MMMM Do YYYY, H:mm')
       const shape = getMessageShape(messages, message)
       const isDelayed =
         shape === MessageShape.STANDALONE_DELAYED || shape === MessageShape.TOP_DELAYED
@@ -68,7 +67,7 @@ const Chat: React.FC<IProps> = ({
         <div key={message.id}>
           {isDelayed && (
             <TimeStamp>
-              <span>{date}</span>
+              <span>{moment(message.date).format('MMMM Do YYYY, H:mm')}</span>
             </TimeStamp>
           )}
           <Message
@@ -82,12 +81,12 @@ const Chat: React.FC<IProps> = ({
       )
     },
     [
-      observeMessage,
       messages,
-      onDeleteMessage,
-      onRecoverMessage,
       scrollToMessageId,
-      scrollToMessageRef
+      scrollToMessageRef,
+      observeMessage,
+      onDeleteMessage,
+      onRecoverMessage
     ]
   )
 
