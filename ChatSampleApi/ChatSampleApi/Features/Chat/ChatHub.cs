@@ -21,8 +21,8 @@ namespace ChatSampleApi.Features.Chat
         public const string DeleteMessage = "DeleteMessage";
         public const string DeleteParticipant = "DeleteParticipant";
         public const string GetConnectionId = "GetConnectionId";
-        public const string UserConnectedStatusChanged = "UserConnectedStatusChanged";
-        public const string ParticipantRoleChanged = "ParticipantRoleChanged";
+        public const string UserConnectedStatusChanged = "ChangeUserStatus";
+        public const string ParticipantRoleChanged = "ChangeParticipantRole";
         public const string RecoverMessage = "RecoverMessage";
         public const string RenameChat = "RenameChat";
 
@@ -40,6 +40,8 @@ namespace ChatSampleApi.Features.Chat
             _currentUserService = currentUserService;
             _db = db;
         }
+
+        #region OnConnected / OnDisconnected
 
         public async override Task OnConnectedAsync()
         {
@@ -118,5 +120,7 @@ namespace ChatSampleApi.Features.Chat
             user.IsOnline = isOnline;
             await _db.SaveChangesAsync();
         }
+
+        #endregion
     }
 }

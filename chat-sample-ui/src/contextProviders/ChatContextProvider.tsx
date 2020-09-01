@@ -155,11 +155,11 @@ const ChatContextProvider: React.FC<{ children: React.ReactNode }> = ({ children
     [messages.length]
   )
 
-  const userConnectedStatusChanged = useCallback((userId, isOnline) => {
+  const changeUserStatus = useCallback((userId, isOnline) => {
     setParticipants(prev => map(prev, x => (x.id === userId ? { ...x, isOnline } : x)))
   }, [])
 
-  const onParticipantRoleChanged = useCallback(
+  const changeParticipantRole = useCallback(
     (chatId, participantId, chatRole) => {
       if (chatId !== currentChatId) return
 
@@ -204,8 +204,8 @@ const ChatContextProvider: React.FC<{ children: React.ReactNode }> = ({ children
     hubConnection.on('DeleteChat', deleteChat)
     hubConnection.on('DeleteMessage', deleteMessage)
     hubConnection.on('DeleteParticipant', deleteParticipant)
-    hubConnection.on('UserConnectedStatusChanged', userConnectedStatusChanged)
-    hubConnection.on('ParticipantRoleChanged', onParticipantRoleChanged)
+    hubConnection.on('ChangeUserStatus', changeUserStatus)
+    hubConnection.on('ChangeParticipantRole', changeParticipantRole)
     hubConnection.on('RecoverMessage', recoverMessage)
     hubConnection.on('RenameChat', renameChat)
 
@@ -216,8 +216,8 @@ const ChatContextProvider: React.FC<{ children: React.ReactNode }> = ({ children
       hubConnection.off('DeleteChat')
       hubConnection.off('DeleteMessage')
       hubConnection.off('DeleteParticipant')
-      hubConnection.off('UserConnectedStatusChanged')
-      hubConnection.off('ParticipantRoleChanged')
+      hubConnection.off('ChangeUserStatus')
+      hubConnection.off('ChangeParticipantRole')
       hubConnection.off('RecoverMessage')
       hubConnection.off('RenameChat')
     }
@@ -229,8 +229,8 @@ const ChatContextProvider: React.FC<{ children: React.ReactNode }> = ({ children
     deleteChat,
     deleteMessage,
     deleteParticipant,
-    userConnectedStatusChanged,
-    onParticipantRoleChanged,
+    changeUserStatus,
+    changeParticipantRole,
     recoverMessage,
     renameChat
   ])

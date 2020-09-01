@@ -8,6 +8,9 @@ const Wrapper = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  svg {
+    color: ${({ theme }) => theme.primary};
+  }
 `
 
 const MessagesLoadingSpinner = () => {
