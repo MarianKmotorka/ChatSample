@@ -39,7 +39,7 @@ const CreateChatForm = ({ formRef, callback }) => {
             onChange={({ target }) => setName(target.value)}
           />
         </div>
-        <StyledButton shape='round' bg='primary' color='white' onClick={createChat}>
+        <StyledButton shape='round' bg='transparent' color='primary' onClick={createChat}>
           Create
         </StyledButton>
       </Content>

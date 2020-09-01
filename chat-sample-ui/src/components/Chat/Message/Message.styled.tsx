@@ -46,7 +46,7 @@ export const Text = styled.p<IProps>`
   padding: 6px 17px;
   word-break: break-word;
   border-radius: ${props => getMessageBorderRadius(props.isMyMessage, props.shape)};
-  color: ${({ theme }) => theme.textPrimary};
+  color: ${({ theme, isMyMessage }) => (isMyMessage ? theme.black : theme.textPrimary)};
   background: ${({ isMyMessage, theme }) => (isMyMessage ? theme.primary : theme.bg200)};
   box-shadow: 0 5px 5px rgba(0, 0, 0, 0.2);
 `

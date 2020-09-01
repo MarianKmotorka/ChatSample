@@ -16,6 +16,7 @@ declare module 'styled-components' {
     green: string
     black: string
     white: string
+    yellow: string
     blackCoffee: string
     gray: string
     lightGray: string
@@ -42,6 +43,7 @@ export const lightTheme: DefaultTheme = {
   green: '#a0a734',
   black: '#010101',
   white: '#ffffff',
+  yellow: '#fcff2b',
   blackCoffee: '#37323E',
   gray: '#424242',
   lightGray: '#ceced9',
@@ -66,6 +68,7 @@ export const darkTheme: DefaultTheme = {
   green: '#a0a734',
   black: '#010101',
   white: '#ffffff',
+  yellow: '#fcff2a',
   blackCoffee: '#37323E',
   gray: '#424242',
   lightGray: '#ceced9',
