@@ -17,5 +17,7 @@ namespace ChatSampleApi.Pagination
         public int Count { get; set; }
 
         public int TotalCount { get; set; }
+
+        public bool HasMore => Skipped + Count < TotalCount;
     }
 }

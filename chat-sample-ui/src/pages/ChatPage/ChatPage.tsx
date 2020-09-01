@@ -18,7 +18,7 @@ const ChatPage = () => {
     moreMessagesFetching,
     messages,
     participants,
-    totalMessagesCount,
+    hasMoreMessages,
     setCurrentChatId,
     getMoreMessages
   } = useContext(ChatContext)
@@ -96,7 +96,7 @@ const ChatPage = () => {
           scrollToMessageId={scrollToMessageId}
           onDeleteMessage={handleMessageDeleted}
           onRecoverMessage={handleMessageRecovered}
-          canLoadMore={totalMessagesCount > messages.length}
+          canLoadMore={hasMoreMessages}
           moreMessagesFetching={moreMessagesFetching}
         />
         {showChatDetail && (

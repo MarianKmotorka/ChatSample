@@ -21,7 +21,7 @@ interface IValue {
   messages: IMessageDto[]
   participants: IParticipantDto[]
   FETCH_MESSAGES_PAGE_SIZE: number
-  totalMessagesCount: number
+  hasMoreMessages: boolean
   getMoreMessages: (chatId: string) => Promise<void>
   setCurrentChatId: React.Dispatch<React.SetStateAction<string>>
 }
@@ -37,7 +37,7 @@ const ChatContextProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [moreMessagesFetching, setMoreMessagesFetching] = useState(false)
   const [messages, setMessages] = useState<IMessageDto[]>([])
   const [participants, setParticipants] = useState<IParticipantDto[]>([])
-  const [totalMessagesCount, setTotalMessagesCount] = useState(0)
+  const [hasMoreMessages, setHasMoreMessages] = useState(false)
 
   const { hubConnection } = useHub(`${API_URL}/chat-hub`)
   const { profile } = useContext(ProfileContext)
@@ -56,7 +56,7 @@ const ChatContextProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
       setParticipants(responses[0]?.data)
       setMessages(responses[1]?.data.data)
-      setTotalMessagesCount(responses[1].data.totalCount)
+      setHasMoreMessages(responses[1].data.hasMore)
       setChats(prev =>
         map(prev, x => (x.id === currentChatId ? { ...x, unreadMessages: 0 } : x))
       )
@@ -101,7 +101,6 @@ const ChatContextProvider: React.FC<{ children: React.ReactNode }> = ({ children
       }
 
       setMessages(prev => [...prev, updatedMessage])
-      setTotalMessagesCount(prev => prev + 1)
     },
     [currentChatId, profile, beep]
   )
@@ -153,9 +152,9 @@ const ChatContextProvider: React.FC<{ children: React.ReactNode }> = ({ children
         `chats/${chatId}/messages?skip=${messages.length}&count=${FETCH_MESSAGES_PAGE_SIZE}`
       )
 
-      const moreMessages = get(response, 'data.data')
+      const moreMessages = response?.data.data || []
       setMessages(prev => [...moreMessages, ...prev])
-      setTotalMessagesCount(get(response, 'data.totalCount'))
+      setHasMoreMessages(response?.data.hasMore)
       setMoreMessagesFetching(false)
     },
     [messages.length]
@@ -238,7 +237,7 @@ const ChatContextProvider: React.FC<{ children: React.ReactNode }> = ({ children
         currentChatId,
         messages,
         participants,
-        totalMessagesCount,
+        hasMoreMessages,
         FETCH_MESSAGES_PAGE_SIZE,
         getMoreMessages,
         setCurrentChatId
