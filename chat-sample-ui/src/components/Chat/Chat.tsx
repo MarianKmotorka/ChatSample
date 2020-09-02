@@ -1,13 +1,14 @@
 import React, { useState, useCallback, useMemo, FormEvent } from 'react'
-import { map, first } from 'lodash'
+import { first, trim } from 'lodash'
 import moment from 'moment'
 
-import Message, { MessageShape } from './Message/Message'
-import EmojiListButton from './EmojiListButton'
-import MessagesLoadingSpinner from './MessagesLoadingSpinner'
-import { IMessageDto } from '../../apiContracts/chatContracts'
 import { getMessageShape } from './utils'
+import EmojiListButton from './EmojiListButton'
+import useIsTyping from '../../utils/useIsTyping'
 import { useObserver } from '../../utils/useObserver'
+import Message, { MessageShape } from './Message/Message'
+import MessagesLoadingSpinner from './MessagesLoadingSpinner'
+import { IMessageDto, IParticipantDto } from '../../apiContracts/chatContracts'
 
 import {
   Wrapper,
@@ -17,37 +18,43 @@ import {
   TimeStamp
 } from './Chat.styled'
 import { useFocusWhenMounted, useScrollTo } from './hooks'
+import TypingIndicator from './TypingIndicator/TypingIndicator'
 
 interface IProps {
   messages: IMessageDto[]
-  scrollToMessageId?: string
+  typingParticipants: IParticipantDto[]
   canLoadMore: boolean
   moreMessagesFetching: boolean
+  scrollToMessageId?: string
   onLoadMore: () => void
   onMessageSent: (text: string) => void
   onDeleteMessage: (id: string) => void
   onRecoverMessage: (id: string) => void
+  onIsTypingChanged: (isTyping: boolean) => void
 }
 
 const Chat: React.FC<IProps> = ({
   messages,
   canLoadMore,
   scrollToMessageId,
+  typingParticipants,
   moreMessagesFetching,
   onLoadMore,
   onMessageSent,
   onDeleteMessage,
-  onRecoverMessage
+  onRecoverMessage,
+  onIsTypingChanged
 }) => {
   const [text, setText] = useState('')
   const inputRef = useFocusWhenMounted<HTMLInputElement>()
   const scrollToMessageRef = useScrollTo<HTMLDivElement>(scrollToMessageId, messages)
   const observeMessage = useObserver<HTMLDivElement>(canLoadMore, onLoadMore)
+  useIsTyping(text, onIsTypingChanged)
 
   const onMessageSentInternal = (e: FormEvent<HTMLFormElement> | null) => {
     e?.preventDefault()
     setText('')
-    text && onMessageSent(text)
+    trim(text) && onMessageSent(text)
   }
 
   const renderMessage = useCallback(
@@ -94,7 +101,8 @@ const Chat: React.FC<IProps> = ({
     <Wrapper>
       <MessagesWrapper>
         {moreMessagesFetching && <MessagesLoadingSpinner />}
-        {useMemo(() => map(messages, renderMessage), [messages, renderMessage])}
+        {useMemo(() => messages.map(renderMessage), [messages, renderMessage])}
+        <TypingIndicator typingParticipants={typingParticipants} />
       </MessagesWrapper>
 
       <form onSubmit={onMessageSentInternal}>
@@ -103,11 +111,7 @@ const Chat: React.FC<IProps> = ({
             onSelect={useCallback(emoji => setText(prev => prev + emoji), [])}
           />
 
-          <input
-            ref={inputRef}
-            value={text}
-            onChange={({ target }) => setText(target.value)}
-          />
+          <input ref={inputRef} value={text} onChange={e => setText(e.target.value)} />
 
           <StyledButton
             shape='circle'

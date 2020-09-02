@@ -1,7 +1,8 @@
 import React, { useState, useEffect, createContext, useCallback, useContext } from 'react'
-import { get, filter, map, find } from 'lodash'
 import useSound from 'use-sound'
 import { useHistory } from 'react-router-dom'
+import { get, filter, map, find } from 'lodash'
+import { HubConnection } from '@microsoft/signalr'
 
 import useHub from '../utils/useHub'
 import api from '../services/httpService'
@@ -22,6 +23,8 @@ interface IValue {
   participants: IParticipantDto[]
   FETCH_MESSAGES_PAGE_SIZE: number
   hasMoreMessages: boolean
+  hubConnection?: HubConnection
+  typingParticipants: IParticipantDto[]
   getMoreMessages: (chatId: string) => Promise<void>
   setCurrentChatId: React.Dispatch<React.SetStateAction<string>>
 }
@@ -30,14 +33,16 @@ const FETCH_MESSAGES_PAGE_SIZE = 25
 export const ChatContext = createContext<IValue>(null!)
 
 const ChatContextProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [chats, setChats] = useState<IChatDto[]>([])
-  const [chatsFetching, setChatsFetching] = useState(true)
   const [currentChatId, setCurrentChatId] = useState('')
+  const [chatsFetching, setChatsFetching] = useState(true)
+  const [hasMoreMessages, setHasMoreMessages] = useState(false)
   const [currentChatFetching, setCurrentChatFetching] = useState(true)
   const [moreMessagesFetching, setMoreMessagesFetching] = useState(false)
+
+  const [chats, setChats] = useState<IChatDto[]>([])
   const [messages, setMessages] = useState<IMessageDto[]>([])
   const [participants, setParticipants] = useState<IParticipantDto[]>([])
-  const [hasMoreMessages, setHasMoreMessages] = useState(false)
+  const [typingParticipants, setTypingParticipants] = useState<IParticipantDto[]>([])
 
   const { hubConnection } = useHub(`${API_URL}/chat-hub`)
   const { profile } = useContext(ProfileContext)
@@ -60,6 +65,7 @@ const ChatContextProvider: React.FC<{ children: React.ReactNode }> = ({ children
       setChats(prev =>
         map(prev, x => (x.id === currentChatId ? { ...x, unreadMessages: 0 } : x))
       )
+      setTypingParticipants([])
       setCurrentChatFetching(false)
     }
 
@@ -187,6 +193,19 @@ const ChatContextProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setChats(prev => map(prev, x => (x.id === chatId ? { ...x, name } : x)))
   }, [])
 
+  const setIsTyping = useCallback(
+    (isTyping, userId, chatId) => {
+      if (chatId !== currentChatId) return
+
+      if (isTyping && typingParticipants.every(x => x.id !== userId))
+        setTypingParticipants(prev => [...prev, find(participants, ['id', userId])!])
+      else {
+        setTypingParticipants(prev => prev.filter(x => x.id !== userId))
+      }
+    },
+    [participants, currentChatId, typingParticipants]
+  )
+
   useEffect(() => {
     if (!hubConnection) return
 
@@ -200,6 +219,7 @@ const ChatContextProvider: React.FC<{ children: React.ReactNode }> = ({ children
     hubConnection.on('ChangeParticipantRole', changeParticipantRole)
     hubConnection.on('RecoverMessage', recoverMessage)
     hubConnection.on('RenameChat', renameChat)
+    hubConnection.on('SetIsTyping', setIsTyping)
 
     return () => {
       hubConnection.off('RecieveChat')
@@ -212,6 +232,7 @@ const ChatContextProvider: React.FC<{ children: React.ReactNode }> = ({ children
       hubConnection.off('ChangeParticipantRole')
       hubConnection.off('RecoverMessage')
       hubConnection.off('RenameChat')
+      hubConnection.off('SetIsTyping')
     }
   }, [
     hubConnection,
@@ -224,7 +245,8 @@ const ChatContextProvider: React.FC<{ children: React.ReactNode }> = ({ children
     changeUserStatus,
     changeParticipantRole,
     recoverMessage,
-    renameChat
+    renameChat,
+    setIsTyping
   ])
 
   return (
@@ -239,6 +261,8 @@ const ChatContextProvider: React.FC<{ children: React.ReactNode }> = ({ children
         participants,
         hasMoreMessages,
         FETCH_MESSAGES_PAGE_SIZE,
+        hubConnection,
+        typingParticipants,
         getMoreMessages,
         setCurrentChatId
       }}
