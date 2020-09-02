@@ -24,6 +24,7 @@ interface IValue {
   FETCH_MESSAGES_PAGE_SIZE: number
   hasMoreMessages: boolean
   hubConnection?: HubConnection
+  typingParticipants: IParticipantDto[]
   getMoreMessages: (chatId: string) => Promise<void>
   setCurrentChatId: React.Dispatch<React.SetStateAction<string>>
 }
@@ -261,6 +262,7 @@ const ChatContextProvider: React.FC<{ children: React.ReactNode }> = ({ children
         hasMoreMessages,
         FETCH_MESSAGES_PAGE_SIZE,
         hubConnection,
+        typingParticipants,
         getMoreMessages,
         setCurrentChatId
       }}

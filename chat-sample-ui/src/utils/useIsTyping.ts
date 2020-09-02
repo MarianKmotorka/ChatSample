@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 
 /**
  * @param text User text imput.
@@ -6,6 +6,7 @@ import { useState, useEffect } from 'react'
  */
 export const useIsTyping = (text: string, callback: (isTyping: boolean) => void) => {
   const [isTyping, setIsTyping] = useState(false)
+  const memoizedCallback = useCallback(callback, [])
 
   useEffect(() => {
     text && setIsTyping(true)
@@ -15,8 +16,8 @@ export const useIsTyping = (text: string, callback: (isTyping: boolean) => void)
   }, [text])
 
   useEffect(() => {
-    callback(isTyping)
-  }, [callback, isTyping])
+    memoizedCallback(isTyping)
+  }, [memoizedCallback, isTyping])
 }
 
 export default useIsTyping

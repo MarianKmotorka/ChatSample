@@ -5,7 +5,6 @@ import { useParams, useHistory } from 'react-router-dom'
 import TopBar from './TopBar'
 import api from '../../services/httpService'
 import Chat from '../../components/Chat/Chat'
-import useIsTyping from '../../utils/useIsTyping'
 import { ChatContext } from '../../contextProviders'
 import LoadingSpinner from '../../components/LoadingSpinner'
 import ChatDetail from '../../components/Chat/Detail/ChatDetail'
@@ -19,10 +18,11 @@ const ChatPage = () => {
     moreMessagesFetching,
     messages,
     participants,
+    hubConnection,
     hasMoreMessages,
+    typingParticipants,
     setCurrentChatId,
-    getMoreMessages,
-    hubConnection
+    getMoreMessages
   } = useContext(ChatContext)
 
   const { chatId } = useParams()
@@ -99,6 +99,7 @@ const ChatPage = () => {
           canLoadMore={hasMoreMessages}
           scrollToMessageId={scrollToMessageId}
           moreMessagesFetching={moreMessagesFetching}
+          typingParticipants={typingParticipants}
           onIsTypingChanged={handleIsTypingChanged}
           onLoadMore={handleLoadMore}
           onMessageSent={handleMessageSent}

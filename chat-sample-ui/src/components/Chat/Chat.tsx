@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useMemo, FormEvent } from 'react'
-import { map, first, trim } from 'lodash'
+import { first, trim } from 'lodash'
 import moment from 'moment'
 
 import { getMessageShape } from './utils'
@@ -8,7 +8,7 @@ import useIsTyping from '../../utils/useIsTyping'
 import { useObserver } from '../../utils/useObserver'
 import Message, { MessageShape } from './Message/Message'
 import MessagesLoadingSpinner from './MessagesLoadingSpinner'
-import { IMessageDto } from '../../apiContracts/chatContracts'
+import { IMessageDto, IParticipantDto } from '../../apiContracts/chatContracts'
 
 import {
   Wrapper,
@@ -18,12 +18,14 @@ import {
   TimeStamp
 } from './Chat.styled'
 import { useFocusWhenMounted, useScrollTo } from './hooks'
+import TypingIndicator from './TypingIndicator/TypingIndicator'
 
 interface IProps {
   messages: IMessageDto[]
-  scrollToMessageId?: string
+  typingParticipants: IParticipantDto[]
   canLoadMore: boolean
   moreMessagesFetching: boolean
+  scrollToMessageId?: string
   onLoadMore: () => void
   onMessageSent: (text: string) => void
   onDeleteMessage: (id: string) => void
@@ -35,6 +37,7 @@ const Chat: React.FC<IProps> = ({
   messages,
   canLoadMore,
   scrollToMessageId,
+  typingParticipants,
   moreMessagesFetching,
   onLoadMore,
   onMessageSent,
@@ -98,7 +101,8 @@ const Chat: React.FC<IProps> = ({
     <Wrapper>
       <MessagesWrapper>
         {moreMessagesFetching && <MessagesLoadingSpinner />}
-        {useMemo(() => map(messages, renderMessage), [messages, renderMessage])}
+        {useMemo(() => messages.map(renderMessage), [messages, renderMessage])}
+        <TypingIndicator typingParticipants={[]} />
       </MessagesWrapper>
 
       <form onSubmit={onMessageSentInternal}>
