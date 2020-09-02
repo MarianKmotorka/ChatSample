@@ -102,7 +102,7 @@ const Chat: React.FC<IProps> = ({
       <MessagesWrapper>
         {moreMessagesFetching && <MessagesLoadingSpinner />}
         {useMemo(() => messages.map(renderMessage), [messages, renderMessage])}
-        <TypingIndicator typingParticipants={[]} />
+        <TypingIndicator typingParticipants={typingParticipants} />
       </MessagesWrapper>
 
       <form onSubmit={onMessageSentInternal}>

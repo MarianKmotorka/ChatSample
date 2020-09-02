@@ -45,7 +45,7 @@ export const Photo = styled.img<{ shiftLeft: number }>`
   height: 30px;
   border-radius: 35px;
   box-shadow: 0 5px 5px rgba(0, 0, 0, 0.3);
-  transform: ${({ shiftLeft }) => `translateX(${shiftLeft}px)`};
+  transform: ${({ shiftLeft }) => `translateX(${-shiftLeft}px)`};
 `
 
 export const DotsWrapper = styled.div<{ shiftLeft: number }>`
@@ -57,7 +57,7 @@ export const DotsWrapper = styled.div<{ shiftLeft: number }>`
   border-radius: 25px;
   background: ${({ theme }) => theme.bg200};
   box-shadow: 0 5px 5px rgba(0, 0, 0, 0.2);
-  transform: ${({ shiftLeft }) => `translateX(${shiftLeft}px)`};
+  transform: ${({ shiftLeft }) => `translateX(${-shiftLeft}px)`};
 
   * + * {
     margin-left: 4px;
