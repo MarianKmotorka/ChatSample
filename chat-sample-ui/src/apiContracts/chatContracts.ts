@@ -9,10 +9,7 @@ export interface IMessageDto {
   senderPicture: string
 }
 
-export enum ChatRole {
-  PARTICIPANT = 0,
-  ADMIN = 1
-}
+export type ChatRole = 'admin' | 'participant'
 
 export interface IParticipantDto {
   id: string

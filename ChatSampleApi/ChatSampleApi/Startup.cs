@@ -1,4 +1,6 @@
 using System.Reflection;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using ChatSampleApi.Features.Chat;
 using ChatSampleApi.Middleware;
 using ChatSampleApi.Middleware.Authorization;
@@ -45,7 +47,9 @@ namespace ChatSampleApi
             services.AddDbContext<DatabaseContext>(o =>
                 o.UseSqlServer(Configuration.GetConnectionString("DatabaseContext")));
 
-            services.AddControllers();
+            services.AddControllers()
+                .AddJsonOptions(x => x.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter(JsonNamingPolicy.CamelCase)));
+
             services.AddSignalR();
         }
 

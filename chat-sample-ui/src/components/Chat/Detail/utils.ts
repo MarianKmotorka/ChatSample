@@ -11,10 +11,9 @@ export const getContextMenuItems = (
 ) => {
   const canRemove =
     particiapantId === currentUserId ||
-    (currentUserRole === ChatRole.ADMIN && participantRole !== ChatRole.ADMIN)
+    (currentUserRole === 'admin' && participantRole !== 'admin')
 
-  const canSetAsAdmin =
-    currentUserRole === ChatRole.ADMIN && participantRole !== ChatRole.ADMIN
+  const canSetAsAdmin = currentUserRole === 'admin' && participantRole !== 'admin'
 
   return compact([
     canRemove && {

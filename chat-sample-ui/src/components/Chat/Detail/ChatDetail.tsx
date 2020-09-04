@@ -5,7 +5,7 @@ import { SwapLeftOutlined, SwapRightOutlined, PlusOutlined } from '@ant-design/i
 import Tooltip from '../../Tooltip'
 import Popover from '../../Popover'
 import { getContextMenuItems } from './utils'
-import { ChatRole, IParticipantDto } from '../../../apiContracts/chatContracts'
+import { IParticipantDto } from '../../../apiContracts/chatContracts'
 import useWindowSize, { SM } from '../../../utils/useWindowSize'
 import SearchableDropdown from '../../SearchableDropdown/SearchableDropdown'
 import { ProfileContext } from '../../../contextProviders'
@@ -68,13 +68,16 @@ const ChatDetail: React.FC<IProps> = ({
     </DropdownItem>
   )
 
-  const renderName = (name: string, role: ChatRole) => (
+  const renderName = (
+    name: IParticipantDto['name'],
+    role: IParticipantDto['chatRole']
+  ) => (
     <Popover
       title={name}
       content={
         <p>
           <strong>Chat role: </strong>
-          {ChatRole[role]}
+          {role}
         </p>
       }
     >

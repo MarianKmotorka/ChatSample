@@ -4,7 +4,6 @@ import { Modal } from 'antd'
 import { DeleteFilled, UserSwitchOutlined, EditOutlined } from '@ant-design/icons'
 
 import { ProfileContext, ChatContext } from '../../contextProviders'
-import { ChatRole } from '../../apiContracts/chatContracts'
 import useOnClickOutside from '../../utils/useOnClickOutside'
 import Tooltip from '../../components/Tooltip'
 import Button from '../../components/Button'
@@ -34,7 +33,7 @@ const TopBar: React.FC<IProps> = ({ onDeleteChat, onToggleChatDetail, onRenameCh
 
   const currentChat = find(chats, ['id', currentChatId])
   const currentUserRole = find(participants, ['id', profile?.id])?.chatRole
-  const canDeleteChat = currentUserRole === ChatRole.ADMIN
+  const canDeleteChat = currentUserRole === 'admin'
 
   useEffect(() => setChatName(currentChat?.name || ''), [currentChat])
   const chatNameWrapperRef = useOnClickOutside<HTMLDivElement>(() => setIsRenaming(false))
