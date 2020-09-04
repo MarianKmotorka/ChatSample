@@ -50,7 +50,8 @@ namespace ChatSampleApi
             services.AddControllers()
                 .AddJsonOptions(x => x.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter(JsonNamingPolicy.CamelCase)));
 
-            services.AddSignalR();
+            services.AddSignalR()
+                .AddJsonProtocol(x => x.PayloadSerializerOptions.Converters.Add(new JsonStringEnumConverter(JsonNamingPolicy.CamelCase)));
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
