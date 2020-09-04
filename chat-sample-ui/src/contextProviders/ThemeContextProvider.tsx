@@ -8,28 +8,21 @@ interface IContext {
 }
 
 export const ThemeContext = createContext<IContext>(null!)
-
-export enum ThemeEnum {
-  Dark = 'dark',
-  Light = 'light'
-}
+export type Theme = 'light' | 'dark'
 
 const ThemeContextProvider: React.FC = ({ children }) => {
-  const [theme, setTheme] = useState(ThemeEnum.Light)
-  const [primaryColor, setPrimaryColor] = useState(lightTheme.green)
+  const [theme, setTheme] = useState<Theme>()
+  const [primaryColor, setPrimaryColor] = useState<string>(null!)
 
   useEffect(() => {
-    const storedTheme =
-      localStorage.getItem('theme') === 'dark' ? ThemeEnum.Dark : ThemeEnum.Light // Note: Find better way to parse to enum
-
-    setTheme(storedTheme)
-    setPrimaryColor(localStorage.getItem('color') || lightTheme.green)
+    setTheme((localStorage.getItem('theme') as Theme) || 'dark')
+    setPrimaryColor(localStorage.getItem('color') || lightTheme.orange)
   }, [])
 
   const toggleTheme = () => {
-    const nextTheme = theme === ThemeEnum.Light ? ThemeEnum.Dark : ThemeEnum.Light
+    const nextTheme = theme === 'light' ? 'dark' : 'light'
     setTheme(nextTheme)
-    localStorage.setItem('theme', nextTheme.toString())
+    localStorage.setItem('theme', nextTheme)
   }
 
   const pickColor = (color: string) => {
@@ -41,7 +34,7 @@ const ThemeContextProvider: React.FC = ({ children }) => {
     <ThemeContext.Provider value={{ toggleTheme, pickColor }}>
       <StyledComponentsThemeProvider
         theme={
-          theme === ThemeEnum.Light
+          theme === 'light'
             ? { ...lightTheme, primary: primaryColor }
             : { ...darkTheme, primary: primaryColor }
         }
