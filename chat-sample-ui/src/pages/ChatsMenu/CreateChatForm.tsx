@@ -1,5 +1,4 @@
 import React, { useState, useRef, useEffect } from 'react'
-import { get } from 'lodash'
 import api from '../../services/httpService'
 import {
   WrapperForm,
@@ -9,21 +8,23 @@ import {
   Text
 } from './styled/CreateChatForm.styled'
 
-const CreateChatForm = ({ formRef, callback }) => {
+interface IProps {
+  formRef: React.RefObject<HTMLFormElement>
+  callback: (createdChatId: string) => void
+}
+
+const CreateChatForm: React.FC<IProps> = ({ formRef, callback }) => {
   const [name, setName] = useState('')
-  const inputRef = useRef()
+  const inputRef = useRef<HTMLInputElement>(null!)
 
-  useEffect(() => {
-    const input = get(inputRef, 'current')
-    input && input.focus()
-  }, [])
+  useEffect(() => inputRef?.current?.focus(), [])
 
-  const createChat = async e => {
-    e.preventDefault()
+  const createChat = async (e: React.FormEvent<HTMLFormElement> | null) => {
+    e?.preventDefault()
 
     if (name) {
-      const reponse = await api.post('/chats', { name })
-      callback(get(reponse, 'data'))
+      const response = await api.post('/chats', { name })
+      callback(response?.data)
     }
   }
 
@@ -39,7 +40,7 @@ const CreateChatForm = ({ formRef, callback }) => {
             onChange={({ target }) => setName(target.value)}
           />
         </div>
-        <StyledButton shape='round' text onClick={createChat}>
+        <StyledButton shape='round' text onClick={_ => createChat(null)}>
           Create
         </StyledButton>
       </Content>

@@ -2,7 +2,7 @@ import React from 'react'
 import { Route, Redirect } from 'react-router-dom'
 import { isLoggedIn } from '../services/authService'
 
-const ProtectedRoute = ({ component: Component, location, ...rest }) => {
+const ProtectedRoute = ({ component: Component, location = undefined, ...rest }) => {
   if (!isLoggedIn)
     return (
       <Redirect

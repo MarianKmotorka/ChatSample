@@ -15,7 +15,7 @@ const Wrapper = styled.div`
   z-index: 10;
 `
 
-export const PortalBackdrop = ({ children }) =>
-  createPortal(<Wrapper>{children}</Wrapper>, document.getElementById('portal'))
+export const PortalBackdrop: React.FC = ({ children }) =>
+  createPortal(<Wrapper>{children}</Wrapper>, document.getElementById('portal')!)
 
 export default Wrapper

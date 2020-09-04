@@ -3,7 +3,7 @@ import { NavLink } from 'react-router-dom'
 import { Badge } from 'antd'
 import Button from '../../../components/Button'
 
-export const Wrapper = styled.div`
+export const Wrapper = styled.div<{ expanded: boolean }>`
   display: flex;
   flex-direction: column;
   background: ${({ theme }) => theme.bg200};

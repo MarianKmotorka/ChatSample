@@ -1,6 +1,6 @@
 import React, { useState, useContext, useEffect } from 'react'
 import { useHistory } from 'react-router-dom'
-import { map, get, head } from 'lodash'
+import { map, head } from 'lodash'
 import { PlusOutlined, SwapLeftOutlined, SwapRightOutlined } from '@ant-design/icons'
 import { CSSTransition } from 'react-transition-group'
 
@@ -25,42 +25,36 @@ const ChatsMenu = () => {
   const [showCreateChatDialog, setShowCreateChatDialog] = useState(false)
   const [expanded, setExpanded] = useState(true)
   const { chats, chatsFetching } = useContext(ChatContext)
-  const history = useHistory()
   const { width } = useWindowSize()
-  const isWiderThanMedium = width > MD
+  const history = useHistory()
+  const formRef = useOnClickOutside<HTMLFormElement>(() => setShowCreateChatDialog(false))
 
-  const formRef = useOnClickOutside(() => setShowCreateChatDialog(false))
+  const isWiderThanMedium = width > MD
 
   useEffect(() => {
     if (isWiderThanMedium) setExpanded(true)
     else setExpanded(false)
   }, [isWiderThanMedium])
 
-  const createChatCallback = chatId => {
+  const createChatCallback = (chatId: string) => {
     setShowCreateChatDialog(false)
     history.push(`/chats/${chatId}`)
   }
 
   if (chatsFetching)
     return (
-      <Wrapper>
+      <Wrapper expanded>
         <LoadingSpinner />
       </Wrapper>
     )
 
-  const items = map(chats, x => {
-    const unreadMessages = get(x, 'unreadMessages', 0)
-    const name = get(x, 'name')
-    const id = get(x, 'id')
-
-    return (
-      <StyledBadge key={id} count={unreadMessages} offset={[-5, 5]}>
-        <ChatButtonLink to={`/chats/${id}`}>
-          <p>{expanded ? name : head(name)}</p>
-        </ChatButtonLink>
-      </StyledBadge>
-    )
-  })
+  const items = map(chats, x => (
+    <StyledBadge key={x.id} count={x.unreadMessages} offset={[-5, 5]}>
+      <ChatButtonLink to={`/chats/${x.id}`}>
+        <p>{expanded ? x.name : head(x.name)}</p>
+      </ChatButtonLink>
+    </StyledBadge>
+  ))
 
   return (
     <>
