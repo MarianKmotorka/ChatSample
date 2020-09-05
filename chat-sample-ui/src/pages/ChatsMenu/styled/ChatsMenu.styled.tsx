@@ -54,7 +54,7 @@ export const ChatButtonLink = styled(NavLink)`
 `
 
 export const StyledBadge = styled(Badge)`
-  min-width: 92%;
+  min-width: 90%;
   transition: all 0.3s ease;
 
   .ant-badge-count {
@@ -65,16 +65,18 @@ export const StyledBadge = styled(Badge)`
 `
 
 export const StyledButton = styled(Button)`
-  margin-bottom: 20px;
   transform: scale(1.2);
 `
 
 export const ButtonsWrapper = styled.div`
-  padding-top: 15px;
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
   align-items: center;
+
+  > * + * {
+    margin-top: 15px;
+  }
 `
 
 export const ItemsWrapper = styled.div`
@@ -86,8 +88,25 @@ export const ItemsWrapper = styled.div`
   overflow-y: auto;
   overflow-x: hidden;
   margin-top: 15px;
-  padding: 0 10px;
-  > * {
+  > * + * {
     margin-top: 10px;
+  }
+`
+
+export const SearchBox = styled.input`
+  padding: 5px 20px;
+  margin-top: 20px;
+  font-size: 18px;
+  width: 90%;
+  outline: none;
+  border: none;
+  border-radius: 30px;
+  color: ${({ theme }) => theme.textPrimary};
+  background: ${({ theme }) => theme.bg100};
+  box-shadow: 0 5px 5px rgba(0, 0, 0, 0.1);
+  position: relative;
+
+  &:focus {
+    outline: none;
   }
 `

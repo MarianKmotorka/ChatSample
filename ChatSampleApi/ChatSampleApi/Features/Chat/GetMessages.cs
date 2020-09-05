@@ -39,7 +39,7 @@ namespace ChatSampleApi.Features.Chat
                 await _db.SaveChangesAsync(cancellationToken);
 
                 var messagesQuery = _db.Messages.Where(x => x.ChatId == request.ChatId);
-                var response = await PaginationProcessor.GetPagedResponse(messagesQuery, request.PaginationQuery, MessageDto.GetMapper(user.Id), x => x.Date, false, cancellationToken);
+                var response = await PaginationProcessor.GetPagedResponse(messagesQuery, request.PaginationQuery, MessageDto.GetMapper(user.Id), x => x.Date, cancellationToken, false);
 
                 response.Data = RemoveDeletedMessagesText(response.Data.OrderBy(x => x.Date).ToList());
                 return response;

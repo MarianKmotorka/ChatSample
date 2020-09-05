@@ -17,9 +17,15 @@ namespace ChatSampleApi.Controllers
     public class ChatController : BaseController
     {
         [HttpGet("mine")]
-        public async Task<ActionResult<List<GetMyChatsList.ChatDto>>> GetChats()
+        public async Task<ActionResult<List<GetMyChatsList.ChatDto>>> GetChats([FromQuery] PaginationQuery paginationQuery, [FromQuery] string nameFilter)
         {
-            var response = await Mediator.Send(new GetMyChatsList.Query { UserId = CurrentUserService.UserId });
+            var response = await Mediator.Send(new GetMyChatsList.Query
+            {
+                UserId = CurrentUserService.UserId,
+                PaginationQuery = paginationQuery,
+                NameFilter = nameFilter
+            });
+
             return Ok(response);
         }
 

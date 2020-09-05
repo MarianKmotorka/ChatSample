@@ -4,11 +4,11 @@ import moment from 'moment'
 
 import { getMessageShape } from './utils'
 import EmojiListButton from './EmojiListButton'
-import useIsTyping from '../../utils/useIsTyping'
-import { useObserver } from '../../utils/useObserver'
 import Message, { MessageShape } from './Message/Message'
 import MessagesLoadingSpinner from './MessagesLoadingSpinner'
+import TypingIndicator from './TypingIndicator/TypingIndicator'
 import { IMessageDto, IParticipantDto } from '../../apiContracts/chatContracts'
+import { useFocusElement, useScrollTo, useIsTyping, useObserver } from '../../utils'
 
 import {
   Wrapper,
@@ -17,8 +17,6 @@ import {
   StyledButton,
   TimeStamp
 } from './Chat.styled'
-import { useFocusWhenMounted, useScrollTo } from './hooks'
-import TypingIndicator from './TypingIndicator/TypingIndicator'
 
 interface IProps {
   messages: IMessageDto[]
@@ -46,7 +44,7 @@ const Chat: React.FC<IProps> = ({
   onIsTypingChanged
 }) => {
   const [text, setText] = useState('')
-  const inputRef = useFocusWhenMounted<HTMLInputElement>()
+  const inputRef = useFocusElement<HTMLInputElement>()
   const scrollToMessageRef = useScrollTo<HTMLDivElement>(scrollToMessageId, messages)
   const observeMessage = useObserver<HTMLDivElement>(canLoadMore, onLoadMore)
   useIsTyping(text, onIsTypingChanged)

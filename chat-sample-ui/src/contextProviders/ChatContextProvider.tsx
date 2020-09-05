@@ -7,7 +7,6 @@ import { HubConnection } from '@microsoft/signalr'
 import useHub from '../utils/useHub'
 import api from '../services/httpService'
 import { API_URL } from '../utils/config.json'
-import { isLoggedIn } from '../services/authService'
 import { IChatDto, IMessageDto, IParticipantDto } from '../apiContracts/chatContracts'
 import { ProfileContext } from './'
 
@@ -21,15 +20,16 @@ interface IValue {
   moreMessagesFetching: boolean
   messages: IMessageDto[]
   participants: IParticipantDto[]
-  FETCH_MESSAGES_PAGE_SIZE: number
   hasMoreMessages: boolean
   hubConnection?: HubConnection
   typingParticipants: IParticipantDto[]
   getMoreMessages: (chatId: string) => Promise<void>
+  getChats: (nameFilter: string, skip: number) => Promise<void>
   setCurrentChatId: React.Dispatch<React.SetStateAction<string>>
 }
 
 const FETCH_MESSAGES_PAGE_SIZE = 25
+const FETCH_CHATS_PAGE_SIZE = 20
 export const ChatContext = createContext<IValue>(null!)
 
 const ChatContextProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -72,16 +72,31 @@ const ChatContextProvider: React.FC<{ children: React.ReactNode }> = ({ children
     currentChatId && fetch()
   }, [currentChatId])
 
-  // FETCH ALL CHATS
-  useEffect(() => {
-    const fetch = async () => {
-      setChatsFetching(true)
-      setChats((await api.get('/chats/mine')).data)
-      setChatsFetching(false)
-    }
-
-    isLoggedIn && fetch()
+  const getChats = useCallback(async (nameFilter: string = '', skip: number = 0) => {
+    setChatsFetching(true)
+    const response = await api.get(
+      `/chats/mine?count=${FETCH_CHATS_PAGE_SIZE}&skip=${skip}&nameFilter=${encodeURI(
+        nameFilter
+      )}`
+    )
+    setChats(response?.data?.data)
+    setChatsFetching(false)
   }, [])
+
+  const getMoreMessages = useCallback(
+    async chatId => {
+      setMoreMessagesFetching(true)
+      const response = await api.get(
+        `chats/${chatId}/messages?skip=${messages.length}&count=${FETCH_MESSAGES_PAGE_SIZE}`
+      )
+
+      const moreMessages = response?.data.data || []
+      setMessages(prev => [...moreMessages, ...prev])
+      setHasMoreMessages(response?.data.hasMore)
+      setMoreMessagesFetching(false)
+    },
+    [messages.length]
+  )
 
   const recieveMessage = useCallback(
     (chatId, message) => {
@@ -149,21 +164,6 @@ const ChatContextProvider: React.FC<{ children: React.ReactNode }> = ({ children
       setParticipants(prev => filter(prev, x => x.id !== participantId))
     },
     [profile, currentChatId, history]
-  )
-
-  const getMoreMessages = useCallback(
-    async chatId => {
-      setMoreMessagesFetching(true)
-      const response = await api.get(
-        `chats/${chatId}/messages?skip=${messages.length}&count=${FETCH_MESSAGES_PAGE_SIZE}`
-      )
-
-      const moreMessages = response?.data.data || []
-      setMessages(prev => [...moreMessages, ...prev])
-      setHasMoreMessages(response?.data.hasMore)
-      setMoreMessagesFetching(false)
-    },
-    [messages.length]
   )
 
   const changeUserStatus = useCallback((userId, isOnline) => {
@@ -260,10 +260,10 @@ const ChatContextProvider: React.FC<{ children: React.ReactNode }> = ({ children
         messages,
         participants,
         hasMoreMessages,
-        FETCH_MESSAGES_PAGE_SIZE,
         hubConnection,
         typingParticipants,
         getMoreMessages,
+        getChats,
         setCurrentChatId
       }}
     >

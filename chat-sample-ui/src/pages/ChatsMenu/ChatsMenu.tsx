@@ -1,15 +1,20 @@
 import React, { useState, useContext, useEffect } from 'react'
-import { useHistory } from 'react-router-dom'
 import { map, head } from 'lodash'
-import { PlusOutlined, SwapLeftOutlined, SwapRightOutlined } from '@ant-design/icons'
+import { useHistory } from 'react-router-dom'
 import { CSSTransition } from 'react-transition-group'
+import { PlusOutlined, SwapLeftOutlined, SwapRightOutlined } from '@ant-design/icons'
 
 import CreateChatForm from './CreateChatForm'
+import { MD } from '../../utils/useWindowSize'
 import Backdrop from '../../components/Backdrop'
-import LoadingSpinner from '../../components/LoadingSpinner'
-import useOnClickOutside from '../../utils/useOnClickOutside'
-import useWindowSize, { MD } from '../../utils/useWindowSize'
 import { ChatContext } from '../../contextProviders'
+import LoadingSpinner from '../../components/LoadingSpinner'
+import {
+  useWindowSize,
+  useDebounce,
+  useOnClickOutside,
+  useFocusElement
+} from '../../utils'
 
 import {
   Wrapper,
@@ -17,17 +22,21 @@ import {
   StyledButton,
   StyledBadge,
   ButtonsWrapper,
-  ItemsWrapper
+  ItemsWrapper,
+  SearchBox
 } from './styled/ChatsMenu.styled'
 import './styled/ChatsMenu.animations.css'
 
 const ChatsMenu = () => {
+  const [searchText, setSearchText] = useState('')
   const [showCreateChatDialog, setShowCreateChatDialog] = useState(false)
   const [expanded, setExpanded] = useState(true)
-  const { chats, chatsFetching } = useContext(ChatContext)
+  const { chats, chatsFetching, getChats } = useContext(ChatContext)
   const { width } = useWindowSize()
   const history = useHistory()
   const formRef = useOnClickOutside<HTMLFormElement>(() => setShowCreateChatDialog(false))
+  const debouncedSearchText = useDebounce(searchText, 500)
+  const inputRef = useFocusElement<HTMLInputElement>(chatsFetching)
 
   const isWiderThanMedium = width > MD
 
@@ -35,6 +44,10 @@ const ChatsMenu = () => {
     if (isWiderThanMedium) setExpanded(true)
     else setExpanded(false)
   }, [isWiderThanMedium])
+
+  useEffect(() => {
+    getChats(debouncedSearchText, 0)
+  }, [getChats, debouncedSearchText])
 
   const createChatCallback = (chatId: string) => {
     setShowCreateChatDialog(false)
@@ -86,6 +99,13 @@ const ChatsMenu = () => {
               icon={<PlusOutlined />}
             />
           </ButtonsWrapper>
+
+          <SearchBox
+            ref={inputRef}
+            placeholder='Search...'
+            value={searchText}
+            onChange={e => setSearchText(e.target.value)}
+          />
 
           <ItemsWrapper>{items}</ItemsWrapper>
         </Wrapper>

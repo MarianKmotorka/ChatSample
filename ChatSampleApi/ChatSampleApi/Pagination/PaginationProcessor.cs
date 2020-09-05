@@ -11,33 +11,40 @@ namespace ChatSampleApi.Pagination
     {
         public static async Task<PagedResponse<TResponseDto>> GetPagedResponse<TResponseDto, TEntity, TKey>
         (
-            IQueryable<TEntity> data,
-            PaginationQuery query,
+            IQueryable<TEntity> query,
+            PaginationQuery paginationQuery,
             Expression<Func<TEntity, TResponseDto>> mapper,
             Expression<Func<TResponseDto, TKey>> orderBy,
-            bool ascending,
-            CancellationToken cancellationToken
+            CancellationToken cancellationToken,
+            bool ascending = true
         )
         {
-            var resultQuery = data.Select(mapper);
+            var mappedQuery = query.Select(mapper);
+            IOrderedQueryable<TResponseDto> orderedQuery = null;
 
-            if (ascending) resultQuery = resultQuery.OrderBy(orderBy);
-            else resultQuery = resultQuery.OrderByDescending(orderBy);
+            if (ascending) orderedQuery = mappedQuery.OrderBy(orderBy);
+            else orderedQuery = mappedQuery.OrderByDescending(orderBy);
 
-            var result = await resultQuery
-                .Skip(query.Skip)
-                .Take(query.Count)
+            return await GetPagedResponse(orderedQuery, paginationQuery, cancellationToken);
+        }
+
+        public static async Task<PagedResponse<T>> GetPagedResponse<T>(IOrderedQueryable<T> query, PaginationQuery paginationQuery, CancellationToken cancellationToken)
+        {
+            var result = await query
+                .Skip(paginationQuery.Skip)
+                .Take(paginationQuery.Count)
                 .ToListAsync(cancellationToken);
 
-            var totalCount = await data.CountAsync(cancellationToken);
+            var totalCount = await query.CountAsync(cancellationToken);
 
-            return new PagedResponse<TResponseDto>(result)
+            return new PagedResponse<T>(result)
             {
                 Count = result.Count,
                 Data = result,
-                Skipped = query.Skip,
+                Skipped = paginationQuery.Skip,
                 TotalCount = totalCount
             };
         }
+
     }
 }
