@@ -31,12 +31,12 @@ export const NavbarLink = styled(Link)`
   text-decoration: none;
   margin: 0 12px 0 20px;
   font-size: 20px;
-  color: ${({ theme }) => theme.black};
+  color: ${({ theme }) => theme.textPrimary};
   transition: transform 0.2s;
 
   :hover {
     transform: translateY(5px);
-    color: ${({ theme }) => theme.black};
+    color: ${({ theme }) => theme.textPrimary};
   }
 `
 
@@ -46,14 +46,14 @@ export const ExpandedMenuLink = styled(Link)`
   justify-content: flex-end;
 
   padding: 8px 20px;
-  color: ${({ theme }) => theme.bg100};
-  background: ${({ theme }) => theme.bg500};
+  color: ${({ theme }) => theme.textPrimary};
+  background: ${({ theme }) => theme.primary};
   font-size: 20px;
   text-decoration: none;
   transition: all 0.2s ease;
 
   :hover {
-    color: ${({ theme }) => theme.bg100};
+    color: ${({ theme }) => theme.textPrimary};
     transform: translateX(-5px);
   }
 `
@@ -65,7 +65,7 @@ export const ExpandedLinksWrapper = styled.div`
   flex-direction: column;
   position: absolute;
   z-index: 10;
-  background: ${({ theme }) => theme.bg500};
+  background: ${({ theme }) => theme.primary};
 `
 
 export const ProfileWrapper = styled.div`
@@ -87,8 +87,15 @@ export const UserName = styled.p`
 
 export const Avatar = styled.img`
   border-radius: 50%;
-  margin-right: ${({ marginRight }) => marginRight || '10px'};
+  margin-right: 10px;
+  height: 33px;
+`
+
+export const SmallScreenAvatar = styled.img`
+  border-radius: 50%;
+  margin-right: 20px;
   margin-left: auto;
   height: 33px;
   cursor: pointer;
+  box-shadow: 0 5px 5px rgba(0, 0, 0, 0.4);
 `

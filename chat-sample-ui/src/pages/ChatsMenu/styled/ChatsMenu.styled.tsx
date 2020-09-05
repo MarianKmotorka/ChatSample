@@ -87,7 +87,8 @@ export const ItemsWrapper = styled.div`
   width: 100%;
   overflow-y: auto;
   overflow-x: hidden;
-  margin-top: 15px;
+  margin-top: 8px;
+  padding-top: 7px;
   > * + * {
     margin-top: 10px;
   }

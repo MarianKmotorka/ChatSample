@@ -16,7 +16,8 @@ import {
   UserName,
   NavbarLink,
   ExpandedLinksWrapper,
-  ExpandedMenuLink
+  ExpandedMenuLink,
+  SmallScreenAvatar
 } from './Navbar.styled'
 
 const Navbar = () => {
@@ -39,11 +40,10 @@ const Navbar = () => {
 
   const smallScreenLinks = (
     <>
-      <Avatar
+      <SmallScreenAvatar
         onClick={() => setLinksExpanded(prev => !prev)}
         referrerPolicy='no-referrer'
         src={get(profile, 'picture')}
-        marginRight='20px'
       />
       {linksExpanded && (
         <ExpandedLinksWrapper>

@@ -31,6 +31,9 @@ export const StyledButton = styled(Button)`
 export const ChatNameWrapper = styled.div`
   display: flex;
   align-items: flex-end;
+  box-shadow: 0 4px 5px rgba(0, 0, 0, 0.1);
+  padding: 2px 20px;
+  border-radius: 20px;
 
   * + * {
     margin-left: 5px;

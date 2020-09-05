@@ -73,7 +73,7 @@ export const Content = styled.div`
     p {
       margin: 0;
       font-weight: 500;
-      color: ${({ theme }) => theme.blackCoffee};
+      color: ${({ theme }) => theme.textPrimary};
       margin: 0 auto;
     }
 
