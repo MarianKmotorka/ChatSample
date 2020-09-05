@@ -46,7 +46,7 @@ export const Text = styled.p<IProps>`
   padding: 6px 17px;
   word-break: break-word;
   border-radius: ${props => getMessageBorderRadius(props.isMyMessage, props.shape)};
-  color: ${({ theme, isMyMessage }) => (isMyMessage ? theme.black : theme.textPrimary)};
+  color: ${({ theme, isMyMessage }) => (isMyMessage ? theme.textPrimary : theme.text)};
   background: ${({ isMyMessage, theme }) => (isMyMessage ? theme.primary : theme.bg200)};
   box-shadow: 0 5px 5px rgba(0, 0, 0, 0.2);
 `
@@ -68,7 +68,7 @@ export const MessageDate = styled.p`
 
 export const StyledButton = styled(Button)<{ opacity: number }>`
   opacity: ${({ opacity = 1 }) => opacity};
-  color: ${({ theme }) => theme.textPrimary};
+  color: ${({ theme }) => theme.text};
   :hover {
     color: ${({ theme }) => theme.primary};
   }

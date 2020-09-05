@@ -13,10 +13,10 @@ export const Wrapper = styled.div`
 export const Logo = styled(Link)`
   font-size: 25px;
   padding: 10px 0 10px 30px;
-  color: ${({ theme }) => theme.black};
+  color: ${({ theme }) => theme.textPrimary};
 
   :hover {
-    color: ${({ theme }) => theme.black};
+    color: ${({ theme }) => theme.textPrimary};
   }
 `
 

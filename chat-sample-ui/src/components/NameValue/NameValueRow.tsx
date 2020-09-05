@@ -18,7 +18,7 @@ const Name = styled.p<{ width: number }>`
 `
 
 const Value = styled.p`
-  color: ${({ theme }) => theme.textPrimary};
+  color: ${({ theme }) => theme.text};
   font-size: 18px;
 `
 

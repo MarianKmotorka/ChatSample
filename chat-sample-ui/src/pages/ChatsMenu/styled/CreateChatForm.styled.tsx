@@ -16,7 +16,7 @@ export const Header = styled.div`
   font-size: 30px;
   border-radius: 20px 20px 0 0;
   background: ${({ theme }) => theme.primary};
-  color: ${({ theme }) => theme.black};
+  color: ${({ theme }) => theme.textPrimary};
   display: flex;
   justify-content: center;
   width: 100%;
@@ -42,7 +42,7 @@ export const Content = styled.div`
     margin: 0 auto 2px 0;
     font-weight: 500;
     font-size: 16px;
-    color: ${({ theme }) => theme.textPrimary};
+    color: ${({ theme }) => theme.text};
   }
 
   input {
@@ -66,9 +66,11 @@ export const StyledButton = styled(Button)`
   width: 100%;
   border: 1px solid ${({ theme }) => theme.primary};
   color: ${({ theme }) => theme.primary};
+  margin-top: 15px;
 
   :hover {
     border: 1px solid ${({ theme }) => theme.primary};
+    color: ${({ theme }) => theme.primary};
   }
 `
 

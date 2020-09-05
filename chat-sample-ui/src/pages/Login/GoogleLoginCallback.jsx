@@ -8,7 +8,7 @@ import { login } from '../../services/authService'
 import api from '../../services/httpService'
 
 const Text = styled.p`
-  color: ${({ theme }) => theme.textPrimary};
+  color: ${({ theme }) => theme.text};
   padding: 20px;
   font-size: 16px;
 `

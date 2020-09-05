@@ -50,11 +50,11 @@ export const Photo = styled.img`
 `
 
 export const Text = styled.p`
-  color: ${({ theme }) => theme.textPrimary};
+  color: ${({ theme }) => theme.text};
 `
 
 export const Header = styled.div`
-  color: ${({ theme }) => theme.textPrimary};
+  color: ${({ theme }) => theme.text};
   font-size: 25px;
   border-bottom: solid 1.5px ${({ theme }) => theme.primary};
   margin: 15px 0;

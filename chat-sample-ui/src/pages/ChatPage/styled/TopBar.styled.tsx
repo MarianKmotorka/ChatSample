@@ -42,7 +42,7 @@ export const ChatName = styled.h2`
 `
 
 export const ChatNameInput = styled.input`
-  color: ${({ theme }) => theme.textPrimary};
+  color: ${({ theme }) => theme.text};
   font-size: 20px;
   background: transparent;
   border: none;

@@ -19,7 +19,7 @@ export const ChatButtonLink = styled(NavLink)`
   height: 100%;
   min-height: 55px;
   background: ${({ theme }) => theme.bg100};
-  color: ${({ theme }) => theme.textPrimary};
+  color: ${({ theme }) => theme.text};
   box-shadow: 0 5px 5px rgba(0, 0, 0, 0.1);
   transition: transform 0.2s, box-shadow 0.2s;
   border-radius: 5px;
@@ -29,7 +29,7 @@ export const ChatButtonLink = styled(NavLink)`
   align-items: center;
 
   :hover {
-    color: ${({ theme }) => theme.textPrimary};
+    color: ${({ theme }) => theme.text};
     box-shadow: 0 8px 5px rgba(0, 0, 0, 0.1);
     transform: translateY(-4px) scale(1.03);
 
@@ -41,7 +41,7 @@ export const ChatButtonLink = styled(NavLink)`
   }
 
   &.active {
-    color: ${({ theme }) => theme.bg100};
+    color: ${({ theme }) => theme.textPrimary};
     background: ${({ theme }) => theme.primary};
     p {
       font-weight: 500;
@@ -59,7 +59,7 @@ export const StyledBadge = styled(Badge)`
 
   .ant-badge-count {
     background-color: ${({ theme }) => theme.primary};
-    color: ${({ theme }) => theme.black};
+    color: ${({ theme }) => theme.textPrimary};
     box-shadow: none;
   }
 `
@@ -101,7 +101,7 @@ export const SearchBox = styled.input`
   outline: none;
   border: none;
   border-radius: 30px;
-  color: ${({ theme }) => theme.textPrimary};
+  color: ${({ theme }) => theme.text};
   background: ${({ theme }) => theme.bg100};
   box-shadow: 0 5px 5px rgba(0, 0, 0, 0.1);
   position: relative;

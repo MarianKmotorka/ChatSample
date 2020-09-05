@@ -39,7 +39,7 @@ export const Expander = styled.div`
   border-bottom-left-radius: 3px;
 
   width: 100%;
-  color: ${({ theme }) => theme.textPrimary};
+  color: ${({ theme }) => theme.text};
 
   background: ${({ theme }) => theme.bg100};
 `
@@ -77,7 +77,7 @@ export const Input = styled.input`
   outline: none;
   border: none;
   border-top-left-radius: 3px;
-  color: ${({ theme }) => theme.textPrimary};
+  color: ${({ theme }) => theme.text};
   background: ${({ theme }) => theme.bg100};
 
   &:focus {

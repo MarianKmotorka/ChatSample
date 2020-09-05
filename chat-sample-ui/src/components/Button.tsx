@@ -4,7 +4,7 @@ import styled from 'styled-components'
 const StyledButton = styled(Button)<{ color?: string; bg?: string; text?: boolean }>`
   border: none;
   color: ${({ theme, color, text }) =>
-    (color && theme[color]) || theme[text ? 'textPrimary' : 'black']};
+    (color && theme[color]) || theme[text ? 'text' : 'black']};
 
   background: ${({ theme, bg, text }) =>
     (bg && theme[bg]) || theme[text ? 'transparent' : 'white']};
@@ -17,7 +17,7 @@ const StyledButton = styled(Button)<{ color?: string; bg?: string; text?: boolea
       (bg && theme[bg]) || theme[text ? 'transparent' : 'white']};
 
     color: ${({ theme, color, text }) =>
-      (color && theme[color]) || theme[text ? 'textPrimary' : 'black']};
+      (color && theme[color]) || theme[text ? 'text' : 'black']};
   }
 `
 

@@ -2,7 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 
 const Wrapper = styled.div`
-  color: ${({ theme }) => theme.textPrimary};
+  color: ${({ theme }) => theme.text};
   font-size: 30px;
   padding: 10px 20px;
 `

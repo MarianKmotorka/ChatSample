@@ -56,10 +56,11 @@ export const GlobalStyle = createGlobalStyle`
   .ant-btn-primary{
     background:${({ theme }) => theme.primary};
     border:${({ theme }) => theme.primary};
+    color:${({ theme }) => theme.textPrimary};
 
     :hover,:focus{
       background:${({ theme }) => theme.primary};
-      color:${({ theme }) => theme.white};
+      color:${({ theme }) => theme.textPrimary};
     }
   }
 `

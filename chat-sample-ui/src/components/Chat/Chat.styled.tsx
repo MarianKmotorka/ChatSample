@@ -23,7 +23,7 @@ export const InputWrapper = styled.div`
     border: none;
     border-radius: 22px;
     background: ${({ theme }) => theme.bg200};
-    color: ${({ theme }) => theme.textPrimary};
+    color: ${({ theme }) => theme.text};
     box-shadow: 0 5px 5px rgba(0, 0, 0, 0.2);
   }
 `
@@ -46,7 +46,7 @@ export const MessagesWrapper = styled.div`
 export const TimeStamp = styled.p`
   margin: 40px;
   text-align: center;
-  color: ${({ theme }) => theme.textPrimary};
+  color: ${({ theme }) => theme.text};
   border-bottom: 1px solid ${({ theme }) => theme.bg300};
   line-height: 0.1em;
   opacity: 0.6;

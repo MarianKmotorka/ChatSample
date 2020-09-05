@@ -35,7 +35,7 @@ const EmojiList: React.FC<IProps> = memo(({ onSelect }) => {
     <Tabs
       defaultActiveKey='1'
       tabPosition='bottom'
-      style={{ width: '50vw', color: theme.textPrimary }}
+      style={{ width: '50vw', color: theme.text }}
     >
       <StyledTabPane tab='Smileys' key='1'>
         {getEmojiButtons(smileys)}
