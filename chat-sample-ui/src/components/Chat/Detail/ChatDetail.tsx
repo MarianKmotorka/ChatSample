@@ -5,6 +5,7 @@ import { SwapLeftOutlined, SwapRightOutlined, PlusOutlined } from '@ant-design/i
 import Tooltip from '../../Tooltip'
 import Popover from '../../Popover'
 import { getContextMenuItems } from './utils'
+import LoadingSpinner from '../../LoadingSpinner'
 import { IParticipantDto } from '../../../apiContracts/chatContracts'
 import useWindowSize, { SM } from '../../../utils/useWindowSize'
 import SearchableDropdown from '../../SearchableDropdown/SearchableDropdown'
@@ -26,6 +27,7 @@ import {
 interface IProps {
   participants: IParticipantDto[]
   chatId: string
+  isLoading: boolean
   onAddParticipant: (participant: IParticipantDto) => void
   onDeleteParticipant: (id: string) => void
   onSetParticipantAsAdmin: (id: string) => void
@@ -34,6 +36,7 @@ interface IProps {
 const ChatDetail: React.FC<IProps> = ({
   participants,
   chatId,
+  isLoading,
   onAddParticipant,
   onDeleteParticipant,
   onSetParticipantAsAdmin
@@ -131,26 +134,29 @@ const ChatDetail: React.FC<IProps> = ({
           />
         )}
 
-        {map(participants, participant => {
-          const menuItems = getContextMenuItems(
-            participant.id,
-            currentUserId,
-            participant.chatRole,
-            currentUserRole,
-            onDeleteParticipant,
-            onSetParticipantAsAdmin
-          )
+        {isLoading && <LoadingSpinner />}
 
-          return expanded ? (
-            <ParticipantWrapper key={participant.id}>
-              {renderPhoto(participant)}
-              {renderName(participant.name, participant.chatRole)}
-              <StyledMenu items={menuItems} />
-            </ParticipantWrapper>
-          ) : (
-            renderPhoto(participant)
-          )
-        })}
+        {!isLoading &&
+          map(participants, participant => {
+            const menuItems = getContextMenuItems(
+              participant.id,
+              currentUserId,
+              participant.chatRole,
+              currentUserRole,
+              onDeleteParticipant,
+              onSetParticipantAsAdmin
+            )
+
+            return expanded ? (
+              <ParticipantWrapper key={participant.id}>
+                {renderPhoto(participant)}
+                {renderName(participant.name, participant.chatRole)}
+                <StyledMenu items={menuItems} />
+              </ParticipantWrapper>
+            ) : (
+              renderPhoto(participant)
+            )
+          })}
       </Content>
     </Wrapper>
   )

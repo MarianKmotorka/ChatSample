@@ -17,12 +17,14 @@ import {
   StyledButton,
   TimeStamp
 } from './Chat.styled'
+import LoadingSpinner from '../LoadingSpinner'
 
 interface IProps {
   messages: IMessageDto[]
   typingParticipants: IParticipantDto[]
   canLoadMore: boolean
   moreMessagesFetching: boolean
+  isLoading: boolean
   scrollToMessageId?: string
   onLoadMore: () => void
   onMessageSent: (text: string) => void
@@ -33,6 +35,7 @@ interface IProps {
 
 const Chat: React.FC<IProps> = ({
   messages,
+  isLoading,
   canLoadMore,
   scrollToMessageId,
   typingParticipants,
@@ -98,8 +101,15 @@ const Chat: React.FC<IProps> = ({
   return (
     <Wrapper>
       <MessagesWrapper>
+        {isLoading && <LoadingSpinner />}
         {moreMessagesFetching && <MessagesLoadingSpinner />}
-        {useMemo(() => messages.map(renderMessage), [messages, renderMessage])}
+
+        {useMemo(() => !isLoading && messages.map(renderMessage), [
+          messages,
+          isLoading,
+          renderMessage
+        ])}
+
         <TypingIndicator typingParticipants={typingParticipants} />
       </MessagesWrapper>
 
@@ -109,7 +119,12 @@ const Chat: React.FC<IProps> = ({
             onSelect={useCallback(emoji => setText(prev => prev + emoji), [])}
           />
 
-          <input ref={inputRef} value={text} onChange={e => setText(e.target.value)} />
+          <input
+            disabled={isLoading}
+            ref={inputRef}
+            value={text}
+            onChange={e => setText(e.target.value)}
+          />
 
           <StyledButton
             shape='circle'
@@ -118,6 +133,7 @@ const Chat: React.FC<IProps> = ({
             bg='transparent'
             icon={<i className='fas fa-paper-plane' />}
             onClick={_ => onMessageSentInternal(null)}
+            disabled={isLoading}
           />
         </InputWrapper>
       </form>

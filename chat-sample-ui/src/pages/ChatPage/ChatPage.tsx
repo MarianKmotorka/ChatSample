@@ -6,7 +6,6 @@ import TopBar from './TopBar'
 import api from '../../services/httpService'
 import Chat from '../../components/Chat/Chat'
 import { ChatContext } from '../../contextProviders'
-import LoadingSpinner from '../../components/LoadingSpinner'
 import ChatDetail from '../../components/Chat/Detail/ChatDetail'
 import { IParticipantDto } from '../../apiContracts/chatContracts'
 
@@ -84,8 +83,6 @@ const ChatPage = () => {
   const handleIsTypingChanged = async (isTyping: boolean) =>
     await hubConnection?.invoke('SendIsTyping', isTyping, chatId)
 
-  if (currentChatFetching) return <LoadingSpinner />
-
   return (
     <Wrapper>
       <TopBar
@@ -105,6 +102,7 @@ const ChatPage = () => {
           onMessageSent={handleMessageSent}
           onDeleteMessage={handleMessageDeleted}
           onRecoverMessage={handleMessageRecovered}
+          isLoading={currentChatFetching}
         />
         {showChatDetail && (
           <ChatDetail
@@ -113,6 +111,7 @@ const ChatPage = () => {
             onAddParticipant={handleAddParticipant}
             onDeleteParticipant={handleParticipantDeleted}
             onSetParticipantAsAdmin={handleSetParticipantAsAdmin}
+            isLoading={currentChatFetching}
           />
         )}
       </InnerWrapper>
