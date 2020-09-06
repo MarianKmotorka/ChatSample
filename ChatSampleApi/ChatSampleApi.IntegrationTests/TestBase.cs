@@ -7,12 +7,6 @@ namespace ChatSampleApi.IntegrationTests
 
     public class TestBase
     {
-        [SetUp]
-        public async Task SetUp()
-        {
-            await ResetState();
-        }
-
         [TearDown]
         public async Task TearDown()
         {

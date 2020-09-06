@@ -22,7 +22,7 @@ namespace ChatSampleApi.IntegrationTests.Chat
             ArrangeDb.AddRange(chat1, chat2);
             await ArrangeDb.SaveChangesAsync();
 
-            var query = new GetMyChatsList.Query { UserId = user.Id };
+            var query = new GetMyChatsList.Query { UserId = user.Id, PaginationQuery = new Pagination.PaginationQuery() };
 
             // Act
             var response = await SendAsync(query);

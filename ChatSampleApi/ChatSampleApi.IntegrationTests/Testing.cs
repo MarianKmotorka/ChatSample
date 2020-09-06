@@ -65,38 +65,17 @@ namespace ChatSampleApi.IntegrationTests
 
             startup.ConfigureServices(services);
 
-            var currentUserServiceDescriptor = services.FirstOrDefault(d =>
-                d.ServiceType == typeof(ICurrentUserService));
-
-            // Mock CurrentUserService
+            // Remove ICurrentUserService and DbContext and use testing configuration
+            var currentUserServiceDescriptor = services.FirstOrDefault(d => d.ServiceType == typeof(ICurrentUserService));
             services.Remove(currentUserServiceDescriptor);
-            services.AddScoped(provider =>
-                Mock.Of<ICurrentUserService>(s => s.UserId == _currentUser.Id));
+            services.AddScoped(provider => Mock.Of<ICurrentUserService>(s => s.UserId == _currentUser.Id));
+
+            var dbContext = services.FirstOrDefault(x => x.ServiceType == typeof(DatabaseContext));
+            services.Remove(dbContext);
+            services.AddDbContext<DatabaseContext>(o => o.UseInMemoryDatabase("ChatSample-Testing"));
+
 
             _scopeFactory = services.BuildServiceProvider().GetService<IServiceScopeFactory>();
-
-            _checkpoint = new Checkpoint
-            {
-                TablesToIgnore = new[] { "__EFMigrationsHistory" }
-            };
-
-            EnsureDatabase();
-        }
-
-        private void EnsureDatabase()
-        {
-            using var scope = _scopeFactory.CreateScope();
-
-            var context = scope.ServiceProvider.GetService<DatabaseContext>();
-
-            context.Database.Migrate();
-        }
-
-        public static async Task ResetState()
-        {
-            await _checkpoint.Reset(_configuration.GetConnectionString("DatabaseContext"));
-
-            _currentUser = null;
         }
 
         public static async Task<TResponse> SendAsync<TResponse>(IRequest<TResponse> request)
