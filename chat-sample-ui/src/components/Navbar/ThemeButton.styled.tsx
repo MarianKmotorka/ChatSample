@@ -6,10 +6,10 @@ export const StyledButton = styled(Button)`
 `
 
 export const ContentWrapper = styled.div`
-  padding: 5px;
+  padding: 10px;
 
-  * + * {
-    margin-top: 10px;
+  > * + * {
+    margin-top: 25px;
   }
 
   .ant-switch {

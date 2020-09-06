@@ -59,7 +59,7 @@ export const DotsWrapper = styled.div<{ shiftLeft: number }>`
   box-shadow: 0 5px 5px rgba(0, 0, 0, 0.2);
   transform: ${({ shiftLeft }) => `translateX(${-shiftLeft}px)`};
 
-  * + * {
+  > * + * {
     margin-left: 4px;
   }
 `

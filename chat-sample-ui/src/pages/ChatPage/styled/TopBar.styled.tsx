@@ -17,7 +17,7 @@ export const ButtonsWrapper = styled.div`
   flex: 1;
   justify-content: flex-end;
 
-  * + * {
+  > * + * {
     margin-left: 10px;
   }
 `
@@ -35,7 +35,7 @@ export const ChatNameWrapper = styled.div`
   padding: 2px 20px;
   border-radius: 20px;
 
-  * + * {
+  > * + * {
     margin-left: 5px;
   }
 `
