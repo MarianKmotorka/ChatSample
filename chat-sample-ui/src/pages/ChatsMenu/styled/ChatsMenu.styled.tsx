@@ -107,7 +107,7 @@ export const ItemsWrapper = styled.div`
   padding-top: 7px;
 
   :hover {
-    overflow-y: scroll;
+    overflow-y: auto;
   }
 
   > * + * {

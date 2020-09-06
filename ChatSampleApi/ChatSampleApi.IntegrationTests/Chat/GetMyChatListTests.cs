@@ -28,8 +28,8 @@ namespace ChatSampleApi.IntegrationTests.Chat
             var response = await SendAsync(query);
 
             // Assert
-            response.Should().HaveCount(1);
-            response.First().Id.Should().Be(chat2.Id);
+            response.Data.Should().HaveCount(1);
+            response.Data.First().Id.Should().Be(chat2.Id);
         }
     }
 }

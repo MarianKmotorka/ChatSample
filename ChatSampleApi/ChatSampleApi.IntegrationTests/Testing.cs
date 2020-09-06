@@ -50,6 +50,7 @@ namespace ChatSampleApi.IntegrationTests
             var builder = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
                 .AddJsonFile("appsettings.json", true, true)
+                .AddUserSecrets("8fb07083-9332-4354-9d8b-9e88cc7f6548")
                 .AddEnvironmentVariables();
 
             _configuration = builder.Build();

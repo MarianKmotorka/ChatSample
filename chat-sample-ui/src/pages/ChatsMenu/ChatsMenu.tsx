@@ -54,13 +54,6 @@ const ChatsMenu = () => {
     history.push(`/chats/${chatId}`)
   }
 
-  if (chatsFetching)
-    return (
-      <Wrapper expanded>
-        <LoadingSpinner />
-      </Wrapper>
-    )
-
   const items = map(chats, x => (
     <StyledBadge key={x.id} count={x.unreadMessages} offset={[-5, 5]}>
       <ChatButtonLink to={`/chats/${x.id}`}>
@@ -107,7 +100,10 @@ const ChatsMenu = () => {
             />
           )}
 
-          <ItemsWrapper>{items}</ItemsWrapper>
+          <ItemsWrapper>
+            {chatsFetching && <LoadingSpinner />}
+            {!chatsFetching && items}
+          </ItemsWrapper>
         </Wrapper>
       </CSSTransition>
     </>
