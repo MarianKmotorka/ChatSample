@@ -83,7 +83,7 @@ export const StyledButton = styled(Button)`
   margin: 5px 8px 15px 0px;
   position: sticky;
   top: 0px;
-  z-index: 2;
+  z-index: 1;
   transform: scale(1.1);
   box-shadow: 0 5px 5px rgba(0, 0, 0, 0.2);
   background: ${({ theme }) => theme.white};

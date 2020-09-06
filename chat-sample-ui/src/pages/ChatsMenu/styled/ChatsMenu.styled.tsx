@@ -3,7 +3,7 @@ import { NavLink } from 'react-router-dom'
 import { Badge } from 'antd'
 import Button from '../../../components/Button'
 
-export const Wrapper = styled.div<{ expanded: boolean }>`
+export const Wrapper = styled.div<{ expanded: boolean; renderOver?: boolean }>`
   display: flex;
   flex-direction: column;
   background: ${({ theme }) => theme.bg200};
@@ -13,6 +13,11 @@ export const Wrapper = styled.div<{ expanded: boolean }>`
   align-items: center;
   border-right: ${({ theme }) => theme.bg400} 0.5px solid;
   width: ${({ expanded }) => (expanded ? '300px' : '90px')};
+
+  position: ${({ renderOver }) => (renderOver ? 'absolute' : 'static')};
+  top: 0px;
+  left: 0px;
+  z-index: 2;
 `
 
 export const ChatButtonLink = styled(NavLink)`
@@ -68,15 +73,27 @@ export const StyledButton = styled(Button)`
   transform: scale(1.2);
 `
 
-export const ButtonsWrapper = styled.div`
+export const ButtonsWrapper = styled.div<{ expanded: boolean }>`
   display: flex;
-  flex-direction: column;
-  justify-content: space-evenly;
   align-items: center;
+  width: 90%;
 
-  > * + * {
-    margin-top: 15px;
-  }
+  ${({ expanded }) =>
+    expanded
+      ? css`
+          justify-content: flex-end;
+          flex-direction: row;
+          > * {
+            margin: 0 10px;
+          }
+        `
+      : css`
+          flex-direction: column-reverse;
+          justify-content: space-evenly;
+          > * + * {
+            margin-bottom: 17px;
+          }
+        `}
 `
 
 export const ItemsWrapper = styled.div`
@@ -85,10 +102,14 @@ export const ItemsWrapper = styled.div`
   align-items: center;
   height: 100%;
   width: 100%;
-  overflow-y: auto;
-  overflow-x: hidden;
+  overflow: hidden;
   margin-top: 8px;
   padding-top: 7px;
+
+  :hover {
+    overflow-y: scroll;
+  }
+
   > * + * {
     margin-top: 10px;
   }

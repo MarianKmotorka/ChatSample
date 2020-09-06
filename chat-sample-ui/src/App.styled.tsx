@@ -10,6 +10,7 @@ export const AppWrapper = styled.div`
 export const MenuAndContentWrapper = styled.div`
   display: flex;
   flex: 1;
+  position: relative;
 `
 
 export const ContentWrapper = styled.div`

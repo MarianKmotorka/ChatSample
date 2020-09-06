@@ -83,29 +83,29 @@ const ChatsMenu = () => {
       </CSSTransition>
 
       <CSSTransition in={expanded} appear timeout={400} classNames='wrapper-'>
-        <Wrapper expanded={expanded}>
-          <ButtonsWrapper>
-            {isWiderThanMedium && (
-              <StyledButton
-                onClick={() => setExpanded(x => !x)}
-                shape='circle'
-                icon={expanded ? <SwapLeftOutlined /> : <SwapRightOutlined />}
-              />
-            )}
-
+        <Wrapper expanded={expanded} renderOver={!isWiderThanMedium && expanded}>
+          <ButtonsWrapper expanded={expanded}>
             <StyledButton
               onClick={() => setShowCreateChatDialog(true)}
               shape='circle'
               icon={<PlusOutlined />}
             />
+
+            <StyledButton
+              onClick={() => setExpanded(x => !x)}
+              shape='circle'
+              icon={expanded ? <SwapLeftOutlined /> : <SwapRightOutlined />}
+            />
           </ButtonsWrapper>
 
-          <SearchBox
-            ref={inputRef}
-            placeholder='Search...'
-            value={searchText}
-            onChange={e => setSearchText(e.target.value)}
-          />
+          {expanded && (
+            <SearchBox
+              ref={inputRef}
+              placeholder='Search...'
+              value={searchText}
+              onChange={e => setSearchText(e.target.value)}
+            />
+          )}
 
           <ItemsWrapper>{items}</ItemsWrapper>
         </Wrapper>
