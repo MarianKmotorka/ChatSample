@@ -1,12 +1,11 @@
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect } from 'react'
 
 /**
  * @param text User text imput.
- * @param callback Function that will be called when user starts or stops typing.
+ * @param callback Function that will be called when user starts or stops typing. Must be wrapped in useCallback.
  */
 export const useIsTyping = (text: string, callback: (isTyping: boolean) => void) => {
   const [isTyping, setIsTyping] = useState(false)
-  const memoizedCallback = useCallback(callback, [])
 
   useEffect(() => {
     text && setIsTyping(true)
@@ -16,8 +15,8 @@ export const useIsTyping = (text: string, callback: (isTyping: boolean) => void)
   }, [text])
 
   useEffect(() => {
-    memoizedCallback(isTyping)
-  }, [memoizedCallback, isTyping])
+    callback(isTyping)
+  }, [callback, isTyping])
 }
 
 export default useIsTyping

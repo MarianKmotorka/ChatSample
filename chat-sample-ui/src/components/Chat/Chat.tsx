@@ -47,7 +47,7 @@ const Chat: React.FC<IProps> = ({
   onIsTypingChanged
 }) => {
   const [text, setText] = useState('')
-  const inputRef = useFocusElement<HTMLInputElement>()
+  const inputRef = useFocusElement<HTMLInputElement>(isLoading)
   const scrollToMessageRef = useScrollTo<HTMLDivElement>(scrollToMessageId, messages)
   const observeMessage = useObserver<HTMLDivElement>(canLoadMore, onLoadMore)
   useIsTyping(text, onIsTypingChanged)

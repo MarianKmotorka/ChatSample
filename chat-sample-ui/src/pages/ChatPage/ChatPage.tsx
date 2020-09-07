@@ -18,6 +18,7 @@ const ChatPage = () => {
     messages,
     participants,
     hubConnection,
+    hubDisconnected,
     hasMoreMessages,
     typingParticipants,
     setCurrentChatId,
@@ -34,6 +35,7 @@ const ChatPage = () => {
 
   useEffect(() => setCurrentChatId(chatId), [chatId, setCurrentChatId])
   useEffect(() => setScrollToMessageId(lastMessageId), [lastMessageId])
+  useEffect(() => console.log(hubConnection), [hubConnection])
 
   const handleMessageSent = async (text: string) => {
     setScrollToMessageId(lastMessageId)
@@ -80,8 +82,13 @@ const ChatPage = () => {
   const handleChatRenamed = async (name: string) =>
     await api.patch(`/chats/${chatId}`, { name })
 
-  const handleIsTypingChanged = async (isTyping: boolean) =>
-    await hubConnection?.invoke('SendIsTyping', isTyping, chatId)
+  const handleIsTypingChanged = useCallback(
+    (isTyping: boolean) => {
+      if (hubDisconnected === undefined)
+        hubConnection?.invoke('SendIsTyping', isTyping, chatId)
+    },
+    [hubConnection, chatId, hubDisconnected]
+  )
 
   return (
     <Wrapper>
@@ -90,6 +97,7 @@ const ChatPage = () => {
         onRenameChat={handleChatRenamed}
         onToggleChatDetail={() => setShowChatDetail(prev => !prev)}
       />
+
       <InnerWrapper>
         <Chat
           messages={messages}
@@ -104,6 +112,7 @@ const ChatPage = () => {
           onRecoverMessage={handleMessageRecovered}
           isLoading={currentChatFetching}
         />
+
         {showChatDetail && (
           <ChatDetail
             participants={participants}

@@ -1,10 +1,10 @@
 import React, { useState, useEffect, createContext, useCallback, useContext } from 'react'
 import useSound from 'use-sound'
 import { useHistory } from 'react-router-dom'
-import { get, filter, map, find } from 'lodash'
+import { filter, map, find } from 'lodash'
 import { HubConnection } from '@microsoft/signalr'
 
-import useHub from '../utils/useHub'
+import useHub, { DisconnectType } from '../utils/useHub'
 import api from '../services/httpService'
 import { API_URL_DEV, API_URL_PROD } from '../utils/config.json'
 import { IChatDto, IMessageDto, IParticipantDto } from '../apiContracts/chatContracts'
@@ -22,6 +22,7 @@ interface IValue {
   participants: IParticipantDto[]
   hasMoreMessages: boolean
   hubConnection?: HubConnection
+  hubDisconnected: DisconnectType | undefined
   typingParticipants: IParticipantDto[]
   getMoreMessages: (chatId: string) => Promise<void>
   getChats: (nameFilter: string, skip: number) => Promise<void>
@@ -44,7 +45,7 @@ const ChatContextProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [participants, setParticipants] = useState<IParticipantDto[]>([])
   const [typingParticipants, setTypingParticipants] = useState<IParticipantDto[]>([])
 
-  const { hubConnection } = useHub(
+  const { hubConnection, disconnected: hubDisconnected } = useHub(
     `${process.env.NODE_ENV === 'production' ? API_URL_PROD : API_URL_DEV}/chat-hub`
   )
   const { profile } = useContext(ProfileContext)
@@ -101,7 +102,8 @@ const ChatContextProvider: React.FC<{ children: React.ReactNode }> = ({ children
   )
 
   const recieveMessage = useCallback(
-    (chatId, message) => {
+    (chatId, message: IMessageDto) => {
+      // Put chat on the top
       setChats(prev => {
         var chat = find(prev, ['id', chatId])
         var otherChats = filter(prev, x => x.id !== chatId)
@@ -111,7 +113,9 @@ const ChatContextProvider: React.FC<{ children: React.ReactNode }> = ({ children
       if (chatId !== currentChatId) {
         setChats(prev =>
           map(prev, x =>
-            x.id === chatId ? { ...x, unreadMessages: x.unreadMessages + 1 } : x
+            x.id === chatId && message.senderId !== profile.id
+              ? { ...x, unreadMessages: x.unreadMessages + 1 }
+              : x
           )
         )
 
@@ -120,7 +124,7 @@ const ChatContextProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
       const updatedMessage = {
         ...message,
-        isMyMessage: get(message, 'senderId') === profile.id
+        isMyMessage: message.senderId === profile.id
       }
 
       setMessages(prev => [...prev, updatedMessage])
@@ -263,6 +267,7 @@ const ChatContextProvider: React.FC<{ children: React.ReactNode }> = ({ children
         participants,
         hasMoreMessages,
         hubConnection,
+        hubDisconnected,
         typingParticipants,
         getMoreMessages,
         getChats,

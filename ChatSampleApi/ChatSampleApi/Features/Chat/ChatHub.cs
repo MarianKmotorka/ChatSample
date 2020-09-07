@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -30,11 +31,8 @@ namespace ChatSampleApi.Features.Chat
         private readonly ICurrentUserService _currentUserService;
         private readonly DatabaseContext _db;
 
-        private static Dictionary<string, List<string>> _userConnections = new Dictionary<string, List<string>>();
-        public static IReadOnlyDictionary<string, List<string>> UserConnections
-        {
-            get => _userConnections;
-        }
+        private static ConcurrentDictionary<string, List<string>> _userConnections = new ConcurrentDictionary<string, List<string>>();
+        public static IReadOnlyDictionary<string, List<string>> UserConnections => _userConnections;
 
         public ChatHub(ICurrentUserService currentUserService, DatabaseContext db)
         {
@@ -69,12 +67,10 @@ namespace ChatSampleApi.Features.Chat
 
         private void AddUserConnection()
         {
-            var userId = _currentUserService.UserId;
-
-            if (_userConnections.ContainsKey(userId))
-                _userConnections[userId].Add(Context.ConnectionId);
-            else
-                _userConnections.Add(userId, new List<string> { Context.ConnectionId });
+            _userConnections.AddOrUpdate(
+                _currentUserService.UserId,
+                _ => new List<string> { Context.ConnectionId },
+                (_, prevCollection) => prevCollection.Append(Context.ConnectionId).ToList());
         }
 
         private async Task AddUserToGroups()
@@ -119,7 +115,7 @@ namespace ChatSampleApi.Features.Chat
             _userConnections[userId].Remove(Context.ConnectionId);
 
             if (_userConnections[userId].Count == 0)
-                _userConnections.Remove(userId);
+                _userConnections.TryRemove(userId, out _);
         }
 
         private async Task SetUserOnlineStatus(string userId, bool isOnline = true)

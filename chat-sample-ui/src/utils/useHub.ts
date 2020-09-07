@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import * as signalR from '@microsoft/signalr'
 import { getJwt, isLoggedIn } from '../services/authService'
 
-type DisconnectType = 'connecting' | 'temporary' | 'permanent'
+export type DisconnectType = 'connecting' | 'temporary' | 'permanent'
 const useHub = (url: string) => {
   const [hubConnection, setConnection] = useState<signalR.HubConnection | undefined>()
   const [disconnected, setDisconnected] = useState<DisconnectType | undefined>(
