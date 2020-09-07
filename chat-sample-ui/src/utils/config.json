@@ -1,6 +1,7 @@
 {
   "GOOGLE_CLIENT_ID": "61115648864-7p9m5h3r2eq885igsnkflamgck2u30s4.apps.googleusercontent.com",
   "SERVER_AUTH_CALLBACK_URL": "/auth/google-code-callback",
-  "GOOGLE_AUTH_CALLBACK_URL": "http://localhost:3000/google-login-callback",
-  "API_URL": "https://localhost:5001/api"
+  "GOOGLE_AUTH_CALLBACK_URL": "/google-login-callback",
+  "API_URL_PROD": "http://ferooref-001-site1.atempurl.com/api",
+  "API_URL_DEV": "https://localhost:5001/api"
 }

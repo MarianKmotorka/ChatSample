@@ -6,7 +6,7 @@ import { HubConnection } from '@microsoft/signalr'
 
 import useHub from '../utils/useHub'
 import api from '../services/httpService'
-import { API_URL } from '../utils/config.json'
+import { API_URL_DEV, API_URL_PROD } from '../utils/config.json'
 import { IChatDto, IMessageDto, IParticipantDto } from '../apiContracts/chatContracts'
 import { ProfileContext } from './'
 
@@ -44,7 +44,9 @@ const ChatContextProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [participants, setParticipants] = useState<IParticipantDto[]>([])
   const [typingParticipants, setTypingParticipants] = useState<IParticipantDto[]>([])
 
-  const { hubConnection } = useHub(`${API_URL}/chat-hub`)
+  const { hubConnection } = useHub(
+    `${process.env.NODE_ENV === 'production' ? API_URL_PROD : API_URL_DEV}/chat-hub`
+  )
   const { profile } = useContext(ProfileContext)
   const [beep] = useSound(newMessageBeep)
   const history = useHistory()

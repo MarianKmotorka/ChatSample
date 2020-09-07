@@ -1,9 +1,10 @@
 import axios from 'axios'
 import { get } from 'lodash'
 import { login, getJwt, getRefreshToken, logout } from './authService'
-import { API_URL } from '../utils/config.json'
+import { API_URL_DEV, API_URL_PROD } from '../utils/config.json'
 
-axios.defaults.baseURL = API_URL
+axios.defaults.baseURL =
+  process.env.NODE_ENV === 'production' ? API_URL_PROD : API_URL_DEV
 
 axios.interceptors.request.use(
   request => {

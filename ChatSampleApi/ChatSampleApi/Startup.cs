@@ -56,16 +56,15 @@ namespace ChatSampleApi
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            if (env.IsDevelopment())
+            app.UseCors(config =>
             {
+                config.AllowAnyOrigin()
+                .AllowAnyMethod()
+                .AllowAnyHeader();
+            });
+
+            if (env.IsDevelopment())
                 app.UseDeveloperExceptionPage();
-                app.UseCors(config =>
-                {
-                    config.AllowAnyOrigin()
-                    .AllowAnyMethod()
-                    .AllowAnyHeader();
-                });
-            }
             else
                 app.UseHsts();
 

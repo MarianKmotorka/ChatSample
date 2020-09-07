@@ -8,9 +8,11 @@ const Login = ({ location, history }) => {
   if (isLoggedIn) history.replace('/')
 
   const onGoogleLoginClick = () => {
+    const redirectUri = `${window.location.origin + config.GOOGLE_AUTH_CALLBACK_URL}`
+
     const queryParams = [
       `client_id=${config.GOOGLE_CLIENT_ID}`,
-      `redirect_uri=${config.GOOGLE_AUTH_CALLBACK_URL}`,
+      `redirect_uri=${redirectUri}`,
       'response_type=code',
       'scope=openid profile email',
       'access_type=offline',

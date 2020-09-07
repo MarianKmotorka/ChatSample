@@ -24,7 +24,6 @@ namespace ChatSampleApi.Features.Chat.AddParticipant
             var user = await _db.Users.SingleOrNotFoundAsync(x => x.Id == request.ParticipantId);
 
             var participant = chat.AddParticipant(user);
-            await _db.SaveChangesAsync();
 
             if (ChatHub.UserConnections.TryGetValue(participant.Id, out var connections))
                 foreach (var connection in connections)
@@ -46,6 +45,7 @@ namespace ChatSampleApi.Features.Chat.AddParticipant
                     IsOnline = participant.IsOnline
                 });
 
+            await _db.SaveChangesAsync(cancellationToken);
             return Unit.Value;
         }
     }
