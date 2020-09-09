@@ -27,7 +27,7 @@ const Message: React.FC<IProps> = memo(
   ({ message, forwardRef, onDelete, onRecover, shape = MessageShape.STANDALONE }) => {
     const [hovered, setHovered] = useState(false)
 
-    const date = moment(message.date).format('MMMM Do YYYY, H:mm:ss')
+    const date = moment.utc(message.date).local().format('MMMM Do YYYY, H:mm:ss')
     const text = message.isDeleted ? <DeletedText>Deleted</DeletedText> : message.text
     const showAvatar =
       shape === MessageShape.STANDALONE ||

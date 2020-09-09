@@ -28,6 +28,7 @@ namespace ChatSampleApi.Features.Chat.SendMessage
             var sender = await _db.Users.FindAsync(request.UserId);
 
             var message = chat.AddMessage(sender, request.Text);
+            await _db.SaveChangesAsync(cancellationToken);
 
             await _hubContext.Clients.Group(chat.Id).SendAsync(ChatHub.RecieveMessage, chat.Id, new GetMessages.MessageDto
             {
@@ -39,7 +40,6 @@ namespace ChatSampleApi.Features.Chat.SendMessage
                 Text = message.Text
             });
 
-            await _db.SaveChangesAsync(cancellationToken);
             return Unit.Value;
         }
     }

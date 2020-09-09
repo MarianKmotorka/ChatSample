@@ -35,7 +35,6 @@ const ChatPage = () => {
 
   useEffect(() => setCurrentChatId(chatId), [chatId, setCurrentChatId])
   useEffect(() => setScrollToMessageId(lastMessageId), [lastMessageId])
-  useEffect(() => console.log(hubConnection), [hubConnection])
 
   const handleMessageSent = async (text: string) => {
     setScrollToMessageId(lastMessageId)

@@ -1,5 +1,6 @@
-import { MessageShape } from './Message/Message'
 import { indexOf } from 'lodash'
+import moment from 'moment'
+import { MessageShape } from './Message/Message'
 import { IMessageDto } from '../../apiContracts/chatContracts'
 
 const BORDER_RADIUS = 25
@@ -42,7 +43,8 @@ export const getMessageBorderRadius = (isMyMessage: boolean, shape: MessageShape
 
 const isDelayedMessage = (message: IMessageDto, otherMessage?: IMessageDto) =>
   Math.abs(
-    new Date(message.date).getTime() - new Date(otherMessage?.date || 0).getTime()
+    new Date(moment.utc(message.date).format()).getTime() -
+      new Date(moment.utc(otherMessage?.date || 0).format()).getTime()
   ) /
     60000 >
   10

@@ -75,7 +75,7 @@ const Chat: React.FC<IProps> = ({
         <div key={message.id}>
           {isDelayed && (
             <TimeStamp>
-              <span>{moment(message.date).format('MMMM Do YYYY, H:mm')}</span>
+              <span>{moment.utc(message.date).local().format('MMMM Do YYYY, H:mm')}</span>
             </TimeStamp>
           )}
           <Message
