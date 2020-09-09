@@ -42,7 +42,7 @@ namespace ChatSampleApi.Features.Chat
                     });
 
                 if (!string.IsNullOrEmpty(request.NameFilter))
-                    chatsQuery = chatsQuery.Where(x => x.Name.ToLower().Contains(request.NameFilter.ToLower()));
+                    chatsQuery = chatsQuery.Where(x => x.Name.Contains(request.NameFilter));
 
                 var pagedChats = await PaginationProcessor.GetPagedResponse((IOrderedQueryable<ChatDto>)chatsQuery, request.PaginationQuery, cancellationToken);
 

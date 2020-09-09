@@ -13,7 +13,7 @@ namespace ChatSampleApi.Persistence.Entities
             Chat = chat;
 
             Text = text;
-            SentDate = DateTime.Now;
+            SentDate = DateTime.UtcNow;
         }
 
         private Message()

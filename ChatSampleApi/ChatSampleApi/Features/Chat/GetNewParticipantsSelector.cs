@@ -44,7 +44,7 @@ namespace ChatSampleApi.Features.Chat
                     });
 
                 if (!string.IsNullOrEmpty(request.Text))
-                    query = query.Where(x => x.Name.ToLower().Contains(request.Text.ToLower()));
+                    query = query.Where(x => x.Name.Contains(request.Text));
 
                 return await query.Take(25).ToListAsync(cancellationToken);
             }
