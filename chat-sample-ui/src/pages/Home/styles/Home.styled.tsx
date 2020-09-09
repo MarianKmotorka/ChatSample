@@ -23,7 +23,9 @@ export const Banner = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background-color: ${({ theme }) => theme.darkGray};
+  background-color: ${({ theme }) => theme.bg200};
+  border-radius: 30px;
+  box-shadow: 0 20px 20px rgba(0, 0, 0, 0.4);
 
   @media only screen and (max-width: ${`${SM}px`}) {
     width: 90%;
