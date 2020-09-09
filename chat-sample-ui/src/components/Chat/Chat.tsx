@@ -48,8 +48,17 @@ const Chat: React.FC<IProps> = ({
 }) => {
   const [text, setText] = useState('')
   const inputRef = useFocusElement<HTMLInputElement>(isLoading)
-  const scrollToMessageRef = useScrollTo<HTMLDivElement>(scrollToMessageId, messages)
-  const observeMessage = useObserver<HTMLDivElement>(canLoadMore, onLoadMore)
+  const scrollToMessageRef = useScrollTo<HTMLDivElement>(
+    scrollToMessageId,
+    messages,
+    isLoading
+  )
+  const observeMessage = useObserver<HTMLDivElement>(
+    canLoadMore,
+    onLoadMore,
+    500,
+    isLoading
+  )
   useIsTyping(text, onIsTypingChanged)
 
   const onMessageSentInternal = (e: FormEvent<HTMLFormElement> | null) => {
