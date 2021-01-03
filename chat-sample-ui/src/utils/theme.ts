@@ -23,7 +23,7 @@ declare module 'styled-components' {
     bg400: string
     bg500: string
     text: string
-    textPrimary: string // overridden by ThemeContextProvider based primary color
+    textPrimary: string // overridden by ThemeContextProvider based on current primary color
     primary: string
 
     blue: string
