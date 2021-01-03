@@ -9,3 +9,8 @@ Demo project utilizing technologies like:
   * React hooks + custom hooks
   * Styled-components
   * React Transition Group (for animations)
+
+### Screenshots:
+![alt text](https://raw.githubusercontent.com/MarianKmotorka/ChatSample/master/Screenshots/screenshot1.png)
+
+![alt text](https://raw.githubusercontent.com/MarianKmotorka/ChatSample/master/Screenshots/screenshot2.png)
