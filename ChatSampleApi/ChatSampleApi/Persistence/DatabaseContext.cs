@@ -12,8 +12,6 @@ namespace ChatSampleApi.Persistence
         {
         }
 
-        public DbSet<RefreshToken> RefreshTokens { get; set; }
-
         public DbSet<Chat> Chats { get; set; }
 
         public DbSet<Message> Messages { get; set; }
@@ -22,8 +20,6 @@ namespace ChatSampleApi.Persistence
         {
             builder.RemovePluralizingTableNameConvention();
             base.OnModelCreating(builder);
-
-            builder.Entity<RefreshToken>().HasKey(x => x.Token);
 
             builder.Entity<AuthUser>(y =>
             {

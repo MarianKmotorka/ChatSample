@@ -1,7 +1,7 @@
 ﻿using System;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using ChatSampleApi.Features.Chat;
 using ChatSampleApi.Options;
 using ChatSampleApi.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -42,26 +42,38 @@ namespace ChatSampleApi
                 o.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
 
             })
-                .AddJwtBearer(o =>
+            .AddJwtBearer(o =>
+            {
+                o.TokenValidationParameters = tokenValidationParams;
+
+                o.Events = new JwtBearerEvents
                 {
-                    o.TokenValidationParameters = tokenValidationParams;
-
-                    o.Events = new JwtBearerEvents
+                    OnMessageReceived = context =>
                     {
-                        OnMessageReceived = context =>
-                        {
-                            var accessToken = context.Request.Query["access_token"];
-                            var path = context.HttpContext.Request.Path;
+                        var accessToken = context.Request.Query["access_token"];
+                        var path = context.HttpContext.Request.Path;
 
-                            if (!string.IsNullOrEmpty(accessToken) && path.StartsWithSegments(ChatHub.ApiPath))
-                                context.Token = accessToken;
+                        if (string.IsNullOrEmpty(accessToken))
+                            accessToken = context.HttpContext.Request.Cookies[AuthCookies.AccessToken];
 
-                            return Task.CompletedTask;
-                        }
-                    };
+                        if (!string.IsNullOrEmpty(accessToken))
+                            context.Token = accessToken;
 
-                    o.SaveToken = true;
-                });
+                        return Task.CompletedTask;
+                    },
+                    OnTokenValidated = context =>
+                    {
+                        var isAccessTokenClaim = context.Principal.Claims.SingleOrDefault(x => x.Type == AuthService.IsAccessTokenClaim);
+
+                        if (isAccessTokenClaim is null)
+                            context.Fail(new Exception("Token is missing 'IsAccessToken' claim."));
+
+                        return Task.CompletedTask;
+                    }
+                };
+
+                o.SaveToken = true;
+            });
 
             services.AddScoped<AuthService>();
 

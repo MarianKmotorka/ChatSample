@@ -2,8 +2,6 @@
 {
     public class GoogleLoginResponse
     {
-        public string Jwt { get; set; }
-
-        public string RefreshToken { get; set; }
+        public string AccessToken { get; set; }
     }
 }

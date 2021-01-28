@@ -5,26 +5,28 @@ using System.Threading;
 using System.Threading.Tasks;
 using ChatSampleApi.Exceptions;
 using ChatSampleApi.Options;
-using ChatSampleApi.Persistence;
 using ChatSampleApi.Services;
 using MediatR;
+using Microsoft.AspNetCore.Http;
 
 namespace ChatSampleApi.Features.Auth.GoogleLogin
 {
     public class GoogleLoginCommandHandler : IRequestHandler<GoogleLoginCommand, GoogleLoginResponse>
     {
-        private readonly DatabaseContext _db;
         private readonly GoogleOAuthOptions _oAuthOptions;
         private readonly AuthService _authService;
+        private readonly JwtOptions _jwtOptions;
         private readonly HttpClient _httpClient;
+        private readonly HttpContext _httpContext;
 
-        public GoogleLoginCommandHandler(DatabaseContext db, GoogleOAuthOptions oAuthOptions,
-            IHttpClientFactory clientFactory, AuthService authService)
+        public GoogleLoginCommandHandler(IHttpContextAccessor httpContextAccessor, GoogleOAuthOptions oAuthOptions,
+            IHttpClientFactory clientFactory, AuthService authService, JwtOptions jwtOptions)
         {
-            _db = db;
             _oAuthOptions = oAuthOptions;
             _authService = authService;
+            _jwtOptions = jwtOptions;
             _httpClient = clientFactory.CreateClient();
+            _httpContext = httpContextAccessor.HttpContext;
         }
 
         public async Task<GoogleLoginResponse> Handle(GoogleLoginCommand request, CancellationToken cancellationToken)
@@ -54,9 +56,16 @@ namespace ChatSampleApi.Features.Auth.GoogleLogin
             response = await _httpClient.SendAsync(userInfoRequest);
             var userInfoResponse = await response.Content.ReadAsAsync<GoogleUserInfoModel>();
 
-            var (jwt, refreshToken) = await _authService.LoginWithGoogle(userInfoResponse);
+            var (accessToken, refreshToken) = await _authService.LoginWithGoogle(userInfoResponse);
 
-            return new GoogleLoginResponse { Jwt = jwt, RefreshToken = refreshToken };
+            _httpContext.Response.Cookies.Append(AuthCookies.RefreshToken, refreshToken, new CookieOptions
+            {
+                MaxAge = _jwtOptions.RefreshTokenLifeTime,
+                SameSite = SameSiteMode.Strict,
+                HttpOnly = true,
+                Path = "/",
+            });
+            return new GoogleLoginResponse { AccessToken = accessToken };
         }
     }
 }

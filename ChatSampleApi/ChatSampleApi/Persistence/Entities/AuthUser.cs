@@ -20,6 +20,8 @@ namespace ChatSampleApi.Persistence.Entities
 
         public string Picture { get; set; }
 
+        public string RefreshToken { get; set; }
+
         public IReadOnlyCollection<UserUnreadMessage> UnreadMessages => _unreadMessages;
         private List<UserUnreadMessage> _unreadMessages;
 

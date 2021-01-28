@@ -1,6 +1,8 @@
 ﻿using System.Threading.Tasks;
+using ChatSampleApi.Features.Auth;
 using ChatSampleApi.Features.Auth.GoogleLogin;
 using ChatSampleApi.Features.Auth.RefreshToken;
+using ChatSampleApi.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ChatSampleApi.Controllers
@@ -9,16 +11,25 @@ namespace ChatSampleApi.Controllers
     public class AuthController : BaseController
     {
         [HttpGet("google-code-callback")]
-        public async Task<ActionResult> GoogleCodeCallback(string code)
+        public async Task<ActionResult<GoogleLoginResponse>> GoogleCodeCallback(string code)
         {
             var response = await Mediator.Send(new GoogleLoginCommand { Code = code });
             return Ok(response);
         }
 
-        [HttpPost("refresh-token")]
-        public async Task<ActionResult> RefreshToken(RefreshTokenCommand request)
+        [HttpGet("refresh-token")]
+        public async Task<ActionResult<RefreshTokenResponse>> RefreshToken()
         {
-            var resposne = await Mediator.Send(request);
+            Request.Cookies.TryGetValue(AuthCookies.RefreshToken, out string refreshToken);
+            var resposne = await Mediator.Send(new RefreshTokenCommand { RefreshToken = refreshToken });
+            return Ok(resposne);
+        }
+
+        [HttpPost("logout")]
+        public async Task<ActionResult<RefreshTokenResponse>> Logout()
+        {
+            Request.Cookies.TryGetValue(AuthCookies.RefreshToken, out string refreshToken);
+            var resposne = await Mediator.Send(new Logout.Command { RefreshToken = refreshToken });
             return Ok(resposne);
         }
     }

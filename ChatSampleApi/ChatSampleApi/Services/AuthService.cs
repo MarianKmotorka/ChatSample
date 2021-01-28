@@ -21,6 +21,9 @@ namespace ChatSampleApi.Services
         private readonly DatabaseContext _db;
         private readonly TokenValidationParameters _tokenValidationParameters;
 
+        public const string IsAccessTokenClaim = "IsAccessToken";
+        public const string IsRefreshTokenClaim = "IsRefreshToken";
+
         public AuthService(JwtOptions jwtOptions, DatabaseContext db, TokenValidationParameters tokenValidationParameters)
         {
             _jwtOptions = jwtOptions;
@@ -36,61 +39,87 @@ namespace ChatSampleApi.Services
             return await CreateJwtAndRefreshToken(user);
         }
 
-        public async Task<(string jwt, string refreshToken)> RefreshJwtAsync(string expiredJwt, string refreshToken)
+        public async Task<(string jwt, string refreshToken)> RefreshJwtAsync(string refreshToken)
         {
-            var validatedJwt = GetPrincipalFromJwt(expiredJwt);
+            var validatedRefreshToken = GetPrincipalFromJwt(refreshToken);
 
-            if (validatedJwt == null)
-                throw new BadRequestException("Invalid JWT");
+            if (validatedRefreshToken is null)
+                throw new BadRequestException("Invalid Refresh Token");
+
+            if (validatedRefreshToken.Claims.SingleOrDefault(x => x.Type == IsRefreshTokenClaim) is null)
+                throw new BadRequestException("Invalid Refresh Token");
 
             var expiryDateUnix =
-                long.Parse(validatedJwt.Claims.Single(x => x.Type == JwtRegisteredClaimNames.Exp).Value);
+                    long.Parse(validatedRefreshToken.Claims.Single(x => x.Type == JwtRegisteredClaimNames.Exp).Value);
 
             var expiryDateUtc =
                 new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddSeconds(expiryDateUnix);
 
-            if (expiryDateUtc > DateTime.UtcNow)
-                throw new BadRequestException("JWT is not expired yet.");
+            if (expiryDateUtc < DateTime.UtcNow)
+                throw new BadRequestException("Refresh Token Is Expired.");
 
-            var jwtId = validatedJwt.Claims.Single(x => x.Type == JwtRegisteredClaimNames.Jti).Value;
-
-            var storedRefreshToken = await _db.RefreshTokens.SingleOrDefaultAsync(x => x.Token == refreshToken);
-
-            if (storedRefreshToken == null)
-                throw new BadRequestException("Refresh token does not exist.");
-
-            if (storedRefreshToken.ExpiryDate < DateTime.UtcNow)
-                throw new BadRequestException("Refresh token expired.");
-
-            if (storedRefreshToken.Used)
-                throw new BadRequestException("Refresh token has been used.");
-
-            if (storedRefreshToken.JwtId != jwtId)
-                throw new BadRequestException("Refresh token does not match JWT.");
-
-            storedRefreshToken.Used = true;
-            await _db.SaveChangesAsync();
-
-            var appUserId = validatedJwt.Claims.Single(c => c.Type == ClaimTypes.NameIdentifier).Value;
+            var appUserId = validatedRefreshToken.Claims.Single(c => c.Type == ClaimTypes.NameIdentifier).Value;
             var appUser = await _db.Users.SingleAsync(x => x.Id == appUserId);
+            var storedRefreshToken = appUser.RefreshToken;
+
+            if (storedRefreshToken != refreshToken)
+                throw new BadRequestException("Invalid Refresh Token.");
 
             return await CreateJwtAndRefreshToken(appUser);
         }
 
         private async Task<(string jwt, string refreshToken)> CreateJwtAndRefreshToken(AuthUser authUser)
         {
+            var accessToken = CreateAccessToken(authUser);
+            var refreshToken = CreateRefreshToken(authUser);
+
+            authUser.RefreshToken = refreshToken;
+            await _db.SaveChangesAsync();
+
+            return (accessToken, refreshToken);
+        }
+
+        private string CreateRefreshToken(AuthUser user)
+        {
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.UTF8.GetBytes(_jwtOptions.Secret);
             var jti = Guid.NewGuid().ToString();
             var claims = new List<Claim>
             {
-                new Claim(JwtRegisteredClaimNames.Sub, authUser.Id),
-                new Claim(JwtRegisteredClaimNames.Jti, jti),
-                new Claim(JwtRegisteredClaimNames.Email, authUser.Email),
-                new Claim(JwtRegisteredClaimNames.Iss, _jwtOptions.Issuer)
+                new Claim(JwtRegisteredClaimNames.Sub, user.Id),
+                new Claim(JwtRegisteredClaimNames.Jti,  jti),
+                new Claim(JwtRegisteredClaimNames.Email, user.Email),
+                new Claim(JwtRegisteredClaimNames.Iss, _jwtOptions.Issuer),
+                new Claim(IsRefreshTokenClaim, "true")
             };
 
-            var jwtObject = new JwtSecurityToken(
+            var refreshTokenObject = new JwtSecurityToken(
+                _jwtOptions.Issuer,
+                null,
+                claims,
+                DateTime.UtcNow,
+                DateTime.UtcNow.Add(_jwtOptions.RefreshTokenLifeTime),
+                new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256)
+                );
+
+            return tokenHandler.WriteToken(refreshTokenObject);
+        }
+
+        private string CreateAccessToken(AuthUser user)
+        {
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var key = Encoding.UTF8.GetBytes(_jwtOptions.Secret);
+            var jti = Guid.NewGuid().ToString();
+            var claims = new List<Claim>
+            {
+                new Claim(JwtRegisteredClaimNames.Sub, user.Id),
+                new Claim(JwtRegisteredClaimNames.Jti,  jti),
+                new Claim(JwtRegisteredClaimNames.Email, user.Email),
+                new Claim(JwtRegisteredClaimNames.Iss, _jwtOptions.Issuer),
+                new Claim(IsAccessTokenClaim,"true")
+            };
+
+            var refreshTokenObject = new JwtSecurityToken(
                 _jwtOptions.Issuer,
                 null,
                 claims,
@@ -99,17 +128,7 @@ namespace ChatSampleApi.Services
                 new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256)
                 );
 
-            var refreshToken = new RefreshToken
-            {
-                CreationDate = DateTime.UtcNow,
-                ExpiryDate = DateTime.UtcNow.Add(_jwtOptions.RefreshTokenLifeTime),
-                JwtId = jti
-            };
-
-            _db.RefreshTokens.Add(refreshToken);
-            await _db.SaveChangesAsync();
-
-            return (tokenHandler.WriteToken(jwtObject), refreshToken.Token);
+            return tokenHandler.WriteToken(refreshTokenObject);
         }
 
         private ClaimsPrincipal GetPrincipalFromJwt(string jwt)
@@ -148,5 +167,11 @@ namespace ChatSampleApi.Services
             _db.Users.Add(newUser);
             return newUser;
         }
+    }
+
+    public static class AuthCookies
+    {
+        public static string RefreshToken { get; } = "refresh-token";
+        public static string AccessToken { get; } = "access-token";
     }
 }
