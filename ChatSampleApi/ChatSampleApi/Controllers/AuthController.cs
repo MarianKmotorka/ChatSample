@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Threading;
+using System.Threading.Tasks;
 using ChatSampleApi.Features.Auth;
 using ChatSampleApi.Features.Auth.GoogleLogin;
 using ChatSampleApi.Features.Auth.RefreshToken;
@@ -11,25 +12,25 @@ namespace ChatSampleApi.Controllers
     public class AuthController : BaseController
     {
         [HttpGet("google-code-callback")]
-        public async Task<ActionResult<GoogleLoginResponse>> GoogleCodeCallback(string code)
+        public async Task<ActionResult<GoogleLoginResponse>> GoogleCodeCallback(string code, CancellationToken ct)
         {
-            var response = await Mediator.Send(new GoogleLoginCommand { Code = code });
+            var response = await Mediator.Send(new GoogleLoginCommand { Code = code }, ct);
             return Ok(response);
         }
 
         [HttpGet("refresh-token")]
-        public async Task<ActionResult<RefreshTokenResponse>> RefreshToken()
+        public async Task<ActionResult<RefreshTokenResponse>> RefreshToken(CancellationToken ct)
         {
             Request.Cookies.TryGetValue(AuthCookies.RefreshToken, out string refreshToken);
-            var resposne = await Mediator.Send(new RefreshTokenCommand { RefreshToken = refreshToken });
+            var resposne = await Mediator.Send(new RefreshTokenCommand { RefreshToken = refreshToken }, ct);
             return Ok(resposne);
         }
 
         [HttpPost("logout")]
-        public async Task<ActionResult<RefreshTokenResponse>> Logout()
+        public async Task<ActionResult<RefreshTokenResponse>> Logout(CancellationToken ct)
         {
             Request.Cookies.TryGetValue(AuthCookies.RefreshToken, out string refreshToken);
-            var resposne = await Mediator.Send(new Logout.Command { RefreshToken = refreshToken });
+            var resposne = await Mediator.Send(new Logout.Command { RefreshToken = refreshToken }, ct);
             return Ok(resposne);
         }
     }

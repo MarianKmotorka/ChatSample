@@ -53,9 +53,6 @@ namespace ChatSampleApi
                         var accessToken = context.Request.Query["access_token"];
                         var path = context.HttpContext.Request.Path;
 
-                        if (string.IsNullOrEmpty(accessToken))
-                            accessToken = context.HttpContext.Request.Cookies[AuthCookies.AccessToken];
-
                         if (!string.IsNullOrEmpty(accessToken))
                             context.Token = accessToken;
 

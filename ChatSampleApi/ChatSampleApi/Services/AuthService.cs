@@ -172,6 +172,5 @@ namespace ChatSampleApi.Services
     public static class AuthCookies
     {
         public static string RefreshToken { get; } = "refresh-token";
-        public static string AccessToken { get; } = "access-token";
     }
 }
