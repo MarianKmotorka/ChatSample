@@ -43,10 +43,7 @@ namespace ChatSampleApi.Services
         {
             var validatedRefreshToken = GetPrincipalFromJwt(refreshToken);
 
-            if (validatedRefreshToken is null)
-                throw new BadRequestException("Invalid Refresh Token");
-
-            if (validatedRefreshToken.Claims.SingleOrDefault(x => x.Type == IsRefreshTokenClaim) is null)
+            if (validatedRefreshToken?.Claims.SingleOrDefault(x => x.Type == IsRefreshTokenClaim) is null)
                 throw new BadRequestException("Invalid Refresh Token");
 
             var expiryDateUnix =

@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using ChatSampleApi.Persistence;
 using MediatR;
@@ -22,7 +23,8 @@ namespace ChatSampleApi.Features.Profile.GetMyProfile
                 Id = user.Id,
                 Email = user.Email,
                 Name = user.FullName,
-                Picture = user.Picture
+                Picture = user.Picture,
+                Now = DateTime.Now
             };
         }
     }

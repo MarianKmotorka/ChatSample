@@ -1,4 +1,6 @@
-﻿namespace ChatSampleApi.Features.Profile.GetMyProfile
+﻿using System;
+
+namespace ChatSampleApi.Features.Profile.GetMyProfile
 {
     public class GetMyProfileResponse
     {
@@ -9,5 +11,7 @@
         public string Email { get; set; }
 
         public string Picture { get; set; }
+
+        public DateTime Now { get; set; }
     }
 }

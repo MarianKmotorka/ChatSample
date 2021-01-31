@@ -4,6 +4,7 @@ using ChatSampleApi.Features.Auth;
 using ChatSampleApi.Features.Auth.GoogleLogin;
 using ChatSampleApi.Features.Auth.RefreshToken;
 using ChatSampleApi.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ChatSampleApi.Controllers
@@ -32,6 +33,14 @@ namespace ChatSampleApi.Controllers
             Request.Cookies.TryGetValue(AuthCookies.RefreshToken, out string refreshToken);
             var resposne = await Mediator.Send(new Logout.Command { RefreshToken = refreshToken }, ct);
             return Ok(resposne);
+        }
+
+        [Authorize]
+        [HttpGet("cloudinary-signature")]
+        public async Task<ActionResult<GetCloudinarySignature.Response>> GetCloudinarySignature([FromQuery] GetCloudinarySignature.Query request)
+        {
+            var response = await Mediator.Send(request);
+            return Ok(response);
         }
     }
 }

@@ -5,6 +5,7 @@ using ChatSampleApi.Features.Chat;
 using ChatSampleApi.Middleware;
 using ChatSampleApi.Middleware.Authorization;
 using ChatSampleApi.Middleware.ErrorHandling;
+using ChatSampleApi.Options;
 using ChatSampleApi.Persistence;
 using ChatSampleApi.Services;
 using MediatR;
@@ -52,6 +53,10 @@ namespace ChatSampleApi
 
             services.AddSignalR()
                 .AddJsonProtocol(x => x.PayloadSerializerOptions.Converters.Add(new JsonStringEnumConverter(JsonNamingPolicy.CamelCase)));
+
+            var cloudinaryOptions = new CloudinaryOptions();
+            Configuration.GetSection(nameof(CloudinaryOptions)).Bind(cloudinaryOptions);
+            services.AddSingleton(cloudinaryOptions);
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
